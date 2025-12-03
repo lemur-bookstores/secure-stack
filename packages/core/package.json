@@ -1,0 +1,50 @@
+{
+  "name": "@lemur-bookstores/core",
+  "version": "0.0.1",
+  "description": "Core framework - Foundation of SecureStack",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:bundle && npm run build:types",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:bundle": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "securestack",
+    "core",
+    "framework",
+    "typescript"
+  ],
+  "author": "@elkincp5",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lemur-bookstores/secure-stack.git",
+    "directory": "packages/core"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.1"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+}
