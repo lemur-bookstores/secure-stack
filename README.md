@@ -1,2 +1,152 @@
-# secure-stack
-Framework opinionado que abstrae la complejidad manteniendo flexibilidad, inspirado en Express (simplicidad) y Firebase (DX increíble).
+# SecureStack Framework
+
+> Full-stack TypeScript framework with hybrid communication (gRPC + tRPC), built-in security mesh, and premium developer experience
+
+[![npm version](https://badge.fury.io/js/%40lemur-bookstores%2Fsecure-stack.svg)](https://www.npmjs.com/package/@lemur-bookstores/secure-stack)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## 🚀 Features
+
+- **Hybrid Communication**: gRPC for internal microservices + tRPC for client-server
+- **Type-Safety End-to-End**: Complete type inference without manual codegen
+- **Built-in Security Mesh**: Encrypted communication, JWT auth, rate limiting, audit logs
+- **Express-like DX**: Familiar middleware system and routing
+- **Plug-and-Play Modules**: Auth, RBAC, Cache, Storage, Realtime, and more
+
+## 📦 Installation
+
+```bash
+npm install @lemur-bookstores/secure-stack
+# or
+pnpm add @lemur-bookstores/secure-stack
+# or
+yarn add @lemur-bookstores/secure-stack
+```
+
+## 🎯 Quick Start
+
+```typescript
+import { SecureStack, router } from '@lemur-bookstores/secure-stack';
+import { z } from 'zod';
+
+const app = new SecureStack({
+  name: 'my-service',
+  port: 50051,
+});
+
+const userRouter = router()
+  .query('getUser', {
+    input: z.string(),
+    handler: async ({ input }) => {
+      return { id: input, name: 'John Doe' };
+    }
+  });
+
+app.router('user', userRouter);
+
+await app.start();
+console.log('🚀 Server ready!');
+```
+
+## 📚 Documentation
+
+Visit [our documentation](https://github.com/lemur-bookstores/secure-stack#readme) for detailed guides and API reference.
+
+## 🏗️ Project Structure
+
+This is a monorepo managed with **Turborepo** and **npm workspaces**:
+
+```
+secure-stack/
+├── packages/
+│   └── core/                    # @lemur-bookstores/core
+│       ├── src/
+│       │   ├── SecureStack.ts   # Main framework class
+│       │   ├── router.ts        # Router builder
+│       │   ├── types.ts         # Type definitions
+│       │   └── index.ts         # Package entry point
+│       ├── package.json
+│       ├── tsconfig.json
+│       └── tsup.config.ts
+├── examples/
+│   └── basic/                   # Basic usage example
+│       ├── src/
+│       │   └── index.ts
+│       └── package.json
+├── docs/                        # Documentation (coming soon)
+├── .development-guide/          # Development planning docs
+│   ├── roadmap.md              # Development roadmap
+│   ├── feasibility-analysis.md # Feasibility analysis
+│   └── secure-microservices-mesh.md # Mesh documentation
+├── package.json                 # Root package.json
+├── turbo.json                   # Turborepo configuration
+├── pnpm-workspace.yaml          # Workspace configuration
+└── tsconfig.json                # Shared TypeScript config
+```
+
+### Packages
+
+- **@lemur-bookstores/core** - Core framework with context, middleware, and router
+- **@lemur-bookstores/server** - Server implementation (coming soon)
+- **@lemur-bookstores/client** - Client SDK (coming soon)
+- **@lemur-bookstores/mesh** - Service Mesh (coming soon)
+- **@lemur-bookstores/cli** - CLI tool (coming soon)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 20+ or Bun 1.0+
+- npm (comes with Node.js)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/lemur-bookstores/secure-stack.git
+cd secure-stack
+
+# Install dependencies
+npm install
+
+# Build all packages
+npm run build
+
+# Run the basic example
+npm run dev --workspace=examples/basic
+```
+
+### Development
+
+```bash
+# Run all packages in dev mode
+npm run dev
+
+# Run tests
+npm run test
+
+# Lint code
+npm run lint
+
+# Format code
+npm run format
+
+# Type check
+npm run typecheck
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## 📄 License
+
+MIT © [@elkincp5](https://github.com/elkincp5)
+
+## 🙏 Acknowledgments
+
+Inspired by:
+- [Express](https://expressjs.com/) - Simplicity and familiarity
+- [Firebase](https://firebase.google.com/) - Premium developer experience
+- [tRPC](https://trpc.io/) - Type-safe APIs
+- [NestJS](https://nestjs.com/) - Enterprise architecture patterns
