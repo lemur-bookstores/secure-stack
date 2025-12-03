@@ -6,8 +6,11 @@ export interface SecureStackServerConfig extends SecureStackConfig {
     host?: string;
     apiPrefix?: string;
     cors?: {
-        origin?: string | string[];
+        origin?: string | string[] | boolean;
         credentials?: boolean;
+        methods?: string | string[];
+        allowedHeaders?: string | string[];
+        exposedHeaders?: string | string[];
     };
 }
 
@@ -61,6 +64,9 @@ export class SecureStackServer extends SecureStack {
                 await this.fastify.register(require('@fastify/cors'), {
                     origin: this.serverConfig.cors.origin || '*',
                     credentials: this.serverConfig.cors.credentials || false,
+                    methods: this.serverConfig.cors.methods,
+                    allowedHeaders: this.serverConfig.cors.allowedHeaders,
+                    exposedHeaders: this.serverConfig.cors.exposedHeaders,
                 });
             } catch (error) {
                 console.warn('[SecureStackServer] CORS plugin not available, skipping...');
