@@ -1,0 +1,56 @@
+{
+  "name": "@lemur-bookstores/auth",
+  "version": "0.0.1",
+  "description": "Authentication module for SecureStack - JWT, OAuth, and Session Management",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:bundle && npm run build:types",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:bundle": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "securestack",
+    "auth",
+    "jwt",
+    "oauth",
+    "security"
+  ],
+  "author": "@elkincp5",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lemur-bookstores/secure-stack.git",
+    "directory": "packages/auth"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@lemur-bookstores/core": "*",
+    "bcryptjs": "2.4.3",
+    "jsonwebtoken": "9.0.2",
+    "zod": "3.22.4"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "2.4.6",
+    "@types/jsonwebtoken": "9.0.5",
+    "@types/node": "20.11.5",
+    "tsup": "8.0.1",
+    "typescript": "5.3.3",
+    "vitest": "1.2.1"
+  }
+}
