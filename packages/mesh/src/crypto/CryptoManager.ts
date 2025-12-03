@@ -4,13 +4,7 @@
  */
 
 import * as crypto from 'crypto';
-import * as fs from 'fs';
-import * as path from 'path';
-
-export interface KeyPair {
-    publicKey: string;
-    privateKey: string;
-}
+import { KeyManager, KeyPair } from './KeyManager';
 
 export interface EncryptedData {
     encryptedData: string;
@@ -21,76 +15,24 @@ export interface EncryptedData {
 }
 
 export class CryptoManager {
-    private rsaKeySize: number;
     private aesKeySize: number;
     private keyPair?: KeyPair;
-    private keysDir: string;
+    private keyManager: KeyManager;
 
     constructor(options: {
-        rsaKeySize?: number;
         aesKeySize?: number;
+        keyManager?: KeyManager;
         keysDir?: string;
     } = {}) {
-        this.rsaKeySize = options.rsaKeySize || 4096;
         this.aesKeySize = options.aesKeySize || 256;
-        this.keysDir = options.keysDir || path.join(process.cwd(), '.secure-stack', 'keys');
+        this.keyManager = options.keyManager || new KeyManager(options.keysDir);
     }
 
     /**
      * Initialize crypto manager - generate or load keys
      */
-    async initialize(serviceId: string): Promise<void> {
-        // Create keys directory if it doesn't exist
-        if (!fs.existsSync(this.keysDir)) {
-            fs.mkdirSync(this.keysDir, { recursive: true });
-        }
-
-        const publicKeyPath = path.join(this.keysDir, `${serviceId}.pub`);
-        const privateKeyPath = path.join(this.keysDir, `${serviceId}.key`);
-
-        // Try to load existing keys
-        if (fs.existsSync(publicKeyPath) && fs.existsSync(privateKeyPath)) {
-            console.log(`[CryptoManager] Loading existing RSA keys for ${serviceId}`);
-            this.keyPair = {
-                publicKey: fs.readFileSync(publicKeyPath, 'utf-8'),
-                privateKey: fs.readFileSync(privateKeyPath, 'utf-8'),
-            };
-        } else {
-            // Generate new keys
-            console.log(`[CryptoManager] Generating new RSA-${this.rsaKeySize} keys for ${serviceId}...`);
-            this.keyPair = await this.generateRSAKeyPair();
-
-            // Save keys
-            fs.writeFileSync(publicKeyPath, this.keyPair.publicKey);
-            fs.writeFileSync(privateKeyPath, this.keyPair.privateKey);
-            console.log(`[CryptoManager] ✓ Keys saved to ${this.keysDir}`);
-        }
-    }
-
-    /**
-     * Generate RSA key pair
-     */
-    private async generateRSAKeyPair(): Promise<KeyPair> {
-        return new Promise((resolve, reject) => {
-            crypto.generateKeyPair(
-                'rsa',
-                {
-                    modulusLength: this.rsaKeySize,
-                    publicKeyEncoding: {
-                        type: 'spki',
-                        format: 'pem',
-                    },
-                    privateKeyEncoding: {
-                        type: 'pkcs8',
-                        format: 'pem',
-                    },
-                },
-                (err, publicKey, privateKey) => {
-                    if (err) reject(err);
-                    else resolve({ publicKey, privateKey });
-                }
-            );
-        });
+    public initialize(serviceId: string): void {
+        this.keyPair = this.keyManager.getOrCreateKeyPair(serviceId);
     }
 
     /**
