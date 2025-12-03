@@ -1,0 +1,19 @@
+{
+  "name": "advanced-example",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Advanced example of SecureStack framework with middleware and error handling",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@lemur-bookstores/core": "*",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "basic-example",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Basic example of SecureStack framework",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "dev:server": "tsx src/server-example.ts",
+    "dev:mesh": "tsx src/mesh-example.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@lemur-bookstores/core": "*",
+    "@lemur-bookstores/server": "*",
+    "@lemur-bookstores/mesh": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
