@@ -298,21 +298,21 @@ packages/client/
 
 - [x] useQuery hook
 - [x] useMutation hook
-- [ ] useSubscription hook
+- [x] useSubscription hook
 - [x] Provider component
 
 **Semana 3: Advanced Features**
 
-- [ ] Cache management
+- [x] Cache management
 - [x] Optimistic updates (Basic support)
-- [ ] SSR support
+- [x] SSR support
 
 **Semana 4: Testing & Examples**
 
 - [x] Unit tests
 - [ ] Integration tests
-- [x] 3 ejemplos (React, Next.js, Vite) - (React/Vite done)
-- [ ] Documentation
+- [x] 3 ejemplos (React, Next.js, Vite)
+- [x] Documentation
 
 **Entregables:**
 
