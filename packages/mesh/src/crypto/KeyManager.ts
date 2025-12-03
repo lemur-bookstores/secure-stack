@@ -42,12 +42,17 @@ export class KeyManager {
     /**
      * Saves a key pair to disk
      */
-    public saveKeyPair(name: string, keyPair: KeyPair): void {
+    public saveKeyPair(name: string, keyPair: Partial<KeyPair>): void {
         const publicPath = path.join(this.keyDir, `${name}.pub.pem`);
         const privatePath = path.join(this.keyDir, `${name}.pem`);
 
-        fs.writeFileSync(publicPath, keyPair.publicKey);
-        fs.writeFileSync(privatePath, keyPair.privateKey, { mode: 0o600 }); // Secure permissions
+        if (keyPair.publicKey) {
+            fs.writeFileSync(publicPath, keyPair.publicKey);
+        }
+
+        if (keyPair.privateKey) {
+            fs.writeFileSync(privatePath, keyPair.privateKey, { mode: 0o600 }); // Secure permissions
+        }
     }
 
     /**

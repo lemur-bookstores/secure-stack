@@ -1,148 +1,117 @@
-/**
- * Secure Mesh Client
- * Client for secure service-to-service communication
- */
-
-import { CryptoManager } from '../crypto/CryptoManager';
+import * as grpc from '@grpc/grpc-js';
+import * as protoLoader from '@grpc/proto-loader';
+import path from 'path';
 import { JWTManager } from '../auth/JWTManager';
-import { SessionManager } from '../auth/SessionManager';
-import type { ServiceInfo } from '../discovery/types';
+import { CryptoManager } from '../crypto/CryptoManager';
+import { KeyManager } from '../crypto/KeyManager';
+import * as crypto from 'crypto';
 
-export interface SecureMeshClientConfig {
-    serviceId: string;
-    cryptoManager: CryptoManager;
-    jwtManager: JWTManager;
-    sessionManager: SessionManager;
-}
-
-export interface SecureMessage {
-    type: 'handshake' | 'request' | 'response';
-    sessionId?: string;
-    token?: string;
-    payload: any;
-}
+const PROTO_PATH = path.join(__dirname, '../../proto/secure-messaging.proto');
 
 export class SecureMeshClient {
-    private config: SecureMeshClientConfig;
-    private connectedServices: Map<string, ServiceInfo> = new Map();
+    private client: any;
+    private jwtManager: JWTManager;
+    private cryptoManager: CryptoManager;
+    private keyManager: KeyManager;
+    private serviceId: string;
+    private targetServiceId: string;
+    private sessionId?: string;
+    private sessionKey?: Buffer;
 
-    constructor(config: SecureMeshClientConfig) {
-        this.config = config;
+    constructor(serviceId: string, targetServiceId: string, address: string, keysDir?: string) {
+        this.serviceId = serviceId;
+        this.targetServiceId = targetServiceId;
+        this.keyManager = new KeyManager(keysDir);
+        this.jwtManager = new JWTManager(serviceId, this.keyManager);
+        this.cryptoManager = new CryptoManager({ keyManager: this.keyManager });
+
+        this.cryptoManager.initialize(serviceId);
+
+        const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
+            keepCase: true,
+            longs: String,
+            enums: String,
+            defaults: true,
+            oneofs: true,
+        });
+        const protoDescriptor = grpc.loadPackageDefinition(packageDefinition) as any;
+        const SecureMeshService = protoDescriptor.secure_mesh.SecureMeshService;
+
+        this.client = new SecureMeshService(address, grpc.credentials.createInsecure());
     }
 
-    /**
-     * Connect to a service (handshake)
-     */
-    async connect(service: ServiceInfo): Promise<string> {
-        console.log(`[MeshClient] Connecting to ${service.id} at ${service.host}:${service.port}`);
+    public async connect(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const publicKey = this.cryptoManager.getPublicKey();
+            const authToken = this.jwtManager.generateToken(this.targetServiceId);
 
-        // Create session
-        const sessionKey = this.config.cryptoManager.generateSessionKey();
-        const session = this.config.sessionManager.createSession(
-            service.id,
-            service.publicKey || '',
-            sessionKey
-        );
+            this.client.Handshake({
+                service_id: this.serviceId,
+                public_key: publicKey,
+                auth_token: authToken,
+            }, (err: any, response: any) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
 
-        // Generate JWT token for handshake (will be used in real gRPC implementation)
-        // const token = this.config.jwtManager.generateToken(this.config.serviceId, session.id);
+                try {
+                    this.sessionId = response.session_id;
+                    const encryptedSessionKey = response.encrypted_session_key;
 
-        // Store connected service
-        this.connectedServices.set(service.id, service);
+                    // Decrypt session key using our private key
+                    this.sessionKey = this.cryptoManager.decryptWithPrivateKey(encryptedSessionKey);
 
-        console.log(`[MeshClient] ✓ Connected to ${service.id} (session: ${session.id})`);
-
-        return session.id;
+                    resolve();
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
     }
 
-    /**
-     * Send secure message to a service
-     */
-    async call<TData = any, TResult = any>(
-        serviceId: string,
-        method: string,
-        data: TData
-    ): Promise<TResult> {
-        const service = this.connectedServices.get(serviceId);
-        if (!service) {
-            throw new Error(`Not connected to service: ${serviceId}`);
+    public async sendMessage(data: string): Promise<string> {
+        if (!this.sessionId || !this.sessionKey) {
+            throw new Error('Client not connected');
         }
 
-        // Get session
-        const session = this.config.sessionManager.getSessionByServiceId(serviceId);
-        if (!session) {
-            throw new Error(`No active session for service: ${serviceId}`);
-        }
+        return new Promise((resolve, reject) => {
+            try {
+                // Encrypt message using Session Key
+                const iv = crypto.randomBytes(16);
+                const cipher = crypto.createCipheriv('aes-256-gcm', this.sessionKey!, iv);
 
-        // Create message payload
-        const message = {
-            method,
-            data,
-            timestamp: Date.now(),
-        };
+                let encryptedData = cipher.update(data, 'utf8');
+                encryptedData = Buffer.concat([encryptedData, cipher.final()]);
+                const authTag = cipher.getAuthTag();
 
-        // Encrypt message with hybrid encryption
-        const encrypted = this.config.cryptoManager.encrypt(
-            JSON.stringify(message),
-            service.publicKey || ''
-        );
+                this.client.SendMessage({
+                    session_id: this.sessionId,
+                    encrypted_data: encryptedData.toString('base64'),
+                    iv: iv.toString('base64'),
+                    auth_tag: authTag.toString('base64'),
+                }, (err: any, response: any) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
 
-        // Generate JWT for authentication
-        const token = this.config.jwtManager.generateToken(
-            this.config.serviceId,
-            session.id
-        );
+                    try {
+                        // Decrypt response
+                        const decipher = crypto.createDecipheriv('aes-256-gcm', this.sessionKey!, Buffer.from(response.iv, 'base64'));
+                        decipher.setAuthTag(Buffer.from(response.auth_tag, 'base64'));
 
-        // Increment message count
-        this.config.sessionManager.incrementMessageCount(session.id);
+                        let decrypted = decipher.update(Buffer.from(response.encrypted_data, 'base64'));
+                        decrypted = Buffer.concat([decrypted, decipher.final()]);
 
-        console.log(`[MeshClient] → Calling ${serviceId}.${method}`);
-        console.log(`[MeshClient]   - Session: ${session.id}`);
-        console.log(`[MeshClient]   - Encrypted: ${encrypted.encryptedData.substring(0, 32)}...`);
-        console.log(`[MeshClient]   - JWT: ${token.substring(0, 32)}...`);
-
-        // TODO: In full implementation, this would:
-        // 1. Send encrypted payload via gRPC
-        // 2. Include JWT token in metadata
-        // 3. Handle response decryption
-        // 4. Verify response signature
-
-        // Mock response for MVP (simulates successful encrypted communication)
-        const mockResponse = {
-            success: true,
-            data: `Mock response from ${serviceId}.${method}`,
-            sessionId: session.id,
-            encrypted: true,
-            authenticated: true,
-        };
-
-        return mockResponse as TResult;
-    }
-
-    /**
-     * Disconnect from a service
-     */
-    async disconnect(serviceId: string): Promise<void> {
-        const session = this.config.sessionManager.getSessionByServiceId(serviceId);
-        if (session) {
-            this.config.sessionManager.deleteSession(session.id);
-        }
-
-        this.connectedServices.delete(serviceId);
-        console.log(`[MeshClient] Disconnected from ${serviceId}`);
-    }
-
-    /**
-     * Get connected services
-     */
-    getConnectedServices(): string[] {
-        return Array.from(this.connectedServices.keys());
-    }
-
-    /**
-     * Check if connected to a service
-     */
-    isConnected(serviceId: string): boolean {
-        return this.connectedServices.has(serviceId);
+                        resolve(decrypted.toString());
+                    } catch (error) {
+                        reject(error);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 }

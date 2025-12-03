@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package secure_mesh;
+
+service SecureMeshService {
+  // Handshake to establish session
+  rpc Handshake (HandshakeRequest) returns (HandshakeResponse);
+  
+  // Send encrypted message
+  rpc SendMessage (SecureMessage) returns (SecureMessage);
+}
+
+message HandshakeRequest {
+  string service_id = 1;
+  string public_key = 2; // PEM format
+  string auth_token = 3; // JWT signed by sender
+}
+
+message HandshakeResponse {
+  string session_id = 1;
+  string encrypted_session_key = 2; // AES key encrypted with sender's public key (Base64)
+}
+
+message SecureMessage {
+  string session_id = 1;
+  string encrypted_data = 2; // Base64
+  string iv = 3; // Base64
+  string auth_tag = 4; // Base64
+}

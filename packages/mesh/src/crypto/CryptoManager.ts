@@ -139,6 +139,40 @@ export class CryptoManager {
     }
 
     /**
+     * Encrypts data directly with a public key (RSA only)
+     * Useful for key exchange
+     */
+    public encryptWithPublicKey(data: Buffer, publicKey: string): string {
+        const encrypted = crypto.publicEncrypt(
+            {
+                key: publicKey,
+                padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+                oaepHash: 'sha256',
+            },
+            data
+        );
+        return encrypted.toString('base64');
+    }
+
+    /**
+     * Decrypts data directly with private key (RSA only)
+     */
+    public decryptWithPrivateKey(encryptedData: string): Buffer {
+        if (!this.keyPair) {
+            throw new Error('CryptoManager not initialized');
+        }
+
+        return crypto.privateDecrypt(
+            {
+                key: this.keyPair.privateKey,
+                padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+                oaepHash: 'sha256',
+            },
+            Buffer.from(encryptedData, 'base64')
+        );
+    }
+
+    /**
      * Get public key
      */
     getPublicKey(): string {
