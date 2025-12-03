@@ -20,7 +20,7 @@
   "scripts": {
     "build": "npm run build:bundle && npm run build:types",
     "build:bundle": "tsup",
-    "build:types": "tsc --emitDeclarationOnly",
+    "build:types": "rm -f tsconfig.tsbuildinfo && tsc --emitDeclarationOnly",
     "dev": "tsup --watch",
     "test": "vitest",
     "test:watch": "vitest --watch",

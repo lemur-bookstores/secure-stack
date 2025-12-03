@@ -43,7 +43,8 @@
   },
   "packageManager": "pnpm@8.15.0",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "devDependencies": {
     "@changesets/cli": "2.29.8",
