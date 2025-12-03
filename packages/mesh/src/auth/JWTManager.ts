@@ -1,104 +1,75 @@
-/**
- * JWT Manager - Mutual Authentication
- * Handles JWT token generation and verification for service-to-service authentication
- */
+import jwt from 'jsonwebtoken';
+import { KeyManager } from '../crypto/KeyManager';
 
-import * as jwt from 'jsonwebtoken';
-import * as crypto from 'crypto';
-
-export interface JWTPayload {
-    serviceId: string;
-    sessionId: string;
-    iat: number;
-    exp: number;
-}
-
-export interface JWTOptions {
-    secret?: string;
-    expiresIn?: string | number;
+export interface TokenPayload {
+    sub: string; // Subject (Service ID)
+    iss: string; // Issuer (Service ID)
+    aud: string; // Audience (Target Service ID)
+    iat?: number;
+    exp?: number;
+    jti?: string;
+    [key: string]: any;
 }
 
 export class JWTManager {
-    private secret: string;
-    private expiresIn: string | number;
+    private keyManager: KeyManager;
+    private serviceId: string;
 
-    constructor(options: JWTOptions = {}) {
-        // Generate random secret if not provided
-        this.secret = options.secret || crypto.randomBytes(64).toString('hex');
-        this.expiresIn = options.expiresIn || '1h';
+    constructor(serviceId: string, keyManager: KeyManager) {
+        this.serviceId = serviceId;
+        this.keyManager = keyManager;
     }
 
     /**
-     * Generate JWT token for a service
+     * Generates a JWT token for a target service
      */
-    generateToken(serviceId: string, sessionId: string): string {
-        const payload: Omit<JWTPayload, 'iat' | 'exp'> = {
-            serviceId,
-            sessionId,
+    public generateToken(targetServiceId: string, expiresIn: string = '1h'): string {
+        const keyPair = this.keyManager.getOrCreateKeyPair(this.serviceId);
+
+        const payload: TokenPayload = {
+            sub: this.serviceId,
+            iss: this.serviceId,
+            aud: targetServiceId,
         };
 
-        return jwt.sign(payload, this.secret, {
-            expiresIn: this.expiresIn,
-            algorithm: 'HS256',
-        } as jwt.SignOptions);
+        const options: jwt.SignOptions = {
+            algorithm: 'RS256',
+            expiresIn: expiresIn as jwt.SignOptions['expiresIn'],
+        };
+
+        return jwt.sign(payload, keyPair.privateKey, options);
     }
 
     /**
-     * Verify JWT token
+     * Verifies a JWT token from a source service
      */
-    verifyToken(token: string): JWTPayload {
+    public verifyToken(token: string, sourceServiceId: string): TokenPayload {
+        const keyPair = this.keyManager.loadKeyPair(sourceServiceId);
+
+        if (!keyPair) {
+            throw new Error(`Public key for service ${sourceServiceId} not found`);
+        }
+
         try {
-            const decoded = jwt.verify(token, this.secret, {
-                algorithms: ['HS256'],
-            }) as JWTPayload;
+            const decoded = jwt.verify(token, keyPair.publicKey, {
+                algorithms: ['RS256'],
+                audience: this.serviceId,
+                issuer: sourceServiceId,
+            }) as TokenPayload;
 
             return decoded;
-        } catch (error: any) {
-            if (error.name === 'TokenExpiredError') {
-                throw new Error('JWT token expired');
-            } else if (error.name === 'JsonWebTokenError') {
-                throw new Error('Invalid JWT token');
+        } catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Token verification failed: ${error.message}`);
             }
-            throw error;
+            throw new Error('Token verification failed');
         }
     }
 
     /**
-     * Decode token without verification (for debugging)
+     * Decodes a token without verification to get the header/payload
      */
-    decodeToken(token: string): JWTPayload | null {
-        try {
-            return jwt.decode(token) as JWTPayload;
-        } catch {
-            return null;
-        }
-    }
-
-    /**
-     * Check if token is expired
-     */
-    isTokenExpired(token: string): boolean {
-        const decoded = this.decodeToken(token);
-        if (!decoded || !decoded.exp) return true;
-
-        return Date.now() >= decoded.exp * 1000;
-    }
-
-    /**
-     * Get token expiration time
-     */
-    getTokenExpiration(token: string): Date | null {
-        const decoded = this.decodeToken(token);
-        if (!decoded || !decoded.exp) return null;
-
-        return new Date(decoded.exp * 1000);
-    }
-
-    /**
-     * Refresh secret (for key rotation)
-     */
-    refreshSecret(newSecret?: string): void {
-        this.secret = newSecret || crypto.randomBytes(64).toString('hex');
-        console.log('[JWTManager] Secret refreshed for key rotation');
+    public decodeToken(token: string): TokenPayload | null {
+        return jwt.decode(token) as TokenPayload;
     }
 }

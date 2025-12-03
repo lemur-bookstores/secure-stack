@@ -1,80 +1,72 @@
-/**
- * Session Manager
- * Manages secure sessions between services
- */
-
-import * as crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface Session {
     id: string;
-    serviceId: string;
-    publicKey: string;
-    sessionKey: Buffer;
-    createdAt: Date;
-    lastActivity: Date;
-    messageCount: number;
+    serviceId: string; // The remote service ID
+    sessionKey: Buffer; // The shared AES key
+    createdAt: number;
+    lastActivity: number;
+    expiresAt: number;
+    metadata?: Record<string, any>;
 }
 
 export class SessionManager {
     private sessions: Map<string, Session> = new Map();
-    private sessionTimeout: number; // in milliseconds
+    private readonly defaultTTL: number; // in milliseconds
 
-    constructor(options: { sessionTimeout?: number } = {}) {
-        this.sessionTimeout = options.sessionTimeout || 3600000; // 1 hour default
+    constructor(defaultTTL: number = 3600000) { // 1 hour default
+        this.defaultTTL = defaultTTL;
     }
 
     /**
-     * Create a new session
+     * Creates a new session
      */
-    createSession(serviceId: string, publicKey: string, sessionKey: Buffer): Session {
-        const sessionId = crypto.randomBytes(16).toString('hex');
-
+    public createSession(serviceId: string, sessionKey: Buffer, metadata?: Record<string, any>): Session {
+        const id = uuidv4();
+        const now = Date.now();
         const session: Session = {
-            id: sessionId,
+            id,
             serviceId,
-            publicKey,
             sessionKey,
-            createdAt: new Date(),
-            lastActivity: new Date(),
-            messageCount: 0,
+            createdAt: now,
+            lastActivity: now,
+            expiresAt: now + this.defaultTTL,
+            metadata,
         };
 
-        this.sessions.set(sessionId, session);
+        this.sessions.set(id, session);
+        return session;
+    }
 
-        console.log(`[SessionManager] Created session ${sessionId} for ${serviceId}`);
+    /**
+     * Gets a session by ID
+     */
+    public getSession(id: string): Session | undefined {
+        const session = this.sessions.get(id);
+        if (!session) return undefined;
+
+        if (this.isExpired(session)) {
+            this.sessions.delete(id);
+            return undefined;
+        }
+
+        // Update activity
+        session.lastActivity = Date.now();
+        session.expiresAt = session.lastActivity + this.defaultTTL; // Sliding expiration
 
         return session;
     }
 
     /**
-     * Get session by ID
+     * Gets a session by Service ID (assuming one active session per service pair for simplicity, or just finding one)
      */
-    getSession(sessionId: string): Session | undefined {
-        const session = this.sessions.get(sessionId);
-
-        if (!session) {
-            return undefined;
-        }
-
-        // Check if session expired
-        if (this.isSessionExpired(session)) {
-            this.deleteSession(sessionId);
-            return undefined;
-        }
-
-        // Update last activity
-        session.lastActivity = new Date();
-
-        return session;
-    }
-
-    /**
-     * Get session by service ID
-     */
-    getSessionByServiceId(serviceId: string): Session | undefined {
+    public getSessionByServiceId(serviceId: string): Session | undefined {
         for (const session of this.sessions.values()) {
-            if (session.serviceId === serviceId && !this.isSessionExpired(session)) {
-                session.lastActivity = new Date();
+            if (session.serviceId === serviceId) {
+                if (this.isExpired(session)) {
+                    this.sessions.delete(session.id);
+                    continue;
+                }
                 return session;
             }
         }
@@ -82,78 +74,24 @@ export class SessionManager {
     }
 
     /**
-     * Delete session
+     * Invalidates/Removes a session
      */
-    deleteSession(sessionId: string): boolean {
-        const deleted = this.sessions.delete(sessionId);
-        if (deleted) {
-            console.log(`[SessionManager] Deleted session ${sessionId}`);
-        }
-        return deleted;
+    public invalidateSession(id: string): void {
+        this.sessions.delete(id);
     }
 
     /**
-     * Increment message count for session
+     * Cleans up expired sessions
      */
-    incrementMessageCount(sessionId: string): void {
-        const session = this.sessions.get(sessionId);
-        if (session) {
-            session.messageCount++;
-            session.lastActivity = new Date();
-        }
-    }
-
-    /**
-     * Check if session is expired
-     */
-    private isSessionExpired(session: Session): boolean {
-        const now = Date.now();
-        const lastActivity = session.lastActivity.getTime();
-        return now - lastActivity > this.sessionTimeout;
-    }
-
-    /**
-     * Clean up expired sessions
-     */
-    cleanupExpiredSessions(): number {
-        let cleanedCount = 0;
-
-        for (const [sessionId, session] of this.sessions.entries()) {
-            if (this.isSessionExpired(session)) {
-                this.sessions.delete(sessionId);
-                cleanedCount++;
+    public cleanup(): void {
+        for (const [id, session] of this.sessions.entries()) {
+            if (this.isExpired(session)) {
+                this.sessions.delete(id);
             }
         }
-
-        if (cleanedCount > 0) {
-            console.log(`[SessionManager] Cleaned up ${cleanedCount} expired session(s)`);
-        }
-
-        return cleanedCount;
     }
 
-    /**
-     * Get all active sessions
-     */
-    getActiveSessions(): Session[] {
-        return Array.from(this.sessions.values()).filter(
-            session => !this.isSessionExpired(session)
-        );
-    }
-
-    /**
-     * Get session statistics
-     */
-    getStats() {
-        const sessions = this.getActiveSessions();
-
-        return {
-            totalSessions: sessions.length,
-            totalMessages: sessions.reduce((sum, s) => sum + s.messageCount, 0),
-            oldestSession: sessions.reduce(
-                (oldest, s) => (s.createdAt < oldest ? s.createdAt : oldest),
-                new Date()
-            ),
-        };
+    private isExpired(session: Session): boolean {
+        return Date.now() > session.expiresAt;
     }
 }
