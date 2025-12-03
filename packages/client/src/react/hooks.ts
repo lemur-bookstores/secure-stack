@@ -10,7 +10,8 @@ import type {
     UseMutationResult,
 } from '@tanstack/react-query';
 import { useClient, useQueryClient } from './context';
-import type { ClientError } from '../types';
+import type { ClientError, SubscriptionOptions } from '../types';
+import { useEffect } from 'react';
 
 /**
  * Query hook options
@@ -170,4 +171,22 @@ export function usePrefetch() {
             queryFn: () => client.query<TInput, TData>(path, input),
         });
     };
+}
+
+/**
+ * Hook for subscriptions
+ */
+export function useSubscription<TData = unknown, TInput = void>(
+    path: string,
+    input: TInput,
+    options: SubscriptionOptions<TData>
+) {
+    const client = useClient();
+
+    useEffect(() => {
+        const unsubscribe = client.subscribe<TInput, TData>(path, input, options);
+        return () => {
+            unsubscribe();
+        };
+    }, [path, JSON.stringify(input), client]); // JSON.stringify to handle object inputs in dependency array
 }

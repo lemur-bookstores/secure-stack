@@ -11,6 +11,7 @@ export {
     useMutationWithOptimisticUpdate,
     useInvalidateQuery,
     usePrefetch,
+    useSubscription,
 } from './hooks';
 export type {
     UseSecureStackQueryOptions,

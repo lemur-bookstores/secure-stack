@@ -42,10 +42,10 @@ SecureStack incluirá un **Service Mesh seguro** como característica core, prop
 
 ### Presupuesto Consolidado
 
-| Fase | Sin Mesh | Con Mesh | Diferencia |
-|------|----------|----------|------------|
-| **MVP (Fases 0-2)** | $93,000 | **$123,000** | +$30,000 (+32%) |
-| **v1.0 (Fases 0-3)** | $133,000 | **$178,000** | +$45,000 (+34%) |
+| Fase                    | Sin Mesh | Con Mesh     | Diferencia      |
+| ----------------------- | -------- | ------------ | --------------- |
+| **MVP (Fases 0-2)**     | $93,000  | **$123,000** | +$30,000 (+32%) |
+| **v1.0 (Fases 0-3)**    | $133,000 | **$178,000** | +$45,000 (+34%) |
 | **Total con Ecosystem** | $168,000 | **$213,000** | +$45,000 (+27%) |
 
 ---
@@ -55,6 +55,7 @@ SecureStack incluirá un **Service Mesh seguro** como característica core, prop
 ### Semana 1-2: Setup Inicial
 
 **Tareas:**
+
 - [x] Crear organización GitHub (lemur-bookstores)
 - [x] Setup package.json inicial
 - [ ] Setup monorepo con Turborepo
@@ -65,6 +66,7 @@ SecureStack incluirá un **Service Mesh seguro** como característica core, prop
 - [ ] Registrar dominio y setup hosting
 
 **Entregables:**
+
 - Repositorio funcional con estructura base
 - Pipeline CI/CD configurado
 - Sitio de documentación en draft
@@ -76,6 +78,7 @@ SecureStack incluirá un **Service Mesh seguro** como característica core, prop
 ### Semana 3-4: Investigación y Diseño
 
 **Tareas:**
+
 - [ ] Análisis competitivo profundo (NestJS, tRPC, Fastify, Istio, Linkerd)
 - [ ] Entrevistas con 10-15 developers potenciales
 - [ ] Finalizar API design y nomenclatura
@@ -85,6 +88,7 @@ SecureStack incluirá un **Service Mesh seguro** como característica core, prop
 - [ ] **Security audit inicial del diseño del mesh**
 
 **Entregables:**
+
 - Documento de especificación API v1
 - Feedback de early adopters
 - Community channels activos
@@ -101,6 +105,7 @@ SecureStack incluirá un **Service Mesh seguro** como característica core, prop
 **Package:** `@lemur-bookstores/secure-stack-core`
 
 **Alcance:**
+
 - Context system
 - Middleware pipeline
 - Router abstraction
@@ -109,6 +114,7 @@ SecureStack incluirá un **Service Mesh seguro** como característica core, prop
 - Procedure definitions (query, mutation, subscription)
 
 **Estructura:**
+
 ```
 packages/core/
 ├── src/
@@ -137,18 +143,21 @@ packages/core/
 **Tareas por semana:**
 
 **Semana 1-2: Foundation**
+
 - Context builder implementation
 - Middleware system + composition
 - Router abstraction
 - Type inference engine
 
 **Semana 3-4: Integration & Testing**
+
 - Tests unitarios (coverage > 90%)
 - Tests de integración
 - Benchmarking inicial
 - Documentación API
 
 **Entregables:**
+
 - Package @lemur-bookstores/secure-stack-core v0.1.0
 - 100+ tests pasando
 - Documentación completa
@@ -163,6 +172,7 @@ packages/core/
 **Package:** `@lemur-bookstores/secure-stack-server`
 
 **Alcance:**
+
 - tRPC adapter
 - gRPC server implementation
 - HTTP server wrapper
@@ -171,6 +181,7 @@ packages/core/
 - Graceful shutdown
 
 **Estructura:**
+
 ```
 packages/server/
 ├── src/
@@ -197,30 +208,35 @@ packages/server/
 **Tareas por semana:**
 
 **Semana 1: tRPC Integration**
+
 - Wrapper para tRPC server
 - Request/response handling
 - Error mapping
 - Type inference
 
 **Semana 2: gRPC Implementation**
+
 - Proto file generation
 - gRPC service definitions
 - Client/server implementation
 - mTLS support
 
 **Semana 3: Server Management**
+
 - Lifecycle hooks (onStart, onReady, onShutdown)
 - Health check endpoints
 - Metrics endpoints
 - Graceful shutdown
 
 **Semana 4: Testing & Examples**
+
 - Integration tests
 - Load testing
 - 3 ejemplos completos
 - Documentation
 
 **Entregables:**
+
 - Package @lemur-bookstores/secure-stack-server v0.1.0
 - Soporte completo tRPC + gRPC
 - Ejemplos funcionando
@@ -235,6 +251,7 @@ packages/server/
 **Package:** `@lemur-bookstores/secure-stack-client`
 
 **Alcance:**
+
 - tRPC client wrapper
 - React hooks integration
 - Query/mutation helpers
@@ -243,6 +260,7 @@ packages/server/
 - SSR support (Next.js)
 
 **Estructura:**
+
 ```
 packages/client/
 ├── src/
@@ -271,28 +289,33 @@ packages/client/
 **Tareas por semana:**
 
 **Semana 1: Core Client**
-- tRPC client wrapper
-- Type-safe API
-- Configuration system
+
+- [x] tRPC client wrapper (SecureStackClient)
+- [x] Type-safe API
+- [x] Configuration system
 
 **Semana 2: React Integration**
-- useQuery hook
-- useMutation hook
-- useSubscription hook
-- Provider component
+
+- [x] useQuery hook
+- [x] useMutation hook
+- [ ] useSubscription hook
+- [x] Provider component
 
 **Semana 3: Advanced Features**
-- Cache management
-- Optimistic updates
-- SSR support
+
+- [ ] Cache management
+- [x] Optimistic updates (Basic support)
+- [ ] SSR support
 
 **Semana 4: Testing & Examples**
-- Unit tests
-- Integration tests
-- 3 ejemplos (React, Next.js, Vite)
-- Documentation
+
+- [x] Unit tests
+- [ ] Integration tests
+- [x] 3 ejemplos (React, Next.js, Vite) - (React/Vite done)
+- [ ] Documentation
 
 **Entregables:**
+
 - Package @lemur-bookstores/secure-stack-client v0.1.0
 - React hooks completos
 - Ejemplos funcionando
@@ -307,6 +330,7 @@ packages/client/
 **Package:** `@lemur-bookstores/secure-stack-mesh`
 
 **Alcance:**
+
 - Encriptación híbrida (RSA-4096 + AES-256-GCM)
 - Autenticación mutua JWT
 - Session management
@@ -315,6 +339,7 @@ packages/client/
 - Basic service discovery
 
 **Estructura:**
+
 ```
 packages/mesh/
 ├── src/
@@ -350,6 +375,7 @@ packages/mesh/
 **Tareas por semana:**
 
 **Semana 1: Cryptography Foundation**
+
 - RSA-4096 key generation
 - AES-256-GCM encryption
 - HMAC-SHA256 integrity
@@ -357,6 +383,7 @@ packages/mesh/
 - Session key management
 
 **Semana 2: Authentication & Authorization**
+
 - JWT token generation
 - JWT verification
 - Mutual authentication
@@ -364,6 +391,7 @@ packages/mesh/
 - Token expiration handling
 
 **Semana 3: Secure Communication**
+
 - gRPC proto definitions
 - Secure server implementation
 - Secure client implementation
@@ -371,6 +399,7 @@ packages/mesh/
 - Message encryption/decryption
 
 **Semana 4: Testing & Integration**
+
 - Unit tests (>90% coverage)
 - Integration tests
 - Security tests
@@ -422,10 +451,10 @@ const app = new SecureStack({
       mode: 'static',
       services: [
         { id: 'auth-service', host: 'auth.internal', port: 50052 },
-        { id: 'order-service', host: 'order.internal', port: 50053 }
-      ]
-    }
-  }
+        { id: 'order-service', host: 'order.internal', port: 50053 },
+      ],
+    },
+  },
 });
 
 // Comunicación segura automática
@@ -434,6 +463,7 @@ const response = await orderService.call('createOrder', { userId: '123' });
 ```
 
 **Entregables:**
+
 - Package @lemur-bookstores/secure-stack-mesh v0.1.0
 - Encriptación híbrida funcional
 - Autenticación JWT implementada
@@ -451,6 +481,7 @@ const response = await orderService.call('createOrder', { userId: '123' });
 **Package:** `@lemur-bookstores/secure-stack-auth`
 
 **Features:**
+
 - JWT authentication
 - Session management
 - OAuth providers (Google, GitHub)
@@ -463,13 +494,15 @@ const response = await orderService.call('createOrder', { userId: '123' });
 
 ```typescript
 // Server
-app.use(auth.init({
-  jwt: { secret: process.env.JWT_SECRET, expiresIn: '7d' },
-  providers: {
-    google: { clientId: '...', clientSecret: '...' }
-  },
-  email: { from: 'noreply@example.com', provider: 'sendgrid' }
-}));
+app.use(
+  auth.init({
+    jwt: { secret: process.env.JWT_SECRET, expiresIn: '7d' },
+    providers: {
+      google: { clientId: '...', clientSecret: '...' },
+    },
+    email: { from: 'noreply@example.com', provider: 'sendgrid' },
+  })
+);
 
 // Client
 const { user, signIn, signOut, signUp } = useAuth();
@@ -484,6 +517,7 @@ const { user, signIn, signOut, signUp } = useAuth();
 **Package:** `@lemur-bookstores/secure-stack-rbac`
 
 **Features:**
+
 - Role definitions
 - Permission system
 - Resource-based access control
@@ -522,6 +556,7 @@ router()
 **Package:** `@lemur-bookstores/secure-stack-rate-limit`
 
 **Features:**
+
 - Fixed window
 - Sliding window
 - Token bucket
@@ -538,6 +573,7 @@ router()
 **Package:** `@lemur-bookstores/secure-stack-audit`
 
 **Features:**
+
 - Event logging
 - Query interface
 - Storage adapters (DB, Elasticsearch, File)
@@ -554,6 +590,7 @@ router()
 **Package:** `@lemur-bookstores/secure-stack-mesh` (actualización)
 
 **Features:**
+
 - Rate limiting distribuido (100 req/min configurable)
 - Circuit breaker pattern
 - Retry policies
@@ -564,6 +601,7 @@ router()
 - Metrics collection
 
 **Estructura adicional:**
+
 ```
 packages/mesh/
 ├── src/
@@ -585,18 +623,21 @@ packages/mesh/
 **Tareas por semana:**
 
 **Semana 1: Resilience Patterns**
+
 - Rate limiter distribuido
 - Circuit breaker implementation
 - Retry policies
 - Timeout management
 
 **Semana 2: Monitoring & Auditing**
+
 - Audit logger
 - Event tracking
 - Metrics collection
 - Health checks
 
 **Semana 3: Key Rotation & Testing**
+
 - Automatic key rotation (cada hora)
 - Rotation policies
 - Integration tests
@@ -633,6 +674,7 @@ packages/mesh/
    - Latency monitoring
 
 **Entregables:**
+
 - Mesh con resilience patterns completos
 - Auditoría funcional
 - Key rotation automática
@@ -650,6 +692,7 @@ packages/mesh/
 **Package:** `@lemur-bookstores/secure-stack-cli`
 
 **Comandos:**
+
 ```bash
 securestack create <project-name>
 securestack generate service <name>
@@ -663,6 +706,7 @@ securestack deploy
 ```
 
 **Features:**
+
 - Interactive project setup
 - Code generation
 - Dev server con hot reload
@@ -709,6 +753,7 @@ securestack deploy
 ### Milestone 4.1: Integraciones
 
 **Prioridad Alta:**
+
 - Prisma integration
 - Drizzle ORM integration
 - Next.js template
@@ -716,6 +761,7 @@ securestack deploy
 - Docker compose files
 
 **Prioridad Media:**
+
 - GraphQL bridge
 - OpenAPI generator
 - Postman collection generator
@@ -728,6 +774,7 @@ securestack deploy
 ### Milestone 4.2: Developer Experience
 
 **Features:**
+
 - VSCode extension
 - Chrome DevTools extension
 - React DevTools integration
@@ -742,6 +789,7 @@ securestack deploy
 ### Milestone 4.3: Enterprise Features (Opcional)
 
 **Features:**
+
 - Advanced analytics
 - Compliance tools (GDPR, HIPAA)
 - Multi-tenancy
@@ -756,6 +804,7 @@ securestack deploy
 ## Stack Tecnológico
 
 ### Core
+
 - **Lenguaje:** TypeScript 5+
 - **Runtime:** Node.js 20+ / Bun 1.0+
 - **Build:** tsup, esbuild
@@ -763,23 +812,27 @@ securestack deploy
 - **Package manager:** pnpm
 
 ### Testing
+
 - **Unit tests:** Vitest
 - **E2E tests:** Playwright
 - **Benchmarking:** Benchmark.js
 - **Coverage:** c8
 
 ### Documentation
+
 - **Site:** Nextra (Next.js)
 - **API docs:** TypeDoc
 - **Examples:** Stackblitz embeds
 
 ### CI/CD
+
 - **CI:** GitHub Actions
 - **Versioning:** Changesets
 - **Publishing:** Automated via CI
 - **Monitoring:** Sentry
 
 ### Infrastructure
+
 - **Hosting:** Vercel (docs), Railway (examples)
 - **CDN:** Cloudflare
 - **Registry:** npm
@@ -788,24 +841,24 @@ securestack deploy
 
 ## Budget Summary
 
-| Fase | Duración | Costo | Acumulado |
-|------|----------|-------|-----------|
-| Fase 0: Preparación | 4 semanas | $5,000 | $5,000 |
-| Fase 1: Core MVP + Mesh | 16 semanas | $70,000 | $75,000 |
-| Fase 2: Módulos + Mesh Advanced | 13 semanas | $53,000 | $128,000 |
-| Fase 3: Advanced | 10 semanas | $40,000 | $168,000 |
-| Fase 4: Ecosystem | Ongoing | $35,000 | $203,000 |
-| **Total MVP (Fases 0-2)** | **29 semanas** | **$123,000** | - |
-| **Total v1.0 (Fases 0-3)** | **39 semanas** | **$178,000** | - |
+| Fase                            | Duración       | Costo        | Acumulado |
+| ------------------------------- | -------------- | ------------ | --------- |
+| Fase 0: Preparación             | 4 semanas      | $5,000       | $5,000    |
+| Fase 1: Core MVP + Mesh         | 16 semanas     | $70,000      | $75,000   |
+| Fase 2: Módulos + Mesh Advanced | 13 semanas     | $53,000      | $128,000  |
+| Fase 3: Advanced                | 10 semanas     | $40,000      | $168,000  |
+| Fase 4: Ecosystem               | Ongoing        | $35,000      | $203,000  |
+| **Total MVP (Fases 0-2)**       | **29 semanas** | **$123,000** | -         |
+| **Total v1.0 (Fases 0-3)**      | **39 semanas** | **$178,000** | -         |
 
 ### Desglose del Service Mesh
 
-| Componente | Fase | Costo |
-|------------|------|-------|
-| Mesh Core (Encryption + Auth) | Fase 1 | $20,000 |
-| Mesh Resilience (Rate Limit + Circuit Breaker) | Fase 2 | $15,000 |
-| Mesh Advanced (Discovery + Monitoring) | Fase 3 | $10,000 |
-| **Total Service Mesh** | - | **$45,000** |
+| Componente                                     | Fase   | Costo       |
+| ---------------------------------------------- | ------ | ----------- |
+| Mesh Core (Encryption + Auth)                  | Fase 1 | $20,000     |
+| Mesh Resilience (Rate Limit + Circuit Breaker) | Fase 2 | $15,000     |
+| Mesh Advanced (Discovery + Monitoring)         | Fase 3 | $10,000     |
+| **Total Service Mesh**                         | -      | **$45,000** |
 
 ---
 
@@ -814,6 +867,7 @@ securestack deploy
 ### Pre-Launch (2 semanas antes)
 
 **Semana -2:**
+
 - Invitar 50 beta testers
 - Crear landing page
 - Escribir blog post de lanzamiento
@@ -822,6 +876,7 @@ securestack deploy
 - **Demo del Service Mesh en acción**
 
 **Semana -1:**
+
 - Fix bugs reportados por beta testers
 - Finalizar documentación
 - Crear social media content
@@ -831,6 +886,7 @@ securestack deploy
 ### Launch Day
 
 **Plataformas:**
+
 - Product Hunt (objetivo: #1 del día)
 - Hacker News (Show HN)
 - Reddit (r/programming, r/typescript)
@@ -839,6 +895,7 @@ securestack deploy
 - LinkedIn
 
 **Contenido:**
+
 - "Why we built SecureStack" blog post
 - **"Building a Secure Service Mesh from Scratch"** technical deep-dive
 - Demo video (3-5 min)
@@ -849,12 +906,14 @@ securestack deploy
 ### Post-Launch (primer mes)
 
 **Semana 1-2:**
+
 - Responder feedback activamente
 - Fix issues críticos
 - Publicar tutoriales
 - Crear content series
 
 **Semana 3-4:**
+
 - Primera patch release (bug fixes)
 - Case studies de early adopters
 - Webinar o workshop
@@ -863,6 +922,7 @@ securestack deploy
 ### Métricas de Éxito
 
 **Corto plazo (3 meses):**
+
 - 🎯 1,500 GitHub stars (vs 1,000 sin mesh)
 - 📦 750 npm downloads/semana (vs 500 sin mesh)
 - 💬 150 Discord members (vs 100 sin mesh)
@@ -870,6 +930,7 @@ securestack deploy
 - 📰 Mencionado en 3+ artículos de tech media
 
 **Medio plazo (6 meses):**
+
 - 5,000 GitHub stars
 - 5,000 npm downloads/semana
 - 500 Discord members
@@ -877,6 +938,7 @@ securestack deploy
 - 10 companies en producción
 
 **Largo plazo (12 meses):**
+
 - 10,000+ GitHub stars
 - 50,000+ npm downloads/semana
 - 2,000+ Discord members
@@ -888,18 +950,21 @@ securestack deploy
 ## Próximos Pasos Inmediatos
 
 ### 1. Validación Técnica (Semana 1-2)
+
 - ✅ Crear POC del core framework (context + middleware + router)
 - ✅ Crear POC del Service Mesh (comunicación segura entre 2 servicios)
 - [ ] Benchmarking vs NestJS, Fastify, gRPC + mTLS
 - [ ] Validar con 10-15 developers (entrevistas + feedback)
 
 ### 2. Preparación de Equipo (Semana 3-4)
+
 - [ ] Contratar security expert para auditoría del mesh
 - [ ] Setup monorepo + CI/CD básico
 - [ ] Escribir RFC para API design (core + mesh)
 - [ ] Iniciar comunidad (Discord/GitHub Discussions)
 
 ### 3. Decisión de Inversión (Semana 4)
+
 - [ ] Aprobar presupuesto: **$123,000 para MVP** (con mesh)
 - [ ] Aprobar timeline: **29 semanas**
 - [ ] Confirmar equipo: 4-5 personas + security expert

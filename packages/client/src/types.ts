@@ -65,6 +65,41 @@ export interface RequestOptions {
      * Custom context to pass to the server
      */
     context?: Partial<DefaultContext>;
+
+    /**
+     * Enable client-side caching for this request
+     */
+    enableCache?: boolean;
+
+    /**
+     * Cache TTL in milliseconds
+     */
+    cacheTTL?: number;
+}
+
+/**
+ * Subscription options
+ */
+export interface SubscriptionOptions<TData = unknown> {
+    /**
+     * Callback on data received
+     */
+    onData: (data: TData) => void;
+
+    /**
+     * Callback on error
+     */
+    onError?: (error: ClientError) => void;
+
+    /**
+     * Callback on connection open
+     */
+    onOpen?: () => void;
+
+    /**
+     * Callback on connection close
+     */
+    onClose?: () => void;
 }
 
 /**

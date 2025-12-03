@@ -3,10 +3,21 @@
  * Core client for making type-safe API calls
  */
 
-import type { ClientConfig, RequestOptions, ClientResponse, ClientError } from './types';
+import type { ClientConfig, RequestOptions, ClientResponse, ClientError, SubscriptionOptions } from './types';
+import { CacheManager } from './cache/cache';
+import { CacheStatus } from './cache/strategies';
 
 export class SecureStackClient {
     private config: Required<ClientConfig>;
+    private cache: CacheManager;
+    private ws: WebSocket | null = null;
+    private wsReconnectTimer: any = null;
+    private subscriptionHandlers: Map<string, {
+        onData: (data: any) => void;
+        onError: (error: any) => void;
+        path: string;
+        input: any;
+    }> = new Map();
 
     constructor(config: ClientConfig) {
         this.config = {
@@ -17,6 +28,7 @@ export class SecureStackClient {
             maxRetries: config.maxRetries || 3,
             signal: config.signal!,
         };
+        this.cache = new CacheManager();
     }
 
     /**
@@ -28,11 +40,144 @@ export class SecureStackClient {
         options?: RequestOptions
     ): Promise<TOutput> {
         const url = this.buildUrl(path, input);
+
+        if (options?.enableCache) {
+            const { data, status } = this.cache.get<TOutput>(url);
+
+            if (status === CacheStatus.Fresh && data !== undefined) {
+                return data;
+            }
+
+            if (status === CacheStatus.Stale && data !== undefined) {
+                // Return stale data immediately, but trigger background refresh
+                const { enableCache, cacheTTL, ...fetchOptions } = options;
+                this.fetch<TOutput>(url, { method: 'GET', ...fetchOptions })
+                    .then(response => {
+                        this.cache.set(url, response.data, cacheTTL);
+                    })
+                    .catch(err => {
+                        console.warn('[SecureStackClient] Background refresh failed:', err);
+                    });
+
+                return data;
+            }
+        }
+
+        const { enableCache, cacheTTL, ...fetchOptions } = options || {};
         const response = await this.fetch<TOutput>(url, {
             method: 'GET',
-            ...options,
+            ...fetchOptions,
         });
-        return response.data;
+
+        if (enableCache) {
+            this.cache.set(url, response.data, cacheTTL);
+        } return response.data;
+    }
+
+    /**
+     * Subscribe to real-time updates
+     */
+    subscribe<TInput = void, TOutput = unknown>(
+        path: string,
+        input: TInput,
+        options: SubscriptionOptions<TOutput>
+    ): () => void {
+        if (typeof WebSocket === 'undefined') {
+            console.warn('[SecureStackClient] WebSocket is not available in this environment');
+            return () => { };
+        }
+
+        const id = Math.random().toString(36).substring(7);
+
+        this.connectWs();
+
+        this.subscriptionHandlers.set(id, {
+            onData: options.onData,
+            onError: options.onError || (() => { }),
+            path,
+            input
+        });
+
+        // Send subscribe message if connected, otherwise it will be sent on open
+        if (this.ws?.readyState === WebSocket.OPEN) {
+            this.sendWsMessage({
+                type: 'SUBSCRIBE',
+                id,
+                path,
+                input
+            });
+        }
+
+        if (options.onOpen) options.onOpen();
+
+        return () => {
+            this.sendWsMessage({ type: 'UNSUBSCRIBE', id });
+            this.subscriptionHandlers.delete(id);
+            if (options.onClose) options.onClose();
+        };
+    }
+
+    private getWsUrl(): string {
+        const url = new URL(this.config.url);
+        url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
+        return url.toString();
+    }
+
+    private connectWs() {
+        if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
+            return;
+        }
+
+        const wsUrl = this.getWsUrl();
+        this.ws = new WebSocket(wsUrl);
+
+        this.ws.onopen = () => {
+            // Resubscribe to all active subscriptions
+            this.subscriptionHandlers.forEach((handler, id) => {
+                this.sendWsMessage({
+                    type: 'SUBSCRIBE',
+                    id,
+                    path: handler.path,
+                    input: handler.input
+                });
+            });
+        };
+
+        this.ws.onmessage = (event) => {
+            try {
+                const message = JSON.parse(event.data);
+                const { id, type, data, error } = message;
+
+                const handler = this.subscriptionHandlers.get(id);
+                if (!handler) return;
+
+                if (type === 'DATA') {
+                    handler.onData(data);
+                } else if (type === 'ERROR') {
+                    handler.onError(error);
+                }
+            } catch (e) {
+                console.error('[SecureStackClient] Failed to parse WS message', e);
+            }
+        };
+
+        this.ws.onclose = () => {
+            // Reconnect logic
+            if (this.wsReconnectTimer) clearTimeout(this.wsReconnectTimer);
+            this.wsReconnectTimer = setTimeout(() => {
+                this.ws = null;
+                // Only reconnect if we have active subscriptions
+                if (this.subscriptionHandlers.size > 0) {
+                    this.connectWs();
+                }
+            }, 5000);
+        };
+    }
+
+    private sendWsMessage(message: any) {
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify(message));
+        }
     }
 
     /**
@@ -44,10 +189,11 @@ export class SecureStackClient {
         options?: RequestOptions
     ): Promise<TOutput> {
         const url = this.buildUrl(path);
+        const { enableCache, cacheTTL, ...fetchOptions } = options || {};
         const response = await this.fetch<TOutput>(url, {
             method: 'POST',
             body: JSON.stringify(input),
-            ...options,
+            ...fetchOptions,
         });
         return response.data;
     }
