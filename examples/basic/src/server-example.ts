@@ -15,7 +15,8 @@ const server = new SecureStackServer({
     apiPrefix: '/api',
     cors: {
         origin: '*',
-        credentials: false,
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     },
 });
 
@@ -33,9 +34,12 @@ const userRouter = router()
     })
     .query('listUsers', {
         handler: async () => {
+            // Simulate delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+
             return [
-                { id: '1', name: 'John Doe', email: 'john@example.com' },
-                { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
+                { id: '1', name: 'John Doe', email: 'john@example.com', role: 'admin' },
+                { id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'user' },
             ];
         },
     })
@@ -45,9 +49,13 @@ const userRouter = router()
             email: z.string().email(),
         }),
         handler: async ({ input }: any) => {
+            // Simulate delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
             return {
                 id: Math.random().toString(36).slice(2),
                 ...input,
+                role: 'user',
                 createdAt: new Date().toISOString(),
             };
         },

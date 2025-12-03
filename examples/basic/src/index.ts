@@ -39,7 +39,7 @@ const userRouter = router()
       name: z.string(),
       email: z.string().email(),
     }),
-    handler: async ({ input }) => {
+    handler: async ({ input }: any) => {
       console.log('Creating user:', input);
       return {
         id: Math.random().toString(36).substring(7),
