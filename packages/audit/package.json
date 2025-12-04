@@ -1,7 +1,7 @@
 {
-  "name": "@lemur-bookstores/rate-limit",
+  "name": "@lemur-bookstores/audit",
   "version": "0.0.1",
-  "description": "Rate Limit module for SecureStack",
+  "description": "Audit logging module for SecureStack",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -22,9 +22,10 @@
   },
   "keywords": [
     "securestack",
-    "rate-limit",
+    "audit",
+    "logging",
     "security",
-    "throttle"
+    "compliance"
   ],
   "author": "Lemur Bookstores",
   "license": "MIT",
@@ -33,9 +34,5 @@
     "tsup": "8.5.1",
     "typescript": "5.9.3",
     "vitest": "4.0.15"
-  },
-  "dependencies": {
-    "@types/uuid": "10.0.0",
-    "uuid": "13.0.0"
   }
 }
