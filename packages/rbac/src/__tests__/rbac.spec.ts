@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { RBACManager } from '../rbac/RBACManager';
-import { RBACConfig } from '../rbac/types';
+import { RBACManager } from '../RBACManager';
+import { RBACConfig } from '../types';
 
 describe('RBACManager', () => {
     const config: RBACConfig = {
@@ -57,5 +57,39 @@ describe('RBACManager', () => {
     it('should handle non-existent roles', () => {
         expect(rbac.hasPermission('guest', 'read:profile')).toBe(false);
         expect(rbac.getPermissions('guest')).toEqual([]);
+    });
+
+    it('should check dynamic rules', async () => {
+        const configWithRules: RBACConfig = {
+            roles: [
+                { name: 'user', permissions: [] },
+                { name: 'admin', permissions: [] }
+            ],
+            rules: [
+                {
+                    roles: ['user'],
+                    resources: ['post'],
+                    actions: ['update'],
+                    condition: (user, post) => user.id === post.authorId
+                }
+            ]
+        };
+        const rbacWithRules = new RBACManager(configWithRules);
+
+        const user1 = { id: '1' };
+        const user2 = { id: '2' };
+        const post = { authorId: '1', content: 'hello' };
+
+        // User 1 is author
+        expect(await rbacWithRules.checkAccess(user1, ['user'], 'post', 'update', post)).toBe(true);
+
+        // User 2 is not author
+        expect(await rbacWithRules.checkAccess(user2, ['user'], 'post', 'update', post)).toBe(false);
+
+        // Wrong action
+        expect(await rbacWithRules.checkAccess(user1, ['user'], 'post', 'delete', post)).toBe(false);
+
+        // Wrong role
+        expect(await rbacWithRules.checkAccess(user1, ['guest'], 'post', 'update', post)).toBe(false);
     });
 });

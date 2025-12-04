@@ -1,12 +1,14 @@
-import { RBACConfig, Role, Permission } from './types';
+import { RBACConfig, Role, Permission, AccessRule } from './types';
 
 export class RBACManager {
     private roles: Map<Role, Set<Permission>>;
     private inheritance: Map<Role, Role[]>;
+    private rules: AccessRule[];
 
     constructor(config: RBACConfig) {
         this.roles = new Map();
         this.inheritance = new Map();
+        this.rules = [];
         this.init(config);
     }
 
@@ -18,6 +20,46 @@ export class RBACManager {
                 this.inheritance.set(roleDef.name, roleDef.inherits);
             }
         }
+
+        // Register rules
+        if (config.rules) {
+            this.rules = config.rules;
+        }
+    }
+
+    /**
+     * Checks access based on dynamic rules
+     */
+    public async checkAccess(
+        user: any,
+        userRoles: Role[],
+        resourceType: string,
+        action: string,
+        resource: any
+    ): Promise<boolean> {
+        // Find matching rules
+        const matchingRules = this.rules.filter(rule => {
+            const roleMatch = rule.roles.some(r => userRoles.includes(r));
+            const resourceMatch = rule.resources.includes(resourceType);
+            const actionMatch = rule.actions.includes(action);
+            return roleMatch && resourceMatch && actionMatch;
+        });
+
+        if (matchingRules.length === 0) {
+            return false;
+        }
+
+        // Check conditions (OR logic - if any rule allows it, access is granted)
+        for (const rule of matchingRules) {
+            try {
+                const allowed = await rule.condition(user, resource);
+                if (allowed) return true;
+            } catch (error) {
+                console.error('RBAC Rule condition error:', error);
+            }
+        }
+
+        return false;
     }
 
     /**
