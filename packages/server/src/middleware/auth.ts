@@ -10,8 +10,8 @@ export interface AuthenticatedContext {
     headers?: Record<string, string>;
 }
 
-export function createAuthMiddleware(auth: AuthModule): MiddlewareFunction<AuthenticatedContext> {
-    return async (ctx, next) => {
+export function createAuthMiddleware(auth: AuthModule): MiddlewareFunction {
+    return async (ctx: any, next) => {
         const authHeader = ctx.headers?.['authorization'];
 
         if (!authHeader) {
@@ -44,8 +44,8 @@ export function createAuthMiddleware(auth: AuthModule): MiddlewareFunction<Authe
     };
 }
 
-export function createRoleMiddleware(auth: AuthModule, requiredPermissions: string[]): MiddlewareFunction<AuthenticatedContext> {
-    return async (ctx, next) => {
+export function createRoleMiddleware(auth: AuthModule, requiredPermissions: string[]): MiddlewareFunction {
+    return async (ctx: any, next) => {
         if (!ctx.user) {
             throw new SecureStackError({
                 code: ErrorCode.UNAUTHORIZED,
