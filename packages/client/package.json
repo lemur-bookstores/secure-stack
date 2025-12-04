@@ -36,8 +36,10 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@grpc/grpc-js": "1.14.2",
     "@lemur-bookstores/core": "*",
-    "@tanstack/react-query": "5.17.0"
+    "@tanstack/react-query": "5.17.0",
+    "next": "14.2.33"
   },
   "peerDependencies": {
     "react": "18.2.0",
@@ -58,8 +60,8 @@
     "@types/react-dom": "18.2.18",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "tsup": "8.0.1",
+    "tsup": "8.5.1",
     "typescript": "5.3.3",
-    "vitest": "1.6.1"
+    "vitest": "4.0.15"
   }
 }

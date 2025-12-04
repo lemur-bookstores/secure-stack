@@ -9,16 +9,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@grpc/grpc-js": "1.14.2",
     "@lemur-bookstores/client": "*",
     "@tanstack/react-query": "^5.17.0",
+    "next": "14.2.33",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tsup": "8.5.1",
+    "vitest": "4.0.15"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "4.7.0",
     "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "vite": "7.2.6"
   }
 }
