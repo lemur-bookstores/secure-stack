@@ -19,6 +19,9 @@ npm run bench:e2e         # End-to-end HTTP
 # Run comparison benchmarks
 npm run bench:trpc        # vs tRPC
 npm run bench:grpc        # vs gRPC
+
+# Generate Markdown report
+npm run bench:report      # Runs all suites and saves reports/*.md
 ```
 
 ## Benchmarked Components
