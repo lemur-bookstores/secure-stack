@@ -1,13 +1,16 @@
 import { PasswordManager } from './utils/PasswordManager';
 import { UserJWTManager, AuthConfig } from './utils/UserJWTManager';
 import { SessionManager, SessionConfig } from './session/SessionManager';
+import { RBACManager } from './rbac/RBACManager';
+import { RBACConfig } from './rbac/types';
 
-export type AuthModuleConfig = AuthConfig & Partial<SessionConfig>;
+export type AuthModuleConfig = AuthConfig & Partial<SessionConfig> & { rbac?: RBACConfig };
 
 export class AuthModule {
     public readonly password: PasswordManager;
     public readonly jwt: UserJWTManager;
     public readonly session?: SessionManager;
+    public readonly rbac?: RBACManager;
 
     constructor(config: AuthModuleConfig) {
         this.password = new PasswordManager();
@@ -20,6 +23,10 @@ export class AuthModule {
                 refreshTokenSecret: config.refreshTokenSecret,
                 refreshTokenExpiresIn: config.refreshTokenExpiresIn || '7d',
             });
+        }
+
+        if (config.rbac) {
+            this.rbac = new RBACManager(config.rbac);
         }
     }
 
@@ -34,5 +41,6 @@ export class AuthModule {
 export * from './utils/PasswordManager';
 export * from './utils/UserJWTManager';
 export * from './session/SessionManager';
+export * from './rbac';
 export * from './providers';
 

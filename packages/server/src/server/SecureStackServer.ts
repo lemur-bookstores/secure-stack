@@ -1,10 +1,12 @@
 import { SecureStack, SecureStackConfig, Router } from '@lemur-bookstores/core';
+import { AuthModule, AuthModuleConfig } from '@lemur-bookstores/auth';
 import Fastify, { FastifyInstance } from 'fastify';
 import { registerHTTPRouter } from '../protocols/http';
 
 export interface SecureStackServerConfig extends SecureStackConfig {
     host?: string;
     apiPrefix?: string;
+    auth?: AuthModuleConfig;
     cors?: {
         origin?: string | string[] | boolean;
         credentials?: boolean;
@@ -26,6 +28,7 @@ export class SecureStackServer extends SecureStack {
     private hooks: LifecycleHooks = {};
     private isRunning = false;
     private httpRouters: Map<string, Router> = new Map();
+    public readonly auth?: AuthModule;
 
     constructor(config: SecureStackServerConfig) {
         super(config);
@@ -35,6 +38,10 @@ export class SecureStackServer extends SecureStack {
                 level: process.env.LOG_LEVEL || 'info',
             },
         });
+
+        if (config.auth) {
+            this.auth = new AuthModule(config.auth);
+        }
     }
 
     /**
