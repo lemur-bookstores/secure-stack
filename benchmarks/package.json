@@ -1,0 +1,36 @@
+{
+  "name": "benchmarks",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bench": "tsx bench.ts",
+    "bench:router": "tsx router.bench.ts",
+    "bench:middleware": "tsx middleware.bench.ts",
+    "bench:server": "tsx server.bench.ts",
+    "bench:cache": "tsx cache.bench.ts",
+    "bench:client": "tsx client.bench.ts",
+    "bench:e2e": "tsx e2e.bench.ts",
+    "bench:trpc": "tsx comparison-trpc.bench.ts",
+    "bench:grpc": "tsx comparison-grpc.bench.ts",
+    "bench:all": "npm run bench:router && npm run bench:middleware && npm run bench:server && npm run bench:cache && npm run bench:client"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.14.2",
+    "@grpc/proto-loader": "^0.7.13",
+    "@lemur-bookstores/client": "*",
+    "@lemur-bookstores/core": "*",
+    "@lemur-bookstores/server": "*",
+    "@tanstack/react-query": "^5.17.0",
+    "@testing-library/react": "^14.1.2",
+    "@trpc/server": "^10.45.0",
+    "react": "^18.2.0",
+    "tinybench": "^2.9.0",
+    "tsx": "^4.21.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.45",
+    "happy-dom": "^20.0.11"
+  }
+}
