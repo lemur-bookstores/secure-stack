@@ -1,5 +1,5 @@
 /**
- * Context types
+ * Context helpers
  */
 
-export { ContextBuilder, DefaultContext } from './context';
+export { ContextBuilder, DefaultContext, createContext } from './context';
