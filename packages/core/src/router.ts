@@ -49,6 +49,13 @@ export function router() {
         },
 
         /**
+         * Alias for middleware
+         */
+        use(middleware: MiddlewareFunction) {
+            return this.middleware(middleware);
+        },
+
+        /**
          * Execute a procedure with input validation
          */
         async executeProcedure<TInput = unknown, TOutput = unknown, TContext = unknown>(
