@@ -139,8 +139,13 @@ for (const suite of suites) {
             results.push({ name: suite.name, success: true, metrics: details });
             console.log(`✅ ${suite.name} completed`);
         } else {
+            const cleanOutput = stripAnsi(output);
+            const errorMatch = cleanOutput.match(/(Error:.*?)(?:\n\s+at|$)/s);
+            const errorMessage = errorMatch ? errorMatch[1].trim() : 'Unknown error';
+
             await appendFile(reportPath, `⚠️ **Status:** Failed (exit code ${exitCode})\n\n`, 'utf8');
-            await appendFile(reportPath, `<details>\n<summary>View output</summary>\n\n\`\`\`\n${stripAnsi(output).slice(0, 1000)}\n\`\`\`\n</details>\n\n`, 'utf8');
+            await appendFile(reportPath, `**Error:** ${errorMessage}\n\n`, 'utf8');
+            await appendFile(reportPath, `<details>\n<summary>View full output</summary>\n\n\`\`\`\n${cleanOutput.slice(0, 2000)}\n\`\`\`\n</details>\n\n`, 'utf8');
             results.push({ name: suite.name, success: false, metrics: '' });
             console.warn(`⚠️ ${suite.name} failed with code ${exitCode}`);
         }

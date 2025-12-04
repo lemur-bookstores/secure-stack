@@ -63,12 +63,40 @@ server.router('api', testRouter);
 // Start server before benchmarks
 let serverStarted = false;
 
+/**
+ * Wait for server to be ready by checking health endpoint
+ */
+async function waitForServer(maxAttempts = 20, delayMs = 1000): Promise<boolean> {
+    for (let i = 0; i < maxAttempts; i++) {
+        try {
+            // Health endpoint is at root level, not under /api prefix
+            const response = await fetch('http://localhost:3334/health');
+            if (response.ok) {
+                return true;
+            }
+        } catch (error) {
+            // Server not ready yet, wait and retry
+            await new Promise(resolve => setTimeout(resolve, delayMs));
+        }
+    }
+    return false;
+}
+
 async function startServer() {
     if (!serverStarted) {
         try {
+            // Start the server
             await server.start();
+
+            // Wait for server to be actually ready
+            const isReady = await waitForServer();
+
+            if (!isReady) {
+                throw new Error('Server started but health check failed after 5 seconds');
+            }
+
             serverStarted = true;
-            console.log('✓ Test server started on port 3334\n');
+            console.log('✓ Test server started and ready on port 3334\n');
         } catch (error) {
             console.error('Failed to start server:', error);
             throw error;
@@ -78,14 +106,26 @@ async function startServer() {
 
 // Helper function for HTTP requests
 async function makeRequest(path: string, options: RequestInit = {}) {
-    const response = await fetch(`http://localhost:3334${path}`, {
-        ...options,
-        headers: {
-            'Content-Type': 'application/json',
-            ...options.headers
+    try {
+        const response = await fetch(`http://localhost:3334${path}`, {
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-    });
-    return response.json();
+
+        return response.json();
+    } catch (error) {
+        if (error instanceof Error && error.message.includes('ECONNREFUSED')) {
+            throw new Error('Server not responding. Make sure the server is started before running benchmarks.');
+        }
+        throw error;
+    }
 }
 
 // ============================================================================
@@ -201,6 +241,12 @@ console.log('  E2E validated query:  < 10ms avg');
 console.log('  E2E mutation:         < 15ms avg');
 console.log('  HTTP overhead:        < 3ms avg');
 
-// Cleanup
-await server.stop();
-console.log('\n✓ Test server stopped');
+// Cleanup - ensure server is stopped even if there were errors
+try {
+    if (serverStarted) {
+        await server.stop();
+        console.log('\n✓ Test server stopped');
+    }
+} catch (error) {
+    console.warn('\n⚠️ Error stopping server:', error);
+}
