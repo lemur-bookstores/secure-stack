@@ -89,6 +89,17 @@ export class SecureStackError extends Error {
     }
 
     /**
+     * Create a CONFLICT error
+     */
+    static conflict(message: string = 'Conflict', meta?: Record<string, any>) {
+        return new SecureStackError({
+            message,
+            code: ErrorCode.CONFLICT,
+            meta,
+        });
+    }
+
+    /**
      * Create a VALIDATION_ERROR
      */
     static validationError(message: string, meta?: Record<string, any>) {
