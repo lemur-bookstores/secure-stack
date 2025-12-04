@@ -1,5 +1,5 @@
+import { router } from '@lemur-bookstores/core';
 import { SecureStackServer } from '@lemur-bookstores/server';
-import { Router } from '@lemur-bookstores/core';
 import { createAuthMiddleware, createRoleMiddleware } from '@lemur-bookstores/server';
 import { z } from 'zod';
 
@@ -36,7 +36,7 @@ const server = new SecureStackServer({
 });
 
 // Public router - no authentication required
-const publicRouter = new Router();
+const publicRouter = router();
 
 publicRouter
     .query('health', {
@@ -62,17 +62,17 @@ publicRouter
             message: z.string(),
             userId: z.string(),
         }),
-        handler: async ({ input }) => {
+        handler: async ({ input }: any) => {
             // In a real app, save to database
             if (!server.auth) {
                 throw new Error('Auth not initialized');
             }
-            
+
             const hashedPassword = await server.auth.password.hashPassword(input.password);
-            
+
             // Simulate user creation
             const userId = `user_${Date.now()}`;
-            
+
             return {
                 message: 'User registered successfully',
                 userId,
@@ -88,11 +88,11 @@ publicRouter
             accessToken: z.string(),
             refreshToken: z.string(),
         }),
-        handler: async ({ input }) => {
+        handler: async ({ input }: any) => {
             if (!server.auth?.session) {
                 throw new Error('Session manager not initialized');
             }
-            
+
             // In a real app, verify password against database
             // For demo purposes, we'll just create tokens
             const tokens = server.auth.session.createSession({
@@ -100,13 +100,13 @@ publicRouter
                 email: input.email,
                 role: 'user', // This would come from the database
             });
-            
+
             return tokens;
         },
     });
 
 // Protected router - requires authentication
-const protectedRouter = new Router();
+const protectedRouter = router();
 
 if (server.auth) {
     protectedRouter.use(createAuthMiddleware(server.auth));
@@ -136,10 +136,10 @@ protectedRouter
         output: z.object({
             message: z.string(),
         }),
-        handler: async ({ input, ctx }) => {
+        handler: async ({ input, ctx }: any) => {
             // In a real app, update database
             console.log(`User ${ctx.user?.userId} updating profile:`, input);
-            
+
             return {
                 message: 'Profile updated successfully',
             };
@@ -147,7 +147,7 @@ protectedRouter
     });
 
 // Admin router - requires admin permissions
-const adminRouter = new Router();
+const adminRouter = router();
 
 if (server.auth) {
     adminRouter.use(createAuthMiddleware(server.auth));
@@ -186,10 +186,10 @@ adminRouter
         output: z.object({
             message: z.string(),
         }),
-        handler: async ({ input }) => {
+        handler: async ({ input }: any) => {
             // In a real app, delete from database
             console.log(`Deleting user: ${input.userId}`);
-            
+
             return {
                 message: 'User deleted successfully',
             };

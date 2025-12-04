@@ -26,11 +26,13 @@ npm run dev --workspace=examples/auth-server
 ### Public Endpoints (No Auth Required)
 
 #### Health Check
+
 ```bash
 GET /api/public/health
 ```
 
 #### Register
+
 ```bash
 POST /api/public/register
 Content-Type: application/json
@@ -43,6 +45,7 @@ Content-Type: application/json
 ```
 
 #### Login
+
 ```bash
 POST /api/public/login
 Content-Type: application/json
@@ -62,12 +65,14 @@ Content-Type: application/json
 ### Protected Endpoints (Auth Required)
 
 #### Get Profile
+
 ```bash
 GET /api/protected/profile
 Authorization: Bearer <accessToken>
 ```
 
 #### Update Profile
+
 ```bash
 POST /api/protected/updateProfile
 Authorization: Bearer <accessToken>
@@ -82,12 +87,14 @@ Content-Type: application/json
 ### Admin Endpoints (Admin Permissions Required)
 
 #### List Users
+
 ```bash
 GET /api/admin/listUsers?page=1&limit=10
 Authorization: Bearer <adminAccessToken>
 ```
 
 #### Delete User
+
 ```bash
 POST /api/admin/deleteUser
 Authorization: Bearer <adminAccessToken>
@@ -116,6 +123,7 @@ The example defines three roles with inheritance:
 ## Testing
 
 ### 1. Register a user
+
 ```bash
 curl -X POST http://localhost:3000/api/public/register \
   -H "Content-Type: application/json" \
@@ -123,6 +131,7 @@ curl -X POST http://localhost:3000/api/public/register \
 ```
 
 ### 2. Login
+
 ```bash
 curl -X POST http://localhost:3000/api/public/login \
   -H "Content-Type: application/json" \
@@ -130,12 +139,14 @@ curl -X POST http://localhost:3000/api/public/login \
 ```
 
 ### 3. Access protected endpoint
+
 ```bash
 curl http://localhost:3000/api/protected/profile \
   -H "Authorization: Bearer <your-access-token>"
 ```
 
 ### 4. Try admin endpoint (will fail without admin role)
+
 ```bash
 curl http://localhost:3000/api/admin/listUsers \
   -H "Authorization: Bearer <your-access-token>"
@@ -155,20 +166,24 @@ examples/auth-server/
 ## Key Concepts
 
 ### 1. Server Initialization with Auth
+
 ```typescript
 const server = new SecureStackServer({
-    name: 'auth-server-example',
-    port: 3000,
-    auth: {
-        jwtSecret: 'your-secret',
-        rbac: {
-            roles: [/* role definitions */]
-        }
-    }
+  name: 'auth-server-example',
+  port: 3000,
+  auth: {
+    jwtSecret: 'your-secret',
+    rbac: {
+      roles: [
+        /* role definitions */
+      ],
+    },
+  },
 });
 ```
 
 ### 2. Middleware Usage
+
 ```typescript
 // Authentication middleware
 protectedRouter.use(createAuthMiddleware(server.auth));
@@ -178,11 +193,12 @@ adminRouter.use(createRoleMiddleware(server.auth, ['manage:users']));
 ```
 
 ### 3. Accessing User Context
+
 ```typescript
 handler: async ({ ctx }) => {
-    console.log(ctx.user?.userId);
-    console.log(ctx.user?.role);
-}
+  console.log(ctx.user?.userId);
+  console.log(ctx.user?.role);
+};
 ```
 
 ## Production Considerations
