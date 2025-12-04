@@ -20,9 +20,14 @@ interface SecureStackContextValue {
  */
 export interface SecureStackProviderProps {
   /**
-   * Client configuration
+   * Client configuration (required if client is not provided)
    */
-  config: ClientConfig;
+  config?: ClientConfig;
+
+  /**
+   * Existing client instance (optional)
+   */
+  client?: SecureStackClient;
 
   /**
    * Optional custom QueryClient
@@ -36,18 +41,23 @@ export interface SecureStackProviderProps {
 }
 
 // Create context
-const SecureStackContext = createContext<SecureStackContextValue | null>(null);
+export const SecureStackContext = createContext<SecureStackContextValue | null>(null);
 
 /**
  * Provider component for SecureStack client
  */
 export function SecureStackProvider({
   config,
+  client: customClient,
   queryClient: customQueryClient,
   children,
 }: SecureStackProviderProps) {
   // Create client instance (memoized)
-  const client = useMemo(() => new SecureStackClient(config), [config]);
+  const client = useMemo(() => {
+    if (customClient) return customClient;
+    if (!config) throw new Error('SecureStackProvider: either client or config must be provided');
+    return new SecureStackClient(config);
+  }, [config, customClient]);
 
   // Create or use custom query client
   const queryClient = useMemo(
