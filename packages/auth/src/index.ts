@@ -1,8 +1,7 @@
 import { PasswordManager } from './utils/PasswordManager';
 import { UserJWTManager, AuthConfig } from './utils/UserJWTManager';
 import { SessionManager, SessionConfig } from './session/SessionManager';
-import { RBACManager } from './rbac/RBACManager';
-import { RBACConfig } from './rbac/types';
+import { RBACManager, RBACConfig } from './rbac';
 
 export type AuthModuleConfig = AuthConfig & Partial<SessionConfig> & { rbac?: RBACConfig };
 
