@@ -1,6 +1,6 @@
 /**
  * Benchmark Report Generator
- * Runs benchmark suites and saves their console output into a Markdown file
+ * Runs benchmark suites and generates a clean Markdown report
  */
 
 import { spawn } from 'node:child_process';
@@ -28,6 +28,17 @@ const suites: Suite[] = [
     { name: 'gRPC Comparison', command: 'npm', args: ['run', 'bench:grpc'] },
 ];
 
+/**
+ * Remove ANSI escape codes from text
+ */
+function stripAnsi(text: string): string {
+    // eslint-disable-next-line no-control-regex
+    return text.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '');
+}
+
+/**
+ * Run a benchmark suite and capture output
+ */
 function runSuite({ command, args }: Suite): Promise<{ output: string; exitCode: number | null }> {
     return new Promise((resolve, reject) => {
         const child = spawn(command, args, {
@@ -55,6 +66,9 @@ function runSuite({ command, args }: Suite): Promise<{ output: string; exitCode:
     });
 }
 
+/**
+ * Format timestamp for filename
+ */
 function formatTimestamp(date: Date) {
     const yyyy = date.getFullYear();
     const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -65,39 +79,106 @@ function formatTimestamp(date: Date) {
     return `${yyyy}-${mm}-${dd}-${hh}${min}${ss}`;
 }
 
+/**
+ * Extract key metrics from benchmark output
+ */
+function extractMetrics(output: string): { summary: string; details: string } {
+    const cleaned = stripAnsi(output);
+
+    // Try to find the summary section
+    const summaryMatch = cleaned.match(/📊 Summary:[\s\S]*?(?=\n\n|$)/);
+    const summary = summaryMatch ? summaryMatch[0] : '';
+
+    // Try to find performance targets
+    const targetsMatch = cleaned.match(/🎯 Performance Targets:[\s\S]*?(?=\n\n|$)/);
+    const targets = targetsMatch ? targetsMatch[0] : '';
+
+    // Combine key sections
+    const details = [summary, targets].filter(Boolean).join('\n\n');
+
+    return {
+        summary: summary || 'No summary available',
+        details: details || cleaned.slice(0, 500) // Fallback to first 500 chars
+    };
+}
+
 const now = new Date();
 const timestamp = formatTimestamp(now);
 const reportPath = join(reportsDir, `benchmark-report-${timestamp}.md`);
 
 await mkdir(reportsDir, { recursive: true });
 
-const header = `# SecureStack Benchmark Report\n\n` +
-    `Generated on ${now.toISOString()}\n\n` +
-    `This report captures the console output for each benchmark suite.\n\n`;
+// Write report header
+const header = `# SecureStack Benchmark Report
+
+**Generated:** ${now.toISOString()}
+
+This report contains performance metrics for all SecureStack benchmark suites.
+
+---
+
+`;
 
 await writeFile(reportPath, header, 'utf8');
 
+// Run each suite and collect results
+const results: Array<{ name: string; success: boolean; metrics: string }> = [];
+
 for (const suite of suites) {
     console.log(`\n🧪 Running ${suite.name} benchmarks...\n`);
+
     await appendFile(reportPath, `## ${suite.name}\n\n`, 'utf8');
 
     try {
         const { output, exitCode } = await runSuite(suite);
-        const trimmed = output.trim() || '(sin salida)';
+        const { details } = extractMetrics(output);
 
-        await appendFile(reportPath, '````bash\n' + trimmed + '\n````\n\n', 'utf8');
-
-        if (exitCode !== 0) {
-            await appendFile(reportPath, `> ⚠️ Comando finalizó con código ${exitCode}\n\n`, 'utf8');
-            console.warn(`⚠️ ${suite.name} terminó con código ${exitCode}`);
+        if (exitCode === 0) {
+            await appendFile(reportPath, `✅ **Status:** Passed\n\n`, 'utf8');
+            await appendFile(reportPath, `### Results\n\n\`\`\`\n${details}\n\`\`\`\n\n`, 'utf8');
+            results.push({ name: suite.name, success: true, metrics: details });
+            console.log(`✅ ${suite.name} completed`);
         } else {
-            console.log(`✅ ${suite.name} completado`);
+            await appendFile(reportPath, `⚠️ **Status:** Failed (exit code ${exitCode})\n\n`, 'utf8');
+            await appendFile(reportPath, `<details>\n<summary>View output</summary>\n\n\`\`\`\n${stripAnsi(output).slice(0, 1000)}\n\`\`\`\n</details>\n\n`, 'utf8');
+            results.push({ name: suite.name, success: false, metrics: '' });
+            console.warn(`⚠️ ${suite.name} failed with code ${exitCode}`);
         }
     } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        await appendFile(reportPath, `> ❌ Error ejecutando benchmark: ${message}\n\n`, 'utf8');
-        console.error(`❌ Error en ${suite.name}:`, error);
+        await appendFile(reportPath, `❌ **Status:** Error\n\n> ${message}\n\n`, 'utf8');
+        results.push({ name: suite.name, success: false, metrics: '' });
+        console.error(`❌ Error in ${suite.name}:`, error);
     }
+
+    await appendFile(reportPath, `---\n\n`, 'utf8');
 }
 
-console.log(`\n📄 Reporte generado en: ${reportPath}`);
+// Add summary section
+await appendFile(reportPath, `## Summary\n\n`, 'utf8');
+
+const passed = results.filter(r => r.success).length;
+const failed = results.length - passed;
+
+await appendFile(reportPath, `- **Total Suites:** ${results.length}\n`, 'utf8');
+await appendFile(reportPath, `- **Passed:** ${passed} ✅\n`, 'utf8');
+await appendFile(reportPath, `- **Failed:** ${failed} ❌\n\n`, 'utf8');
+
+if (passed > 0) {
+    await appendFile(reportPath, `### Successful Benchmarks\n\n`, 'utf8');
+    for (const result of results.filter(r => r.success)) {
+        await appendFile(reportPath, `- ✅ ${result.name}\n`, 'utf8');
+    }
+    await appendFile(reportPath, `\n`, 'utf8');
+}
+
+if (failed > 0) {
+    await appendFile(reportPath, `### Failed Benchmarks\n\n`, 'utf8');
+    for (const result of results.filter(r => !r.success)) {
+        await appendFile(reportPath, `- ❌ ${result.name}\n`, 'utf8');
+    }
+    await appendFile(reportPath, `\n`, 'utf8');
+}
+
+console.log(`\n📄 Report generated: ${reportPath}`);
+console.log(`📊 Results: ${passed}/${results.length} passed\n`);
