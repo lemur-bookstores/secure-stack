@@ -72,7 +72,7 @@ describe('AuditLogger', () => {
 
     it('should not log when disabled', async () => {
         const disabledLogger = new AuditLogger({
-            adapters: [{ log: async (e) => events.push(e) }],
+            adapters: [{ log: async (e) => { events.push(e); } }],
             enabled: false,
         });
 

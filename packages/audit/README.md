@@ -6,7 +6,7 @@ Audit logging module for SecureStack.
 
 - Event logging with structured data
 - Automatic sensitive data masking
-- Multiple storage adapters (Console, File)
+- Multiple storage adapters (Console, File, Database)
 - Query interface for retrieving audit logs
 - Middleware integration
 - Configurable retention policies
@@ -88,6 +88,53 @@ Logs events to a JSON Lines file with query support.
 
 ```typescript
 const adapter = new FileAdapter('./audit.log');
+```
+
+### DatabaseAdapter
+
+Database-agnostic adapter for storing audit logs. Works with any database by providing a client interface.
+
+```typescript
+import { DatabaseAdapter } from '@lemur-bookstores/audit';
+
+// Example with Prisma
+const prismaClient = {
+  insert: async (table: string, data: any) => {
+    await prisma.auditLog.create({ data });
+  },
+  query: async (table: string, filters: any, options?: any) => {
+    return prisma.auditLog.findMany({
+      where: filters,
+      take: options?.limit,
+      skip: options?.offset,
+    });
+  },
+};
+
+const adapter = new DatabaseAdapter({
+  client: prismaClient,
+  tableName: 'audit_logs',
+});
+
+// Example with Drizzle ORM
+const drizzleClient = {
+  insert: async (table: string, data: any) => {
+    await db.insert(auditLogs).values(data);
+  },
+  query: async (table: string, filters: any, options?: any) => {
+    return db.select().from(auditLogs).where(filters).limit(options?.limit).offset(options?.offset);
+  },
+};
+
+// Example with raw SQL
+const sqlClient = {
+  insert: async (table: string, data: any) => {
+    await pool.query(\`INSERT INTO \${table} ...\`, Object.values(data));
+  },
+  query: async (table: string, filters: any, options?: any) => {
+    return pool.query(\`SELECT * FROM \${table} WHERE ...\`);
+  },
+};
 ```
 
 ## Custom Adapters

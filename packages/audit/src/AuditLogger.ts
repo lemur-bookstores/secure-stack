@@ -1,4 +1,4 @@
-import { AuditConfig, AuditEvent, AuditAdapter } from './types';
+import { AuditConfig, AuditEvent } from './types';
 import { v4 as uuidv4 } from 'uuid';
 
 export class AuditLogger {
