@@ -6,6 +6,7 @@ Type-safe client for SecureStack applications with React integration.
 
 - 🔒 **Type-safe**: Full TypeScript support for queries and mutations
 - ⚛️ **React Hooks**: `useQuery`, `useMutation` powered by TanStack Query
+- 🧩 **Vue 3 Composables**: `useQuery`, `useMutation`, `useSubscription` via TanStack Vue Query
 - 🚀 **Optimistic Updates**: Built-in support for optimistic UI
 - 🔄 **SSR Ready**: Utilities for Next.js and other SSR frameworks
 - 🛡️ **Error Handling**: Typed error handling with status codes
@@ -15,7 +16,11 @@ Type-safe client for SecureStack applications with React integration.
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/client @tanstack/react-query
+# React / Next.js
+npm install @lemur-bookstores/client @tanstack/react-query react react-dom
+
+# Vue 3
+npm install @lemur-bookstores/client @tanstack/vue-query vue
 ```
 
 ## Quick Start
@@ -169,5 +174,39 @@ Helper for optimistic updates.
 useMutationWithOptimisticUpdate('todo.add', {
   queryKey: ['todos'],
   updater: (old, newTodo) => [...old, newTodo],
+});
+```
+
+## Vue 3 Integration
+
+Register the plugin once in your app entrypoint:
+
+```ts
+// main.ts
+import { createApp } from 'vue';
+import App from './App.vue';
+import { SecureStackPlugin } from '@lemur-bookstores/client/vue';
+
+const app = createApp(App);
+
+app.use(SecureStackPlugin, {
+  config: {
+    url: 'http://localhost:3000/api',
+  },
+});
+
+app.mount('#app');
+```
+
+Use the composables anywhere:
+
+```ts
+import { useQuery, useMutation, useQueryClient } from '@lemur-bookstores/client/vue';
+
+const queryClient = useQueryClient();
+const { data: users, isLoading } = useQuery('user.listUsers');
+
+const createUser = useMutation('user.createUser', {
+  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['user.listUsers'] }),
 });
 ```

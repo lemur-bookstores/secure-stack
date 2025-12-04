@@ -15,6 +15,11 @@
       "types": "./dist/react/index.d.ts",
       "import": "./dist/react/index.mjs",
       "require": "./dist/react/index.js"
+    },
+    "./vue": {
+      "types": "./dist/vue/index.d.ts",
+      "import": "./dist/vue/index.mjs",
+      "require": "./dist/vue/index.js"
     }
   },
   "scripts": {
@@ -31,6 +36,7 @@
     "client",
     "trpc",
     "react",
+    "vue",
     "hooks",
     "typescript"
   ],
@@ -39,11 +45,14 @@
     "@grpc/grpc-js": "1.14.2",
     "@lemur-bookstores/core": "*",
     "@tanstack/react-query": "5.17.0",
+    "@tanstack/vue-query": "5.92.0",
     "next": "14.2.33"
   },
   "peerDependencies": {
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "vue": "3.5.25",
+    "@tanstack/vue-query": "5.92.0"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -51,9 +60,16 @@
     },
     "react-dom": {
       "optional": true
+    },
+    "vue": {
+      "optional": true
+    },
+    "@tanstack/vue-query": {
+      "optional": true
     }
   },
   "devDependencies": {
+    "@tanstack/vue-query": "5.92.0",
     "@testing-library/react": "14.1.2",
     "@types/node": "20.11.5",
     "@types/react": "18.2.48",
@@ -63,6 +79,7 @@
     "react-dom": "18.2.0",
     "tsup": "8.5.1",
     "typescript": "5.3.3",
-    "vitest": "4.0.15"
+    "vitest": "4.0.15",
+    "vue": "3.5.25"
   }
 }
