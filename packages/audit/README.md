@@ -6,7 +6,7 @@ Audit logging module for SecureStack.
 
 - Event logging with structured data
 - Automatic sensitive data masking
-- Multiple storage adapters (Console, File, Database)
+- Multiple storage adapters (Console, File, Database, HTTP)
 - Query interface for retrieving audit logs
 - Middleware integration
 - Configurable retention policies
@@ -137,6 +137,48 @@ const sqlClient = {
 };
 ```
 
+### HttpAdapter
+
+Send audit logs to external services via HTTP/REST APIs. Perfect for cloud logging services (Datadog, Sentry, custom APIs).
+
+```typescript
+import { HttpAdapter } from '@lemur-bookstores/audit';
+
+// Example with custom API
+const httpAdapter = new HttpAdapter({
+  endpoint: 'https://api.example.com/audit-logs',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json',
+  },
+});
+
+// Example with Datadog
+const datadogAdapter = new HttpAdapter({
+  endpoint: 'https://http-intake.logs.datadoghq.com/v1/input',
+  headers: {
+    'DD-API-KEY': process.env.DATADOG_API_KEY!,
+  },
+  mapEvent: (event) => ({
+    service: 'my-app',
+    ddsource: 'audit',
+    hostname: 'server-1',
+    message: `${event.action} by ${event.actor.id}`,
+    ...event,
+  }),
+});
+
+// Example with custom HTTP client (axios)
+const axiosAdapter = new HttpAdapter({
+  endpoint: 'https://api.example.com/logs',
+  client: {
+    post: async (url, data, headers) => {
+      return axios.post(url, data, { headers });
+    },
+  },
+});
+```
+
 ## Custom Adapters
 
 Implement the `AuditAdapter` interface:
@@ -152,5 +194,4 @@ class DatabaseAdapter implements AuditAdapter {
   async query(params: AuditQueryParams): Promise<AuditEvent[]> {
     return db.auditLogs.findMany({ where: params });
   }
-}
-```
+}
