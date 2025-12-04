@@ -9,20 +9,22 @@ export interface KeyPair {
 
 export class KeyManager {
     private readonly keyDir: string;
+    private readonly keySize: number;
 
-    constructor(keyDir: string = './keys') {
+    constructor(keyDir: string = './keys', keySize: number = 4096) {
         this.keyDir = keyDir;
+        this.keySize = keySize;
         if (!fs.existsSync(this.keyDir)) {
             fs.mkdirSync(this.keyDir, { recursive: true });
         }
     }
 
     /**
-     * Generates a new RSA-4096 key pair
+     * Generates a new RSA key pair
      */
     public generateKeyPair(): KeyPair {
         const { publicKey, privateKey } = generateKeyPairSync('rsa', {
-            modulusLength: 4096,
+            modulusLength: this.keySize,
             publicKeyEncoding: {
                 type: 'spki',
                 format: 'pem',
