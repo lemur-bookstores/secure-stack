@@ -144,20 +144,42 @@ Send audit logs to external services via HTTP/REST APIs. Perfect for cloud loggi
 ```typescript
 import { HttpAdapter } from '@lemur-bookstores/audit';
 
-// Example with custom API
+// Example with Bearer token authentication
 const httpAdapter = new HttpAdapter({
   endpoint: 'https://api.example.com/audit-logs',
-  headers: {
-    'Authorization': 'Bearer YOUR_TOKEN',
-    'Content-Type': 'application/json',
+  auth: {
+    type: 'bearer',
+    token: process.env.API_TOKEN,
+  },
+});
+
+// Example with Basic authentication
+const basicAuthAdapter = new HttpAdapter({
+  endpoint: 'https://api.example.com/logs',
+  auth: {
+    type: 'basic',
+    username: 'admin',
+    password: process.env.API_PASSWORD,
+  },
+});
+
+// Example with API Key
+const apiKeyAdapter = new HttpAdapter({
+  endpoint: 'https://api.service.com/v1/logs',
+  auth: {
+    type: 'api-key',
+    apiKey: process.env.SERVICE_API_KEY,
+    headerName: 'X-Service-Key', // Optional, defaults to 'X-API-Key'
   },
 });
 
 // Example with Datadog
 const datadogAdapter = new HttpAdapter({
   endpoint: 'https://http-intake.logs.datadoghq.com/v1/input',
-  headers: {
-    'DD-API-KEY': process.env.DATADOG_API_KEY!,
+  auth: {
+    type: 'api-key',
+    apiKey: process.env.DATADOG_API_KEY!,
+    headerName: 'DD-API-KEY',
   },
   mapEvent: (event) => ({
     service: 'my-app',
@@ -168,9 +190,25 @@ const datadogAdapter = new HttpAdapter({
   }),
 });
 
+// Example with custom authentication header
+const customAuthAdapter = new HttpAdapter({
+  endpoint: 'https://custom-service.com/logs',
+  auth: {
+    type: 'custom',
+    customHeader: {
+      name: 'X-Custom-Auth',
+      value: `Token ${process.env.CUSTOM_TOKEN}`,
+    },
+  },
+});
+
 // Example with custom HTTP client (axios)
 const axiosAdapter = new HttpAdapter({
   endpoint: 'https://api.example.com/logs',
+  auth: {
+    type: 'bearer',
+    token: process.env.API_TOKEN,
+  },
   client: {
     post: async (url, data, headers) => {
       return axios.post(url, data, { headers });
@@ -194,4 +232,5 @@ class DatabaseAdapter implements AuditAdapter {
   async query(params: AuditQueryParams): Promise<AuditEvent[]> {
     return db.auditLogs.findMany({ where: params });
   }
-}
+}
+```
