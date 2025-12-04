@@ -7,6 +7,7 @@ Rate Limiting module for SecureStack.
 - Fixed Window algorithm
 - Memory Store (built-in)
 - Redis Store support
+- SQLite Store support
 - Middleware integration
 - Custom key generators
 - Configurable headers and status codes
