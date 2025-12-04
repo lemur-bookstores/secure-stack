@@ -10,7 +10,7 @@ interface User {
 }
 
 export function UserList() {
-  const { data: users, isLoading, error } = useQuery<void, User[]>('user.listUsers');
+  const { data: users, isLoading, error } = useQuery<User[], void>('user.listUsers');
 
   if (isLoading) return <div className="loading">Loading users...</div>;
   if (error) return <div className="error">Error: {error.message}</div>;
