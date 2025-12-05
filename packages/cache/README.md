@@ -8,6 +8,8 @@ A robust caching module for SecureStack with support for multiple providers (Mem
 - 💾 **Memory Provider**: Built-in LRU cache for development and testing.
 - 🚀 **Redis Provider**: High-performance caching using `ioredis`.
 - 📦 **Memcached Provider**: Alternative caching using `memjs`.
+- 🗄️ **SQLite Provider**: Persistent local caching using `better-sqlite3`.
+- 🍃 **MongoDB Provider**: Distributed document caching using `mongodb`.
 - 🛡️ **Unified API**: Consistent interface across all providers.
 - ⏱️ **TTL Support**: Time-to-live support for all operations.
 
@@ -63,6 +65,37 @@ const cache = new CacheManager({
     options: {
       expires: 60,
     },
+  },
+});
+```
+
+### SQLite Usage
+
+```typescript
+import { CacheManager } from '@lemur-bookstores/cache';
+
+const cache = new CacheManager({
+  store: 'sqlite',
+  sqlite: {
+    path: './cache.sqlite', // Defaults to :memory:
+    table: 'my_cache',      // Defaults to 'cache'
+    ttl: 60,
+  },
+});
+```
+
+### MongoDB Usage
+
+```typescript
+import { CacheManager } from '@lemur-bookstores/cache';
+
+const cache = new CacheManager({
+  store: 'mongo',
+  mongo: {
+    url: 'mongodb://localhost:27017',
+    dbName: 'my_app',
+    collectionName: 'cache_items',
+    ttl: 60,
   },
 });
 ```

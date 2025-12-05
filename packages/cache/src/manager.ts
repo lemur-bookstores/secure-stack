@@ -2,8 +2,10 @@ import { CacheProvider } from './interfaces/cache-provider.js';
 import { MemoryProvider, MemoryConfig } from './providers/memory.js';
 import { RedisProvider, RedisConfig } from './providers/redis.js';
 import { MemcachedProvider, MemcachedConfig } from './providers/memcached.js';
+import { SqliteProvider, SqliteConfig } from './providers/sqlite.js';
+import { MongoProvider, MongoConfig } from './providers/mongo.js';
 
-export type CacheStore = 'memory' | 'redis' | 'memcached';
+export type CacheStore = 'memory' | 'redis' | 'memcached' | 'sqlite' | 'mongo';
 
 export interface CacheConfig {
     store?: CacheStore;
@@ -11,6 +13,8 @@ export interface CacheConfig {
     memory?: MemoryConfig;
     redis?: RedisConfig;
     memcached?: MemcachedConfig;
+    sqlite?: SqliteConfig;
+    mongo?: MongoConfig;
 }
 
 export class CacheManager {
@@ -29,11 +33,21 @@ export class CacheManager {
             case 'memcached':
                 this.provider = new MemcachedProvider(config.memcached);
                 break;
+            case 'sqlite':
+                this.provider = new SqliteProvider(config.sqlite);
+                break;
+            case 'mongo':
+                if (!config.mongo) throw new Error('Mongo configuration is required');
+                this.provider = new MongoProvider(config.mongo);
+                break;
             default:
                 throw new Error(`Unsupported cache store: ${store}`);
         }
     }
 
+    /**
+     * Get the underlying provider
+     */
     getProvider(): CacheProvider {
         return this.provider;
     }

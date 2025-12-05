@@ -3,6 +3,8 @@ import { CacheManager } from '../src/manager.js';
 import { MemoryProvider } from '../src/providers/memory.js';
 import { RedisProvider } from '../src/providers/redis.js';
 import { MemcachedProvider } from '../src/providers/memcached.js';
+import { SqliteProvider } from '../src/providers/sqlite.js';
+import { MongoProvider } from '../src/providers/mongo.js';
 
 describe('CacheManager', () => {
     it('should use memory provider by default', () => {
@@ -18,6 +20,20 @@ describe('CacheManager', () => {
     it('should initialize memcached provider', () => {
         const manager = new CacheManager({ store: 'memcached' });
         expect(manager.getProvider()).toBeInstanceOf(MemcachedProvider);
+    });
+
+    it('should initialize sqlite provider', () => {
+        const manager = new CacheManager({ store: 'sqlite' });
+        expect(manager.getProvider()).toBeInstanceOf(SqliteProvider);
+    });
+
+    it('should initialize mongo provider', () => {
+        const manager = new CacheManager({ store: 'mongo', mongo: { url: 'mongodb://localhost' } });
+        expect(manager.getProvider()).toBeInstanceOf(MongoProvider);
+    });
+
+    it('should throw error if mongo config is missing', () => {
+        expect(() => new CacheManager({ store: 'mongo' })).toThrow('Mongo configuration is required');
     });
 
     it('should throw error for unsupported provider', () => {
