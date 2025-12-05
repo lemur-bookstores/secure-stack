@@ -66,6 +66,13 @@ await storage.upload(fileBuffer, 'images/profile.jpg', {
   validation: {
     maxSize: 5 * 1024 * 1024, // 5MB
     allowedMimeTypes: ['image/jpeg', 'image/png'],
+    custom: async (file, metadata) => {
+      // Example: Check for specific filename pattern
+      if (metadata.originalName?.includes('test')) {
+        return 'Test files are not allowed';
+      }
+      return true;
+    },
   },
   process: {
     resize: { width: 800, height: 600, fit: 'cover' },
