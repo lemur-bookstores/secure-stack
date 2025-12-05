@@ -1,4 +1,4 @@
-import { Prompts, ProjectOptions } from '../utils/prompts.js';
+import { Prompts, ProjectOptions, DatabaseType } from '../utils/prompts.js';
 import { Validation } from '../utils/validation.js';
 import { FileManager } from '../utils/files.js';
 import { logger } from '../utils/logger.js';
@@ -29,7 +29,7 @@ export async function createProject(projectName: string, options: any) {
         // Interactive setup if no template specified
         let projectType = options.template;
         let features: string[] = [];
-        let database = 'none';
+        let database: DatabaseType = 'none';
 
         if (!options.skipPrompts) {
             logger.newLine();
@@ -126,7 +126,7 @@ async function generatePackageJson(projectPath: string, options: ProjectOptions)
             'tsup': '^8.0.0',
             'typescript': '^5.3.3',
             '@types/node': '^20.11.5',
-        },
+        } as Record<string, string>,
     };
 
     // Add feature dependencies
