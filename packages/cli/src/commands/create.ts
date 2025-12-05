@@ -1,6 +1,7 @@
 import { Prompts, ProjectOptions, DatabaseType } from '../utils/prompts.js';
 import { Validation } from '../utils/validation.js';
 import { FileManager } from '../utils/files.js';
+import { PackageManager } from '../utils/package-manager.js';
 import { logger } from '../utils/logger.js';
 import picocolors from 'picocolors';
 import path from 'path';
@@ -74,9 +75,7 @@ export async function createProject(projectName: string, options: any) {
 
         // Install dependencies
         if (projectOptions.installDeps) {
-            logger.startSpinner('Installing dependencies...');
-            // TODO: Implement npm install
-            logger.succeedSpinner('Dependencies installed');
+            await PackageManager.install(projectPath);
         }
 
         logger.newLine();
