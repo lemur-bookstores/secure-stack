@@ -2,11 +2,10 @@ import { Server, Socket, ServerOptions } from 'socket.io';
 import { createAdapter } from '@socket.io/redis-adapter';
 import { Redis } from 'ioredis';
 import { RealtimeConfig, RealtimeMessage } from './interfaces/index.js';
-import { createServer, Server as HttpServer } from 'http';
+import { Server as HttpServer } from 'http';
 
 export class RealtimeManager {
     private io: Server;
-    private httpServer?: HttpServer;
     private redisPub?: Redis;
     private redisSub?: Redis;
 

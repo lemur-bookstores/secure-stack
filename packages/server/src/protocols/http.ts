@@ -23,7 +23,8 @@ export function createHealthCheck() {
 export function registerHTTPRouter(
     fastify: FastifyInstance,
     router: Router,
-    options: HTTPRouterOptions = {}
+    options: HTTPRouterOptions = {},
+    extraContext: Record<string, any> = {}
 ) {
     const { prefix = '' } = options;
     const routes = router.getRoutes();
@@ -43,6 +44,7 @@ export function registerHTTPRouter(
                         req: request,
                         res: reply,
                         headers: request.headers as Record<string, string>,
+                        ...extraContext,
                     };
 
                     // Execute procedure
@@ -79,6 +81,7 @@ export function registerHTTPRouter(
                         req: request,
                         res: reply,
                         headers: request.headers as Record<string, string>,
+                        ...extraContext,
                     };
 
                     // Execute procedure

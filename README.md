@@ -13,6 +13,36 @@
 - **Express-like DX**: Familiar middleware system and routing
 - **Plug-and-Play Modules**: Auth, RBAC, Cache, Storage, Realtime, and more
 
+## 🧩 Modules & Use Cases
+
+### 🔐 Authentication & Security (`@lemur-bookstores/auth`)
+
+Complete security suite with JWT, RBAC, and Session management.
+
+- **Use Case**: Protect your API with role-based access control and secure session handling.
+- **Docs**: [Auth Setup](docs/auth/setup.md) | [RBAC Guide](docs/auth/rbac.md)
+
+### 🕸️ Service Mesh (`@lemur-bookstores/mesh`)
+
+Internal communication layer with mTLS-like encryption and service discovery.
+
+- **Use Case**: Securely connect microservices without managing complex certificates.
+- **Docs**: [Mesh Overview](docs/mesh/overview.md) | [Configuration](docs/mesh/configuration.md)
+
+### ⚡ Realtime (`@lemur-bookstores/realtime`)
+
+Scalable WebSocket support using Socket.io and Redis.
+
+- **Use Case**: Build chat apps, live notifications, or collaborative tools.
+- **Docs**: [Realtime Overview](docs/realtime/overview.md)
+
+### 🛠️ CLI Tool (`@lemur-bookstores/cli`)
+
+Powerful CLI for scaffolding, code generation, and management.
+
+- **Use Case**: Quickly bootstrap new services or generate boilerplate code.
+- **Docs**: [CLI Guide](packages/cli/README.md)
+
 ## 📦 Installation
 
 ```bash
@@ -34,13 +64,12 @@ const app = new SecureStack({
   port: 50051,
 });
 
-const userRouter = router()
-  .query('getUser', {
-    input: z.string(),
-    handler: async ({ input }) => {
-      return { id: input, name: 'John Doe' };
-    }
-  });
+const userRouter = router().query('getUser', {
+  input: z.string(),
+  handler: async ({ input }) => {
+    return { id: input, name: 'John Doe' };
+  },
+});
 
 app.router('user', userRouter);
 
@@ -146,6 +175,7 @@ MIT © [@elkincp5](https://github.com/elkincp5)
 ## 🙏 Acknowledgments
 
 Inspired by:
+
 - [Express](https://expressjs.com/) - Simplicity and familiarity
 - [Firebase](https://firebase.google.com/) - Premium developer experience
 - [tRPC](https://trpc.io/) - Type-safe APIs

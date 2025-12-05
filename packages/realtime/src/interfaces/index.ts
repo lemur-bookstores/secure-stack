@@ -1,4 +1,3 @@
-import { ServerOptions, Socket } from 'socket.io';
 
 export interface RealtimeConfig {
     port?: number;
@@ -13,6 +12,7 @@ export interface RealtimeConfig {
         port: number;
         password?: string;
     };
+    auth?: boolean; // Enable/disable auto-auth integration (default: true)
     adapter?: any; // For flexibility with redis-adapter
 }
 
