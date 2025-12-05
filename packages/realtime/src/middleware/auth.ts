@@ -1,5 +1,4 @@
-import { Socket } from 'socket.io';
-import { ExtendedError } from 'socket.io/dist/namespace';
+import { ExtendedError, Socket } from 'socket.io';
 
 export type VerifyCallback = (token: string) => Promise<any>;
 

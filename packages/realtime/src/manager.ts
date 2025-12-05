@@ -11,7 +11,7 @@ export class RealtimeManager {
     private redisSub?: Redis;
 
     constructor(config: RealtimeConfig = {}, httpServer?: HttpServer) {
-        const options: ServerOptions = {
+        const options: Partial<ServerOptions> = {
             path: config.path || '/socket.io',
             cors: config.cors || { origin: '*' },
         };
