@@ -1,12 +1,12 @@
 import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
-import path from 'path';
 import { JWTManager } from '../auth/JWTManager';
 import { CryptoManager } from '../crypto/CryptoManager';
 import { KeyManager } from '../crypto/KeyManager';
+import { PathResolver } from '../utils/PathResolver';
 import * as crypto from 'crypto';
 
-const PROTO_PATH = path.join(__dirname, '../../proto/secure-messaging.proto');
+
 
 export class SecureMeshClient {
     private client: any;
@@ -15,10 +15,11 @@ export class SecureMeshClient {
     private keyManager: KeyManager;
     private serviceId: string;
     private targetServiceId: string;
+    private protoPath: string;
     private sessionId?: string;
     private sessionKey?: Buffer;
 
-    constructor(serviceId: string, targetServiceId: string, address: string, keysDir?: string) {
+    constructor(serviceId: string, targetServiceId: string, address: string, keysDir?: string, protoPath?: string) {
         this.serviceId = serviceId;
         this.targetServiceId = targetServiceId;
         this.keyManager = new KeyManager(keysDir);
@@ -27,7 +28,10 @@ export class SecureMeshClient {
 
         this.cryptoManager.initialize(serviceId);
 
-        const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
+        // Resolve proto file path
+        this.protoPath = PathResolver.resolveFile(protoPath, './proto/secure-messaging.proto');
+
+        const packageDefinition = protoLoader.loadSync(this.protoPath, {
             keepCase: true,
             longs: String,
             enums: String,

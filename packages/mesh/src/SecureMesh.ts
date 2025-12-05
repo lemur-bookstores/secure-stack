@@ -28,6 +28,12 @@ export interface SecureMeshConfig {
         sessionTimeout?: number;
         keysDir?: string;
     };
+    paths?: {
+        protoFile?: string;
+        keysDir?: string;
+        logsDir?: string;
+        metricsDir?: string;
+    };
     discovery?: {
         services?: ServiceInfo[];
     };
@@ -80,7 +86,7 @@ export class SecureMesh {
         this.config = config;
 
         // Initialize managers
-        this.keyManager = new KeyManager(config.security?.keysDir);
+        this.keyManager = new KeyManager(config.paths?.keysDir || config.security?.keysDir);
 
         this.cryptoManager = new CryptoManager({
             aesKeySize: config.security?.aesKeySize || 256,
@@ -206,7 +212,8 @@ export class SecureMesh {
                                     this.config.serviceId,
                                     serviceId,
                                     `${service.host}:${service.port}`,
-                                    this.config.security?.keysDir
+                                    this.config.paths?.keysDir || this.config.security?.keysDir,
+                                    this.config.paths?.protoFile
                                 );
                                 await client.connect();
                                 this.clients.set(serviceId, client);

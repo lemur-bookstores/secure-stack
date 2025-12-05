@@ -14,7 +14,7 @@ describe('KeyRotation', () => {
         } as any;
 
         cryptoManager = new CryptoManager();
-        await cryptoManager.initialize();
+        await cryptoManager.initialize('test-service');
 
         keyRotation = new KeyRotation(
             'test-service',

@@ -1,15 +1,15 @@
 import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
-import path from 'path';
 import { JWTManager } from '../auth/JWTManager';
 import { SessionManager } from '../auth/SessionManager';
 import { CryptoManager } from '../crypto/CryptoManager';
 import { KeyManager } from '../crypto/KeyManager';
 import { RateLimiter } from '../resilience/RateLimiter';
 import { RateLimiterConfig } from '../resilience/types';
+import { PathResolver } from '../utils/PathResolver';
 import * as crypto from 'crypto';
 
-const PROTO_PATH = path.join(__dirname, '../../proto/secure-messaging.proto');
+
 
 export class SecureMeshServer {
     private server: grpc.Server;
@@ -18,9 +18,10 @@ export class SecureMeshServer {
     private cryptoManager: CryptoManager;
     private keyManager: KeyManager;
     private rateLimiter: RateLimiter;
+    private protoPath: string;
     private serviceId: string;
 
-    constructor(serviceId: string, keysDir?: string, rateLimitConfig?: RateLimiterConfig) {
+    constructor(serviceId: string, keysDir?: string, rateLimitConfig?: RateLimiterConfig, protoPath?: string) {
         this.serviceId = serviceId;
         this.keyManager = new KeyManager(keysDir);
         this.jwtManager = new JWTManager(serviceId, this.keyManager);
@@ -33,12 +34,15 @@ export class SecureMeshServer {
 
         this.cryptoManager.initialize(serviceId);
 
+        // Resolve proto file path
+        this.protoPath = PathResolver.resolveFile(protoPath, './proto/secure-messaging.proto');
+
         this.server = new grpc.Server();
         this.setupService();
     }
 
     private setupService() {
-        const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
+        const packageDefinition = protoLoader.loadSync(this.protoPath, {
             keepCase: true,
             longs: String,
             enums: String,
