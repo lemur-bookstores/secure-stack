@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { logger } from './utils/logger.js';
-import picocolors from 'picocolors';
+import { createProject } from './commands/create.js';
 
 const program = new Command();
 
@@ -16,14 +16,8 @@ export async function run() {
         .description('Create a new SecureStack project')
         .option('-t, --template <template>', 'Project template (monolith, microservices, hybrid)', 'monolith')
         .option('--skip-install', 'Skip npm install')
-        .action(async (projectName, options) => {
-            logger.box(
-                `Creating new SecureStack project: ${picocolors.cyan(projectName)}`,
-                'SecureStack CLI'
-            );
-            logger.info(`Template: ${options.template}`);
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .option('--skip-prompts', 'Skip interactive prompts')
+        .action(createProject);
 
     // Init command
     program
