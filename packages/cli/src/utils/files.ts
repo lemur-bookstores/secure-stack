@@ -32,6 +32,13 @@ export class FileManager {
     }
 
     /**
+     * Read JSON file
+     */
+    static async readJson(filePath: string): Promise<any> {
+        return await fs.readJson(filePath);
+    }
+
+    /**
      * Copy file or directory
      */
     static async copy(src: string, dest: string): Promise<void> {

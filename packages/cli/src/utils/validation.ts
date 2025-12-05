@@ -8,7 +8,7 @@ export class Validation {
         const schema = z.string()
             .min(1, 'Project name cannot be empty')
             .max(50, 'Project name is too long')
-            .regex(/^[a-z0-9-]+$/, 'Project name must contain only lowercase letters, numbers, and hyphens')
+            .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Project name must contain only lowercase letters and numbers, separated by hyphens')
             .regex(/^[a-z]/, 'Project name must start with a letter');
 
         const result = schema.safeParse(name);
@@ -31,7 +31,7 @@ export class Validation {
         const schema = z.string()
             .min(1, 'Name cannot be empty')
             .max(30, 'Name is too long')
-            .regex(/^[a-zA-Z][a-zA-Z0-9]*$/, 'Name must start with a letter and contain only letters and numbers');
+            .regex(/^[a-zA-Z][a-zA-Z0-9-]*$/, 'Name must start with a letter and contain only letters, numbers, and hyphens');
 
         const result = schema.safeParse(name);
 

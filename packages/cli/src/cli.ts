@@ -1,8 +1,12 @@
 import { Command } from 'commander';
 import { logger } from './utils/logger.js';
 import { createProject } from './commands/create.js';
+import { init } from './commands/init.js';
 import { generateService, generateModule, generateRouter, generateMiddleware } from './commands/generate.js';
 import { dev } from './commands/dev.js';
+import { meshStatus, meshHealth, meshRotateKeys, meshVisualize } from './commands/mesh.js';
+import { build } from './commands/build.js';
+import { deploy, docker } from './commands/deploy.js';
 
 const program = new Command();
 
@@ -25,10 +29,7 @@ export async function run() {
     program
         .command('init')
         .description('Initialize SecureStack in an existing project')
-        .action(async () => {
-            logger.info('Initializing SecureStack...');
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .action(init);
 
     // Generate commands
     const generate = program
@@ -68,10 +69,7 @@ export async function run() {
         .command('build')
         .description('Build for production')
         .option('--minify', 'Minify output')
-        .action(async () => {
-            logger.info('Building for production...');
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .action(build);
 
     // Mesh commands
     const mesh = program
@@ -81,34 +79,25 @@ export async function run() {
     mesh
         .command('visualize')
         .description('Visualize mesh topology')
-        .action(async () => {
-            logger.info('Visualizing mesh topology...');
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .action(meshVisualize);
 
     mesh
         .command('status')
         .description('Show service status')
-        .action(async () => {
-            logger.info('Checking service status...');
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .option('-u, --url <url>', 'Service URL', 'http://localhost:3000')
+        .action(meshStatus);
 
     mesh
         .command('rotate-keys')
         .description('Manually rotate encryption keys')
-        .action(async () => {
-            logger.info('Rotating encryption keys...');
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .option('-u, --url <url>', 'Service URL', 'http://localhost:3000')
+        .action(meshRotateKeys);
 
     mesh
         .command('health')
         .description('Health check all services')
-        .action(async () => {
-            logger.info('Running health checks...');
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .option('-u, --url <url>', 'Service URL', 'http://localhost:3000')
+        .action(meshHealth);
 
     // Typecheck command
     program
@@ -123,19 +112,13 @@ export async function run() {
     program
         .command('deploy')
         .description('Deploy helpers')
-        .action(async () => {
-            logger.info('Deploying...');
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .action(deploy);
 
     // Docker command
     program
         .command('docker')
         .description('Generate Docker files')
-        .action(async () => {
-            logger.info('Generating Docker files...');
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .action(docker);
 
     try {
         await program.parseAsync(process.argv);
