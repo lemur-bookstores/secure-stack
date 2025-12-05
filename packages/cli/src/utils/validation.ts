@@ -14,9 +14,10 @@ export class Validation {
         const result = schema.safeParse(name);
 
         if (!result.success) {
+            const { message, errors: [errorMessage] } = result.error;
             return {
                 valid: false,
-                error: result.error.errors[0].message,
+                error: errorMessage?.message || message,
             };
         }
 
@@ -35,9 +36,10 @@ export class Validation {
         const result = schema.safeParse(name);
 
         if (!result.success) {
+            const { message, errors: [errorMessage] } = result.error;
             return {
                 valid: false,
-                error: result.error.errors[0].message,
+                error: errorMessage?.message || message,
             };
         }
 
