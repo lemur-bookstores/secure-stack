@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import { logger } from './utils/logger.js';
 import { createProject } from './commands/create.js';
+import { generateService, generateModule, generateRouter, generateMiddleware } from './commands/generate.js';
 
 const program = new Command();
 
@@ -37,34 +38,22 @@ export async function run() {
     generate
         .command('service <name>')
         .description('Generate a new service')
-        .action(async (name) => {
-            logger.info(`Generating service: ${name}`);
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .action(generateService);
 
     generate
         .command('module <name>')
         .description('Generate a new module')
-        .action(async (name) => {
-            logger.info(`Generating module: ${name}`);
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .action(generateModule);
 
     generate
         .command('router <name>')
         .description('Generate a new router')
-        .action(async (name) => {
-            logger.info(`Generating router: ${name}`);
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .action(generateRouter);
 
     generate
         .command('middleware <name>')
         .description('Generate a new middleware')
-        .action(async (name) => {
-            logger.info(`Generating middleware: ${name}`);
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .action(generateMiddleware);
 
     // Dev command
     program
