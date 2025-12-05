@@ -18,7 +18,7 @@ export class LocalProvider implements StorageProvider {
         fs.ensureDirSync(this.root);
     }
 
-    async upload(file: Buffer | Readable, filePath: string, options?: UploadOptions): Promise<FileMetadata> {
+    async upload(file: Buffer | Readable | string | NodeJS.ArrayBufferView, filePath: string, options?: UploadOptions): Promise<FileMetadata> {
         const fullPath = path.join(this.root, filePath);
         await fs.ensureDir(path.dirname(fullPath));
 
@@ -34,10 +34,11 @@ export class LocalProvider implements StorageProvider {
         }
 
         const stats = await fs.stat(fullPath);
+        const url = await this.getUrl(filePath);
 
         return {
+            url,
             path: filePath,
-            url: this.getUrl(filePath),
             size: stats.size,
             mimetype: options?.mimetype,
             lastModified: stats.mtime,

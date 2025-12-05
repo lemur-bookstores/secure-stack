@@ -54,17 +54,70 @@ const storage = new StorageManager({
 });
 ```
 
+### Advanced Usage (Validation & Processing)
+
+```typescript
+import { StorageManager } from '@lemur-bookstores/storage';
+
+const storage = new StorageManager({ default: 'local' });
+
+await storage.upload(fileBuffer, 'images/profile.jpg', {
+  mimetype: 'image/jpeg',
+  validation: {
+    maxSize: 5 * 1024 * 1024, // 5MB
+    allowedMimeTypes: ['image/jpeg', 'image/png'],
+  },
+  process: {
+    resize: { width: 800, height: 600, fit: 'cover' },
+    format: 'webp',
+    quality: 80,
+  },
+});
+```
+
+### Middleware Usage (Node.js/Fastify/Express)
+
+```typescript
+import { StorageMiddleware, StorageManager } from '@lemur-bookstores/storage';
+import http from 'http';
+
+const storage = new StorageManager();
+const uploadMiddleware = new StorageMiddleware({
+  storageManager: storage,
+  path: (file) => `uploads/${Date.now()}-${file.filename}`,
+  validation: { maxSize: 10 * 1024 * 1024 },
+});
+
+http.createServer(async (req, res) => {
+  if (req.method === 'POST' && req.headers['content-type']?.includes('multipart/form-data')) {
+    try {
+      const files = await uploadMiddleware.handle(req);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(files));
+    } catch (err) {
+      res.writeHead(400);
+      res.end(err.message);
+    }
+  }
+}).listen(3000);
+```
+
 ## API
 
 ### `StorageManager`
 
-- `upload(file: Buffer | Readable, path: string, options?: UploadOptions): Promise<FileMetadata>`
+- `upload(file: Buffer | Readable, path: string, options?: ExtendedUploadOptions): Promise<FileMetadata>`
 - `download(path: string): Promise<Buffer>`
 - `getStream(path: string): Promise<Readable>`
 - `delete(path: string): Promise<void>`
 - `exists(path: string): Promise<boolean>`
 - `getUrl(path: string): Promise<string>`
 - `getProvider(name?: string): StorageProvider`
+
+### `ExtendedUploadOptions`
+
+- `validation`: `ValidationOptions` (maxSize, allowedMimeTypes, custom)
+- `process`: `ImageProcessOptions` (resize, format, quality, rotate, grayscale)
 
 ## License
 

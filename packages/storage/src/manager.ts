@@ -1,7 +1,9 @@
+import { Readable } from 'stream';
 import { StorageProvider, FileMetadata, UploadOptions } from './interfaces/storage-provider.js';
 import { LocalProvider, LocalConfig } from './providers/local.js';
 import { S3Provider, S3Config } from './providers/s3.js';
-import { Readable } from 'stream';
+import { ImageProcessor, ImageProcessOptions } from './processing/image-processor.js';
+import { FileValidator, ValidationOptions } from './validation/file-validator.js';
 
 export type StorageType = 'local' | 's3';
 
@@ -11,12 +13,19 @@ export interface StorageConfig {
     s3?: S3Config;
 }
 
+export interface ExtendedUploadOptions extends UploadOptions {
+    validation?: ValidationOptions;
+    process?: ImageProcessOptions;
+}
+
 export class StorageManager {
     private providers: Map<string, StorageProvider> = new Map();
     private defaultProvider: string;
+    private imageProcessor: ImageProcessor;
 
     constructor(config: StorageConfig = {}) {
         this.defaultProvider = config.default || 'local';
+        this.imageProcessor = new ImageProcessor();
 
         if (config.local) {
             this.providers.set('local', new LocalProvider(config.local));
@@ -46,10 +55,26 @@ export class StorageManager {
     }
 
     /**
-     * Upload a file using the default provider
+     * Upload a file using the default provider with optional validation and processing
      */
-    async upload(file: Buffer | Readable, path: string, options?: UploadOptions): Promise<FileMetadata> {
-        return this.getProvider().upload(file, path, options);
+    async upload(file: Buffer | Readable, path: string, options?: ExtendedUploadOptions): Promise<FileMetadata> {
+        let fileToUpload = file;
+        let fileSize = options?.metadata?.size;
+
+        // 1. Validation
+        if (options?.validation) {
+            await FileValidator.validate(file, { ...options.metadata, size: fileSize, mimetype: options.mimetype }, options.validation);
+        }
+
+        // 2. Processing (only if it's an image and processing options are provided)
+        if (options?.process && options.mimetype?.startsWith('image/')) {
+            const processedBuffer = await this.imageProcessor.process(file, options.process);
+            fileToUpload = processedBuffer;
+            fileSize = processedBuffer.length;
+        }
+
+        // 3. Upload
+        return this.getProvider().upload(fileToUpload, path, options);
     }
 
     /**
