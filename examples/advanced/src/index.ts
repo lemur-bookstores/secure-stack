@@ -8,16 +8,16 @@ import {
     ServiceType,
     logger,
     errorHandler,
-    createContext,
+    // createContext,
     SecureStackError
 } from '@lemur-bookstores/core';
 import { z } from 'zod';
 
 // Create a custom context
-const contextBuilder = createContext<{
-    user?: { id: string; name: string };
-    requestId: string;
-}>();
+// const contextBuilder = createContext<{
+//     user?: { id: string; name: string };
+//     requestId: string;
+// }>();
 
 // Create the application
 const app = new SecureStack({

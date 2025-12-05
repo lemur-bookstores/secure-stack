@@ -26,7 +26,7 @@ export class LocalProvider implements StorageProvider {
             const writeStream = fs.createWriteStream(fullPath);
             await new Promise((resolve, reject) => {
                 file.pipe(writeStream);
-                writeStream.on('finish', resolve);
+                writeStream.on('finish', () => resolve({}));
                 writeStream.on('error', reject);
             });
         } else {
