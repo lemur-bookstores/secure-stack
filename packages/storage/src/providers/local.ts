@@ -30,7 +30,7 @@ export class LocalProvider implements StorageProvider {
                 writeStream.on('error', reject);
             });
         } else {
-            await fs.writeFile(fullPath, file);
+            await fs.writeFile(fullPath, file as Uint8Array);
         }
 
         const stats = await fs.stat(fullPath);

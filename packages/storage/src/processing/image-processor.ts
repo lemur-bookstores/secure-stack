@@ -63,7 +63,7 @@ export class ImageProcessor {
         return new Promise((resolve, reject) => {
             const chunks: Buffer[] = [];
             input.on('data', (chunk) => chunks.push(chunk));
-            input.on('end', () => resolve(Buffer.concat(chunks)));
+            input.on('end', () => resolve(Buffer.concat(chunks as Uint8Array[])));
             input.on('error', reject);
         });
     }
