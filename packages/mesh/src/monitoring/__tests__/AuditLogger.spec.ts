@@ -63,9 +63,9 @@ describe('AuditLogger', () => {
         });
 
         await multiLogger.log({
-            eventType: 'test',
+            eventType: 'test' as any,
             serviceId: 'service-1',
-            details: {},
+            details: {} as any,
         });
 
         expect(adapter1.logEvent).toHaveBeenCalledTimes(1);
@@ -84,18 +84,18 @@ describe('AuditLogger', () => {
 
         await expect(
             errorLogger.log({
-                eventType: 'test',
+                eventType: 'test' as any,
                 serviceId: 'service-1',
-                details: {},
+                details: {} as any,
             })
         ).resolves.not.toThrow();
     });
 
     it('should add event ID to each log', async () => {
         await auditLogger.log({
-            eventType: 'test',
+            eventType: 'test' as any,
             serviceId: 'service-1',
-            details: {},
+            details: {} as any,
         });
 
         expect(mockAdapter.logEvent).toHaveBeenCalledWith(

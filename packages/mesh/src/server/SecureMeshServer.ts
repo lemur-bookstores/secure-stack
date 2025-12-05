@@ -5,6 +5,8 @@ import { JWTManager } from '../auth/JWTManager';
 import { SessionManager } from '../auth/SessionManager';
 import { CryptoManager } from '../crypto/CryptoManager';
 import { KeyManager } from '../crypto/KeyManager';
+import { RateLimiter } from '../resilience/RateLimiter';
+import { RateLimiterConfig } from '../resilience/types';
 import * as crypto from 'crypto';
 
 const PROTO_PATH = path.join(__dirname, '../../proto/secure-messaging.proto');
@@ -15,14 +17,19 @@ export class SecureMeshServer {
     private sessionManager: SessionManager;
     private cryptoManager: CryptoManager;
     private keyManager: KeyManager;
+    private rateLimiter: RateLimiter;
     private serviceId: string;
 
-    constructor(serviceId: string, keysDir?: string) {
+    constructor(serviceId: string, keysDir?: string, rateLimitConfig?: RateLimiterConfig) {
         this.serviceId = serviceId;
         this.keyManager = new KeyManager(keysDir);
         this.jwtManager = new JWTManager(serviceId, this.keyManager);
         this.sessionManager = new SessionManager();
         this.cryptoManager = new CryptoManager({ keyManager: this.keyManager });
+        this.rateLimiter = new RateLimiter(rateLimitConfig || {
+            maxRequests: 1000,
+            windowMs: 60000
+        });
 
         this.cryptoManager.initialize(serviceId);
 
@@ -47,9 +54,19 @@ export class SecureMeshServer {
         });
     }
 
-    private handleHandshake(call: any, callback: any) {
+    private async handleHandshake(call: any, callback: any) {
         try {
             const { service_id, public_key, auth_token } = call.request;
+
+            // 0. Rate Limit Check
+            const limitResult = await this.rateLimiter.checkLimit(service_id || 'unknown');
+            if (!limitResult.allowed) {
+                callback({
+                    code: grpc.status.RESOURCE_EXHAUSTED,
+                    details: `Rate limit exceeded. Retry after ${limitResult.retryAfter}s`,
+                });
+                return;
+            }
 
             // 1. Save provided public key temporarily/persistently to verify token
             this.keyManager.saveKeyPair(service_id, { publicKey: public_key });
@@ -80,10 +97,25 @@ export class SecureMeshServer {
         }
     }
 
-    private handleSendMessage(call: any, callback: any) {
+    private async handleSendMessage(call: any, callback: any) {
         try {
             const { session_id, encrypted_data, iv, auth_tag } = call.request;
+
+            // 0. Rate Limit Check (using session_id as identifier for now, ideally map to service_id)
             const session = this.sessionManager.getSession(session_id);
+            if (session) {
+                const limitResult = await this.rateLimiter.checkLimit(session.serviceId);
+                if (!limitResult.allowed) {
+                    callback({
+                        code: grpc.status.RESOURCE_EXHAUSTED,
+                        details: `Rate limit exceeded. Retry after ${limitResult.retryAfter}s`,
+                    });
+                    return;
+                }
+            }
+
+            // Re-fetch session because we need it for logic (and previous fetch was just for rate limit ID)
+            // Optimization: We already fetched it.
 
             if (!session) {
                 throw new Error('Session not found or expired');

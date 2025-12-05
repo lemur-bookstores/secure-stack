@@ -1,7 +1,7 @@
 export interface MeshAuditEvent {
     id: string;
     timestamp: Date;
-    eventType: 'connection' | 'message' | 'key_rotation' | 'rate_limit' | 'circuit_breaker' | 'error';
+    eventType: 'connection' | 'message' | 'key_rotation' | 'rate_limit' | 'circuit_breaker' | 'error' | 'system';
     serviceId: string;
     targetServiceId?: string;
     details: {

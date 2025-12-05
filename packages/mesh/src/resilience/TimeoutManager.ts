@@ -16,7 +16,7 @@ export class TimeoutManager {
     async execute<T>(fn: () => Promise<T>): Promise<T> {
         return Promise.race([
             fn(),
-            this.createTimeoutPromise(),
+            this.createTimeoutPromise<T>(),
         ]);
     }
 

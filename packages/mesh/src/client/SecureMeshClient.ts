@@ -114,4 +114,9 @@ export class SecureMeshClient {
             }
         });
     }
+    public disconnect(): void {
+        if (this.client) {
+            this.client.close();
+        }
+    }
 }

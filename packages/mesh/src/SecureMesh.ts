@@ -3,12 +3,13 @@
  */
 
 import { CryptoManager } from './crypto/CryptoManager';
-import { JWTManager } from './auth/JWTManager';
+
 import { SessionManager } from './auth/SessionManager';
+import { KeyManager } from './crypto/KeyManager';
 import { StaticDiscovery } from './discovery/StaticDiscovery';
 import { SecureMeshClient } from './client/SecureMeshClient';
 import type { ServiceInfo } from './discovery/types';
-import { RateLimiter } from './resilience/RateLimiter';
+
 import { CircuitBreaker } from './resilience/CircuitBreaker';
 import { RetryPolicy } from './resilience/RetryPolicy';
 import { MetricsCollector } from './monitoring/MetricsCollector';
@@ -25,6 +26,7 @@ export interface SecureMeshConfig {
         aesKeySize?: number;
         jwtSecret?: string;
         sessionTimeout?: number;
+        keysDir?: string;
     };
     discovery?: {
         services?: ServiceInfo[];
@@ -57,13 +59,14 @@ export interface SecureMeshConfig {
 export class SecureMesh {
     private config: SecureMeshConfig;
     private cryptoManager: CryptoManager;
-    private jwtManager: JWTManager;
+
     private sessionManager: SessionManager;
     private discovery: StaticDiscovery;
-    private client: SecureMeshClient;
+    private clients: Map<string, SecureMeshClient> = new Map();
+    private keyManager: KeyManager;
 
     // Resilience & Monitoring
-    private rateLimiter: RateLimiter;
+    // private rateLimiter: RateLimiter;
     private retryPolicy: RetryPolicy;
     private metricsCollector: MetricsCollector;
     private auditLogger: AuditLogger;
@@ -77,27 +80,24 @@ export class SecureMesh {
         this.config = config;
 
         // Initialize managers
+        this.keyManager = new KeyManager(config.security?.keysDir);
+
         this.cryptoManager = new CryptoManager({
-            rsaKeySize: config.security?.rsaKeySize || 4096,
             aesKeySize: config.security?.aesKeySize || 256,
+            keyManager: this.keyManager,
         });
 
-        this.jwtManager = new JWTManager({
-            secret: config.security?.jwtSecret,
-            expiresIn: '1h',
-        });
-
-        this.sessionManager = new SessionManager({
-            sessionTimeout: config.security?.sessionTimeout || 3600000,
-        });
+        this.sessionManager = new SessionManager(
+            config.security?.sessionTimeout || 3600000
+        );
 
         this.discovery = new StaticDiscovery(config.discovery?.services || []);
 
         // Initialize Resilience & Monitoring
-        this.rateLimiter = new RateLimiter({
-            maxRequests: config.resilience?.rateLimit?.maxRequests || 1000,
-            windowMs: config.resilience?.rateLimit?.windowMs || 60000,
-        });
+        // this.rateLimiter = new RateLimiter({
+        //     maxRequests: config.resilience?.rateLimit?.maxRequests || 1000,
+        //     windowMs: config.resilience?.rateLimit?.windowMs || 60000,
+        // });
 
         this.retryPolicy = new RetryPolicy({
             maxAttempts: config.resilience?.retry?.maxAttempts || 3,
@@ -108,7 +108,7 @@ export class SecureMesh {
 
         this.auditLogger = new AuditLogger({
             enabled: config.monitoring?.enabled !== false,
-            adapters: config.monitoring?.adapters,
+            adapters: config.monitoring?.adapters || [],
         });
 
         this.keyRotation = new KeyRotation(
@@ -122,13 +122,6 @@ export class SecureMesh {
         );
 
         this.healthMonitor = new HealthMonitor();
-
-        this.client = new SecureMeshClient({
-            serviceId: config.serviceId,
-            cryptoManager: this.cryptoManager,
-            jwtManager: this.jwtManager,
-            sessionManager: this.sessionManager,
-        });
     }
 
     /**
@@ -165,7 +158,7 @@ export class SecureMesh {
         await this.auditLogger.log({
             eventType: 'system',
             serviceId: this.config.serviceId,
-            details: { action: 'mesh_initialized' },
+            details: { action: 'mesh_initialized', success: true },
         });
 
         console.log(`[SecureMesh] ✓ Mesh initialized`);
@@ -207,13 +200,23 @@ export class SecureMesh {
                             }
 
                             // Connect if not already connected
-                            if (!this.client.isConnected(serviceId)) {
-                                await this.client.connect(service);
+                            let client = this.clients.get(serviceId);
+                            if (!client) {
+                                client = new SecureMeshClient(
+                                    this.config.serviceId,
+                                    serviceId,
+                                    `${service.host}:${service.port}`,
+                                    this.config.security?.keysDir
+                                );
+                                await client.connect();
+                                this.clients.set(serviceId, client);
                                 this.metricsCollector.recordConnection(true);
                             }
 
                             // Make the call
-                            const result = await this.client.call<TData, TResult>(serviceId, method, data);
+                            const payload = JSON.stringify({ method, data });
+                            const response = await client.sendMessage(payload);
+                            const result = JSON.parse(response);
 
                             // Record metrics
                             this.metricsCollector.recordMessageSent();
@@ -235,7 +238,11 @@ export class SecureMesh {
      * Disconnect from a service
      */
     async disconnect(serviceId: string): Promise<void> {
-        await this.client.disconnect(serviceId);
+        const client = this.clients.get(serviceId);
+        if (client) {
+            client.disconnect();
+            this.clients.delete(serviceId);
+        }
     }
 
     /**
@@ -245,7 +252,7 @@ export class SecureMesh {
         return {
             service: this.config.serviceId,
             sessions: this.sessionManager.getStats(),
-            connectedServices: this.client.getConnectedServices(),
+            connectedServices: Array.from(this.clients.keys()),
             metrics: this.metricsCollector.getMetrics(),
         };
     }
@@ -278,10 +285,10 @@ export class SecureMesh {
         this.keyRotation.stop();
 
         // Disconnect from all services
-        const connectedServices = this.client.getConnectedServices();
-        for (const serviceId of connectedServices) {
-            await this.disconnect(serviceId);
+        for (const client of this.clients.values()) {
+            client.disconnect();
         }
+        this.clients.clear();
 
         // Clean up sessions
         this.sessionManager.cleanupExpiredSessions();
@@ -289,7 +296,7 @@ export class SecureMesh {
         await this.auditLogger.log({
             eventType: 'system',
             serviceId: this.config.serviceId,
-            details: { action: 'mesh_shutdown' },
+            details: { action: 'mesh_shutdown', success: true },
         });
 
         console.log('[SecureMesh] ✓ Cleanup complete');
