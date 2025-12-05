@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import { logger } from './utils/logger.js';
 import { createProject } from './commands/create.js';
 import { generateService, generateModule, generateRouter, generateMiddleware } from './commands/generate.js';
+import { dev } from './commands/dev.js';
 
 const program = new Command();
 
@@ -60,10 +61,7 @@ export async function run() {
         .command('dev')
         .description('Start development server with hot reload')
         .option('-p, --port <port>', 'Port number', '3000')
-        .action(async (options) => {
-            logger.info(`Starting dev server on port ${options.port}...`);
-            logger.warn('Command not yet implemented - Coming soon!');
-        });
+        .action(dev);
 
     // Build command
     program
