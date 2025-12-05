@@ -81,6 +81,22 @@ export async function run() {
             logger.info(`Starting dev server on port ${options.port}...`);
             logger.warn('Command not yet implemented - Coming soon!');
         });
+
+    // Build command
+    program
+        .command('build')
+        .description('Build for production')
+        .option('--minify', 'Minify output')
+        .action(async () => {
+            logger.info('Building for production...');
+            logger.warn('Command not yet implemented - Coming soon!');
+        });
+
+    // Mesh commands
+    const mesh = program
+        .command('mesh')
+        .description('Service mesh management tools');
+
     mesh
         .command('visualize')
         .description('Visualize mesh topology')
