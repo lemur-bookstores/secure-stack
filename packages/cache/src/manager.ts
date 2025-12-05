@@ -1,5 +1,7 @@
 import { CacheProvider } from './interfaces/cache-provider.js';
 import { MemoryProvider, MemoryConfig } from './providers/memory.js';
+import { RedisProvider, RedisConfig } from './providers/redis.js';
+import { MemcachedProvider, MemcachedConfig } from './providers/memcached.js';
 
 export type CacheStore = 'memory' | 'redis' | 'memcached';
 
@@ -7,8 +9,8 @@ export interface CacheConfig {
     store?: CacheStore;
     ttl?: number;
     memory?: MemoryConfig;
-    // redis?: RedisConfig; // To be implemented
-    // memcached?: MemcachedConfig; // To be implemented
+    redis?: RedisConfig;
+    memcached?: MemcachedConfig;
 }
 
 export class CacheManager {
@@ -22,17 +24,16 @@ export class CacheManager {
                 this.provider = new MemoryProvider(config.memory);
                 break;
             case 'redis':
-                throw new Error('Redis provider not implemented yet');
+                this.provider = new RedisProvider(config.redis);
+                break;
             case 'memcached':
-                throw new Error('Memcached provider not implemented yet');
+                this.provider = new MemcachedProvider(config.memcached);
+                break;
             default:
                 throw new Error(`Unsupported cache store: ${store}`);
         }
     }
 
-    /**
-     * Get the underlying provider
-     */
     getProvider(): CacheProvider {
         return this.provider;
     }
