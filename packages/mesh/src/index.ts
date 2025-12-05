@@ -20,4 +20,16 @@ export * from './discovery/StaticDiscovery';
 // Client
 export * from './client/SecureMeshClient';
 
+// Resilience
+export * from './resilience';
+
+// Monitoring
+export * from './monitoring';
+
+// Rotation
+export * from './rotation';
+
+// Health
+export * from './health/HealthMonitor';
+
 export const version = '0.0.1';

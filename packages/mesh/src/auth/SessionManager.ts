@@ -83,12 +83,18 @@ export class SessionManager {
     /**
      * Cleans up expired sessions
      */
-    public cleanup(): void {
+    public cleanupExpiredSessions(): void {
         for (const [id, session] of this.sessions.entries()) {
             if (this.isExpired(session)) {
                 this.sessions.delete(id);
             }
         }
+    }
+
+    public getStats(): { activeSessions: number } {
+        return {
+            activeSessions: this.sessions.size,
+        };
     }
 
     private isExpired(session: Session): boolean {

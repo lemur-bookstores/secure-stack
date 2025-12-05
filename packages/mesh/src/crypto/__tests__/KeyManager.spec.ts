@@ -9,7 +9,8 @@ describe('KeyManager', () => {
     let keyManager: KeyManager;
 
     beforeEach(() => {
-        keyManager = new KeyManager(TEST_KEYS_DIR);
+        // Use 2048 bit keys for testing speed
+        keyManager = new KeyManager(TEST_KEYS_DIR, 2048);
     });
 
     afterEach(() => {
