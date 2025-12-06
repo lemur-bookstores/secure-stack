@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/cache",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Cache module for SecureStack with support for Redis, Memory, and Memcached",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

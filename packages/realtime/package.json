@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/realtime",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Realtime module for SecureStack using Socket.io",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
