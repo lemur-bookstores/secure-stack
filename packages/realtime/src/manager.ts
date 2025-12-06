@@ -8,6 +8,8 @@ export class RealtimeManager {
     private io: Server;
     private redisPub?: Redis;
     private redisSub?: Redis;
+    // @ts-ignore - Used in other methods or future implementation
+    private httpServer?: HttpServer;
 
     constructor(config: RealtimeConfig = {}, httpServer?: HttpServer) {
         const options: Partial<ServerOptions> = {

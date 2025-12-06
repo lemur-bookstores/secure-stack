@@ -1,4 +1,4 @@
-import { ExtendedError, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 
 export type VerifyCallback = (token: string) => Promise<any>;
 
@@ -8,7 +8,7 @@ export interface AuthOptions {
 }
 
 export const socketAuthMiddleware = (options: AuthOptions) => {
-    return async (socket: Socket, next: (err?: ExtendedError) => void) => {
+    return async (socket: Socket, next: (err?: Error) => void) => {
         const tokenKey = options.tokenKey || 'token';
         const token =
             socket.handshake.auth[tokenKey] ||

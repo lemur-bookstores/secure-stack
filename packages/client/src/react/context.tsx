@@ -89,7 +89,7 @@ export function SecureStackProvider({
 
   return (
     <SecureStackContext.Provider value={value}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children as any}</QueryClientProvider>
     </SecureStackContext.Provider>
   );
 }

@@ -13,5 +13,5 @@ export default defineConfig({
     clean: true,
     minify: false,
     treeshake: true,
-    external: ['react', 'react-dom', 'vue'],
+    external: ['react', 'react-dom', 'vue', '@tanstack/react-query', '@tanstack/vue-query', 'next'],
 });

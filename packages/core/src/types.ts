@@ -62,7 +62,7 @@ export interface ServiceDefinition {
     port: number;
 }
 
-import { ZodSchema } from 'zod';
+import { z } from 'zod';
 import { MiddlewareFunction } from './middleware';
 import type { DefaultContext } from './context';
 
@@ -71,9 +71,9 @@ export interface RouterConfig {
     middleware?: MiddlewareFunction[];
 }
 
-export interface ProcedureConfig<TInput = unknown, TOutput = unknown, TContext = DefaultContext> {
-    input?: ZodSchema<TInput>;
-    output?: ZodSchema<TOutput>;
+export interface ProcedureConfig<TInput = any, TOutput = unknown, TContext = DefaultContext> {
+    input?: TInput;
+    output?: z.ZodType<TOutput>;
     handler: (ctx: ProcedureContext<TInput, TContext>) => Promise<TOutput> | TOutput;
 }
 
