@@ -20,6 +20,11 @@
       "types": "./dist/vue/index.d.ts",
       "import": "./dist/vue/index.mjs",
       "require": "./dist/vue/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.mjs",
+      "require": "./dist/server/index.js"
     }
   },
   "scripts": {
