@@ -3,7 +3,18 @@
 > Full-stack TypeScript framework with hybrid communication (gRPC + tRPC), built-in security mesh, and premium developer experience
 
 [![npm version](https://badge.fury.io/js/%40lemur-bookstores%2Fsecure-stack.svg)](https://www.npmjs.com/package/@lemur-bookstores/secure-stack)
+[![npm downloads](https://img.shields.io/npm/dm/@lemur-bookstores/secure-stack.svg)](https://www.npmjs.com/package/@lemur-bookstores/secure-stack)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
+[![Build Status](https://github.com/lemur-bookstores/secure-stack/workflows/CI/badge.svg)](https://github.com/lemur-bookstores/secure-stack/actions)
+[![Code Coverage](https://codecov.io/gh/lemur-bookstores/secure-stack/branch/main/graph/badge.svg)](https://codecov.io/gh/lemur-bookstores/secure-stack)
+[![GitHub stars](https://img.shields.io/github/stars/lemur-bookstores/secure-stack.svg?style=social&label=Star)](https://github.com/lemur-bookstores/secure-stack)
+[![GitHub forks](https://img.shields.io/github/forks/lemur-bookstores/secure-stack.svg?style=social&label=Fork)](https://github.com/lemur-bookstores/secure-stack/fork)
+[![GitHub issues](https://img.shields.io/github/issues/lemur-bookstores/secure-stack.svg)](https://github.com/lemur-bookstores/secure-stack/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Contributors](https://img.shields.io/github/contributors/lemur-bookstores/secure-stack.svg)](https://github.com/lemur-bookstores/secure-stack/graphs/contributors)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/tu-perfil)
+[![Changelog](https://img.shields.io/badge/Changelog-View-orange)](CHANGELOG.md)
 
 ## 🚀 Features
 

@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/secure-stack",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The complete SecureStack framework (Meta-package)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
