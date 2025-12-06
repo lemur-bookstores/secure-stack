@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/auth-server-example",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Example showing how to use SecureStack Server with Authentication and RBAC",
   "private": true,
   "scripts": {
