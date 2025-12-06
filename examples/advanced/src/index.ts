@@ -41,7 +41,7 @@ app.use(async (ctx: any, next) => {
 const userRouter = router()
     .query('getById', {
         input: z.string().uuid(),
-        handler: async ({ input }: { input: string }) => {
+        handler: async ({ input }: { input: any }) => {
             console.log(`Getting user with ID: ${input}`);
 
             // Simulate database lookup
@@ -91,7 +91,7 @@ const userRouter = router()
     })
     .mutation('delete', {
         input: z.string().uuid(),
-        handler: async ({ input }: { input: string }) => {
+        handler: async ({ input }: { input: any }) => {
             console.log('Deleting user:', input);
 
             // Simulate authorization check
