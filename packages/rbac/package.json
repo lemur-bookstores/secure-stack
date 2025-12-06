@@ -1,0 +1,51 @@
+{
+  "name": "@lemur-bookstores/rbac",
+  "version": "0.1.0",
+  "description": "Role-Based Access Control (RBAC) module for SecureStack",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:bundle && npm run build:types",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:bundle": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "securestack",
+    "rbac",
+    "authorization",
+    "security",
+    "permissions"
+  ],
+  "author": "@elkincp5",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lemur-bookstores/secure-stack.git",
+    "directory": "packages/rbac"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@lemur-bookstores/core": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "vitest": "4.0.15"
+  }
+}

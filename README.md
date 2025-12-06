@@ -13,6 +13,44 @@
 - **Express-like DX**: Familiar middleware system and routing
 - **Plug-and-Play Modules**: Auth, RBAC, Cache, Storage, Realtime, and more
 
+## 🧩 Modules & Use Cases
+
+### 🔐 Authentication & Security (`@lemur-bookstores/auth`)
+
+Complete security suite with JWT, RBAC, and Session management.
+
+- **Use Case**: Protect your API with role-based access control and secure session handling.
+- **Docs**: [Auth Setup](docs/auth/setup.md) | [RBAC Guide](docs/auth/rbac.md)
+
+### 🕸️ Service Mesh (`@lemur-bookstores/mesh`)
+
+Internal communication layer with mTLS-like encryption and service discovery.
+
+- **Use Case**: Securely connect microservices without managing complex certificates.
+- **Docs**: [Mesh Overview](docs/mesh/overview.md) | [Configuration](docs/mesh/configuration.md)
+
+### 📱 Client SDK (`@lemur-bookstores/client`)
+
+Type-safe client SDK with React integration, auth helpers, and CSRF protection.
+
+- **Use Case**: Build secure frontend applications with authentication, session management, and RBAC.
+- **Features**: Middleware pipeline, token management, SessionProvider with SSR hydration, auth hooks (useSignIn, useSignOut, useIsAuthenticated), RBAC guards (SessionGuard, RoleGate, PermissionGate), CSRF protection, server-side utilities for Next.js
+- **Docs**: [Client API](docs/client/api.md) | [Auth Helper Hooks](docs/client/auth-helper-hooks.md) | [CSRF Protection](docs/client/csrf-protection.md) | [React Hooks](docs/client/react-hooks.md) | [SSR Support](docs/client/ssr.md)
+
+### ⚡ Realtime (`@lemur-bookstores/realtime`)
+
+Scalable WebSocket support using Socket.io and Redis.
+
+- **Use Case**: Build chat apps, live notifications, or collaborative tools.
+- **Docs**: [Realtime Overview](docs/realtime/overview.md)
+
+### 🛠️ CLI Tool (`@lemur-bookstores/cli`)
+
+Powerful CLI for scaffolding, code generation, and management.
+
+- **Use Case**: Quickly bootstrap new services or generate boilerplate code.
+- **Docs**: [CLI Guide](packages/cli/README.md)
+
 ## 📦 Installation
 
 ```bash
@@ -34,13 +72,12 @@ const app = new SecureStack({
   port: 50051,
 });
 
-const userRouter = router()
-  .query('getUser', {
-    input: z.string(),
-    handler: async ({ input }) => {
-      return { id: input, name: 'John Doe' };
-    }
-  });
+const userRouter = router().query('getUser', {
+  input: z.string(),
+  handler: async ({ input }) => {
+    return { id: input, name: 'John Doe' };
+  },
+});
 
 app.router('user', userRouter);
 
@@ -50,7 +87,16 @@ console.log('🚀 Server ready!');
 
 ## 📚 Documentation
 
-Visit [our documentation](https://github.com/lemur-bookstores/secure-stack#readme) for detailed guides and API reference.
+Visit [our documentation](docs/README.md) for detailed guides and API reference.
+
+- [Getting Started](docs/getting-started.md)
+- [Core Concepts](docs/core/router.md)
+- [Server Package](docs/server/api.md)
+- [Client Package](docs/client/api.md)
+- [Authentication](docs/auth/setup.md)
+- [Service Mesh](docs/mesh/overview.md)
+- [Examples](docs/examples/basic-crud.md)
+- [API Reference](docs/api-reference/index.md)
 
 ## 🏗️ Project Structure
 
@@ -87,8 +133,8 @@ secure-stack/
 ### Packages
 
 - **@lemur-bookstores/core** - Core framework with context, middleware, and router
-- **@lemur-bookstores/server** - Server implementation (coming soon)
-- **@lemur-bookstores/client** - Client SDK (coming soon)
+- **@lemur-bookstores/server** - Server implementation with HTTP, tRPC, and gRPC adapters
+- **@lemur-bookstores/client** - Client SDK with React integration, auth, CSRF protection, and SSR support
 - **@lemur-bookstores/mesh** - Service Mesh (coming soon)
 - **@lemur-bookstores/cli** - CLI tool (coming soon)
 
@@ -146,6 +192,7 @@ MIT © [@elkincp5](https://github.com/elkincp5)
 ## 🙏 Acknowledgments
 
 Inspired by:
+
 - [Express](https://expressjs.com/) - Simplicity and familiarity
 - [Firebase](https://firebase.google.com/) - Premium developer experience
 - [tRPC](https://trpc.io/) - Type-safe APIs

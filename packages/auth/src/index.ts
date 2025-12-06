@@ -1,7 +1,7 @@
 import { PasswordManager } from './utils/PasswordManager';
 import { UserJWTManager, AuthConfig } from './utils/UserJWTManager';
 import { SessionManager, SessionConfig } from './session/SessionManager';
-import { RBACManager, RBACConfig } from './rbac';
+import { RBACManager, RBACConfig } from '@lemur-bookstores/rbac';
 
 export type AuthModuleConfig = AuthConfig & Partial<SessionConfig> & { rbac?: RBACConfig };
 
@@ -40,6 +40,5 @@ export class AuthModule {
 export * from './utils/PasswordManager';
 export * from './utils/UserJWTManager';
 export * from './session/SessionManager';
-export * from './rbac';
 export * from './providers';
 

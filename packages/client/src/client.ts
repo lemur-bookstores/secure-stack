@@ -3,13 +3,14 @@
  * Core client for making type-safe API calls
  */
 
-import type { ClientConfig, RequestOptions, ClientResponse, ClientError, SubscriptionOptions } from './types';
+import type { ClientConfig, RequestOptions, ClientResponse, ClientError, SubscriptionOptions, ClientMiddleware, MiddlewareContext, MiddlewareNext } from './types';
 import { CacheManager } from './cache/cache';
 import { CacheStatus } from './cache/strategies';
 
 export class SecureStackClient {
     private config: Required<ClientConfig>;
     private cache: CacheManager;
+    private middleware: ClientMiddleware[];
     private ws: WebSocket | null = null;
     private wsReconnectTimer: any = null;
     private subscriptionHandlers: Map<string, {
@@ -27,7 +28,9 @@ export class SecureStackClient {
             retry: config.retry ?? true,
             maxRetries: config.maxRetries || 3,
             signal: config.signal!,
+            middleware: config.middleware || [],
         };
+        this.middleware = this.config.middleware;
         this.cache = new CacheManager();
     }
 
@@ -202,7 +205,13 @@ export class SecureStackClient {
      * Build URL with query parameters
      */
     private buildUrl(path: string, params?: unknown): string {
-        const url = new URL(path, this.config.url);
+        // Ensure base URL ends with /
+        const baseUrl = this.config.url.endsWith('/')
+            ? this.config.url
+            : this.config.url + '/';
+
+        // Create full URL by appending path
+        const url = new URL(path, baseUrl);
 
         if (params && typeof params === 'object') {
             Object.entries(params).forEach(([key, value]) => {
@@ -216,71 +225,93 @@ export class SecureStackClient {
     }
 
     /**
-     * Core fetch implementation with retry logic
+     * Core fetch implementation with retry logic and middleware support
      */
     private async fetch<TData>(
         url: string,
         options: RequestInit & RequestOptions = {}
     ): Promise<ClientResponse<TData>> {
-        const {
-            headers: optionHeaders,
-            timeout: optionTimeout,
-            signal: optionSignal,
-            ...fetchOptions
-        } = options;
-
-        const headers = {
-            'Content-Type': 'application/json',
-            ...this.config.headers,
-            ...optionHeaders,
+        // 1. Prepare initial context
+        const context: MiddlewareContext = {
+            path: url,
+            method: options.method || 'GET',
+            body: options.body,
+            headers: {
+                'Content-Type': 'application/json',
+                ...this.config.headers,
+                ...(options.headers as Record<string, string>),
+            }
         };
 
-        const timeout = optionTimeout || this.config.timeout;
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeout);
+        // 2. Define the final handler (the actual fetch)
+        const finalHandler: MiddlewareNext = async (ctx) => {
+            const {
+                headers: _ignoredHeaders, // Handled in context
+                timeout: optionTimeout,
+                signal: optionSignal,
+                ...fetchOptions
+            } = options;
 
-        // Combine abort signals
-        const signal = optionSignal || this.config.signal;
-        if (signal) {
-            signal.addEventListener('abort', () => controller.abort());
-        }
+            const timeout = optionTimeout || this.config.timeout;
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-        try {
-            const response = await fetch(url, {
-                ...fetchOptions,
-                headers,
-                signal: controller.signal,
-            });
-
-            clearTimeout(timeoutId);
-
-            if (!response.ok) {
-                throw await this.createError(response);
+            // Combine abort signals
+            const signal = optionSignal || this.config.signal;
+            if (signal) {
+                signal.addEventListener('abort', () => controller.abort());
             }
 
-            const data = (await response.json()) as TData;
-            const responseHeaders: Record<string, string> = {};
-            response.headers.forEach((value, key) => {
-                responseHeaders[key] = value;
-            });
+            try {
+                const response = await fetch(ctx.path, {
+                    ...fetchOptions,
+                    method: ctx.method,
+                    body: ctx.body,
+                    headers: ctx.headers,
+                    signal: controller.signal,
+                });
 
-            return {
-                data,
-                headers: responseHeaders,
-                status: response.status,
-            };
-        } catch (error) {
-            clearTimeout(timeoutId);
+                clearTimeout(timeoutId);
 
-            if (error instanceof Error && error.name === 'AbortError') {
-                const timeoutError: ClientError = new Error('Request timeout') as ClientError;
-                timeoutError.status = 408;
-                timeoutError.code = 'TIMEOUT';
-                throw timeoutError;
+                if (!response.ok) {
+                    throw await this.createError(response);
+                }
+
+                const data = (await response.json()) as TData;
+                const responseHeaders: Record<string, string> = {};
+                response.headers.forEach((value, key) => {
+                    responseHeaders[key] = value;
+                });
+
+                return {
+                    data,
+                    headers: responseHeaders,
+                    status: response.status,
+                };
+            } catch (error) {
+                clearTimeout(timeoutId);
+
+                if (error instanceof Error && error.name === 'AbortError') {
+                    const timeoutError: ClientError = new Error('Request timeout') as ClientError;
+                    timeoutError.status = 408;
+                    timeoutError.code = 'TIMEOUT';
+                    throw timeoutError;
+                }
+
+                throw error;
             }
+        };
 
-            throw error;
-        }
+        // 3. Execute middleware chain
+        const dispatch = async (i: number, ctx: MiddlewareContext): Promise<any> => {
+            const fn = this.middleware[i];
+            if (!fn) {
+                return finalHandler(ctx);
+            }
+            return fn(ctx, (nextCtx) => dispatch(i + 1, nextCtx || ctx));
+        };
+
+        return dispatch(0, context);
     }
 
     /**

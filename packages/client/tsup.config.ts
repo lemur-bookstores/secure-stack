@@ -5,6 +5,7 @@ export default defineConfig({
         index: 'src/index.ts',
         'react/index': 'src/react/index.ts',
         'vue/index': 'src/vue/index.ts',
+        'server/index': 'src/server/index.ts',
     },
     format: ['esm', 'cjs'],
     dts: false, // We use tsc for .d.ts files
@@ -13,5 +14,5 @@ export default defineConfig({
     clean: true,
     minify: false,
     treeshake: true,
-    external: ['react', 'react-dom', 'vue'],
+    external: ['react', 'react-dom', 'vue', '@tanstack/react-query', '@tanstack/vue-query', 'next'],
 });

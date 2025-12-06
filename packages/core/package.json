@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/core",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Core framework - Foundation of SecureStack",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -39,10 +39,10 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/node": "20.11.5",
+    "@types/node": "^20.11.5",
     "tinybench": "6.0.0",
     "tsup": "8.5.1",
-    "typescript": "5.3.3",
+    "typescript": "5.9.3",
     "vitest": "4.0.15"
   },
   "dependencies": {

@@ -68,8 +68,6 @@ publicRouter
                 throw new Error('Auth not initialized');
             }
 
-            const hashedPassword = await server.auth.password.hashPassword(input.password);
-
             // Simulate user creation
             const userId = `user_${Date.now()}`;
 

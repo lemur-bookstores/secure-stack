@@ -40,6 +40,45 @@ export interface ClientConfig {
      * Abort signal for cancelling requests
      */
     signal?: AbortSignal | undefined;
+
+    /**
+     * Middleware to run before requests
+     */
+    middleware?: ClientMiddleware[];
+}
+
+/**
+ * Middleware Types
+ */
+export interface MiddlewareContext {
+    path: string;
+    method: string;
+    body?: any;
+    headers: Record<string, string>;
+}
+
+export type MiddlewareNext = (context: MiddlewareContext) => Promise<any>;
+
+export type ClientMiddleware = (
+    context: MiddlewareContext,
+    next: MiddlewareNext
+) => Promise<any>;
+
+/**
+ * Auth Session Types
+ */
+export interface AuthSession {
+    user: {
+        id: string;
+        email: string;
+        role: string;
+        permissions: string[];
+        [key: string]: any;
+    } | null;
+    isAuthenticated: boolean;
+    isLoading: boolean;
+    status: 'loading' | 'authenticated' | 'unauthenticated' | 'error';
+    error?: Error | null;
 }
 
 /**

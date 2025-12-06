@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/mesh",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Secure Service Mesh for SecureStack - Hybrid encryption, JWT auth, and service discovery",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -57,7 +57,7 @@
     "@types/node": "^20.11.5",
     "@types/uuid": "^9.0.7",
     "tsup": "8.5.1",
-    "typescript": "^5.3.3",
+    "typescript": "5.9.3",
     "vitest": "4.0.15"
   }
 }

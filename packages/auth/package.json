@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/auth",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Authentication module for SecureStack - JWT, OAuth, and Session Management",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -42,6 +42,7 @@
   "dependencies": {
     "@grpc/grpc-js": "1.14.2",
     "@lemur-bookstores/core": "*",
+    "@lemur-bookstores/rbac": "*",
     "bcryptjs": "2.4.3",
     "jsonwebtoken": "9.0.2",
     "next": "14.2.33",
@@ -50,9 +51,9 @@
   "devDependencies": {
     "@types/bcryptjs": "2.4.6",
     "@types/jsonwebtoken": "9.0.5",
-    "@types/node": "20.11.5",
+    "@types/node": "^20.11.5",
     "tsup": "8.5.1",
-    "typescript": "5.3.3",
+    "typescript": "5.9.3",
     "vitest": "4.0.15"
   }
 }

@@ -28,6 +28,7 @@ export class SecureStackServer extends SecureStack {
     private hooks: LifecycleHooks = {};
     private isRunning = false;
     private httpRouters: Map<string, Router> = new Map();
+    private providers: Map<string, any> = new Map();
     public readonly auth?: AuthModule;
 
     constructor(config: SecureStackServerConfig) {
@@ -42,6 +43,18 @@ export class SecureStackServer extends SecureStack {
         if (config.auth) {
             this.auth = new AuthModule(config.auth);
         }
+    }
+
+    /**
+     * Register a provider to be injected into the context
+     */
+    registerProvider(name: string, provider: any): this {
+        this.providers.set(name, provider);
+        return this;
+    }
+
+    public getHttpServer() {
+        return this.fastify.server;
     }
 
     /**
@@ -121,11 +134,12 @@ export class SecureStackServer extends SecureStack {
      */
     private registerHTTPRoutes() {
         const prefix = this.serverConfig.apiPrefix || '/api';
+        const extraContext = Object.fromEntries(this.providers);
 
         this.httpRouters.forEach((router, name) => {
             registerHTTPRouter(this.fastify, router, {
                 prefix: `${prefix}/${name}`,
-            });
+            }, extraContext);
         });
     }
 

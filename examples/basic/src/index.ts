@@ -48,6 +48,7 @@ const userRouter = router()
     },
   });
 
+
 // Register the router
 app.router('user', userRouter);
 

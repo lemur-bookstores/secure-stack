@@ -40,4 +40,18 @@ describe('AuthModule', () => {
             expect(() => auth.jwt.verifyToken('invalid-token')).toThrow();
         });
     });
+
+    describe('RBAC Integration', () => {
+        it('should initialize RBAC if config is provided', () => {
+            const authWithRbac = AuthModule.init({
+                jwtSecret: secret,
+                rbac: {
+                    roles: [{ name: 'admin', permissions: ['all'] }]
+                }
+            });
+            
+            expect(authWithRbac.rbac).toBeDefined();
+            expect(authWithRbac.rbac?.roleExists('admin')).toBe(true);
+        });
+    });
 });

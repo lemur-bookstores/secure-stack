@@ -8,132 +8,129 @@ import { SecureStackError } from './error';
 
 export interface RouteDefinition {
     type: RouteType;
-    config: ProcedureConfig;
+    config: ProcedureConfig<any, any>;
 }
 
-export function router() {
-    const routes: Map<string, RouteDefinition> = new Map();
-    const middlewares: MiddlewareFunction[] = [];
+export class Router {
+    private routes: Map<string, RouteDefinition> = new Map();
+    private middlewares: MiddlewareFunction[] = [];
+    /**
+     * Define a query procedure
+     */
+    query<TInput = unknown, TOutput = unknown>(name: string, config: ProcedureConfig<TInput, TOutput>): Router {
+        this.routes.set(name, { type: RouteType.Query, config });
+        return this;
+    }
 
-    return {
-        /**
-         * Define a query procedure
-         */
-        query<TInput = unknown, TOutput = unknown>(name: string, config: ProcedureConfig<TInput, TOutput>) {
-            routes.set(name, { type: RouteType.Query, config: config as ProcedureConfig });
-            return this;
-        },
+    /**
+     * Define a mutation procedure
+     */
+    mutation<TInput = unknown, TOutput = unknown>(name: string, config: ProcedureConfig<TInput, TOutput>) {
+        this.routes.set(name, { type: RouteType.Mutation, config });
+        return this;
+    }
 
-        /**
-         * Define a mutation procedure
-         */
-        mutation<TInput = unknown, TOutput = unknown>(name: string, config: ProcedureConfig<TInput, TOutput>) {
-            routes.set(name, { type: RouteType.Mutation, config: config as ProcedureConfig });
-            return this;
-        },
+    /**
+     * Define a subscription procedure
+     */
+    subscription<TInput = unknown, TOutput = unknown>(name: string, config: ProcedureConfig<TInput, TOutput>) {
+        this.routes.set(name, { type: RouteType.Subscription, config });
+        return this;
+    }
 
-        /**
-         * Define a subscription procedure
-         */
-        subscription<TInput = unknown, TOutput = unknown>(name: string, config: ProcedureConfig<TInput, TOutput>) {
-            routes.set(name, { type: RouteType.Subscription, config: config as ProcedureConfig });
-            return this;
-        },
+    /**
+     * Add middleware to this router
+     */
+    middleware(middleware: MiddlewareFunction) {
+        this.middlewares.push(middleware);
+        return this;
+    }
 
-        /**
-         * Add middleware to this router
-         */
-        middleware(middleware: MiddlewareFunction) {
-            middlewares.push(middleware);
-            return this;
-        },
+    /**
+     * Alias for middleware
+     */
+    use(middleware: MiddlewareFunction) {
+        return this.middleware(middleware);
+    }
 
-        /**
-         * Alias for middleware
-         */
-        use(middleware: MiddlewareFunction) {
-            return this.middleware(middleware);
-        },
+    /**
+     * Execute a procedure with input validation
+     */
+    async executeProcedure<TInput = unknown, TOutput = unknown, TContext = unknown>(
+        procedureName: string,
+        input: TInput,
+        ctx: TContext
+    ): Promise<TOutput> {
+        const route = this.routes.get(procedureName);
 
-        /**
-         * Execute a procedure with input validation
-         */
-        async executeProcedure<TInput = unknown, TOutput = unknown, TContext = unknown>(
-            procedureName: string,
-            input: TInput,
-            ctx: TContext
-        ): Promise<TOutput> {
-            const route = routes.get(procedureName);
+        if (!route) {
+            throw SecureStackError.notFound(`Procedure '${procedureName}' not found`);
+        }
 
-            if (!route) {
-                throw SecureStackError.notFound(`Procedure '${procedureName}' not found`);
+        const { config } = route;
+
+        // Validate input if schema provided
+        let validatedInput = input;
+        if (config.input) {
+            try {
+                validatedInput = config.input.parse(input) as TInput;
+            } catch (error: any) {
+                throw SecureStackError.validationError('Input validation failed', {
+                    errors: error.errors,
+                    input,
+                });
             }
+        }
 
-            const { config } = route;
+        // Create procedure context
+        const procedureContext: ProcedureContext<TInput, TContext> = {
+            input: validatedInput,
+            ctx,
+        };
 
-            // Validate input if schema provided
-            let validatedInput = input;
-            if (config.input) {
+        // Execute handler
+        try {
+            const result = await (config.handler as any)(procedureContext);
+
+            // Validate output if schema provided
+            if (config.output) {
                 try {
-                    validatedInput = config.input.parse(input) as TInput;
+                    return config.output.parse(result) as TOutput;
                 } catch (error: any) {
-                    throw SecureStackError.validationError('Input validation failed', {
+                    throw SecureStackError.internal('Output validation failed', error, {
                         errors: error.errors,
-                        input,
+                        output: result,
                     });
                 }
             }
 
-            // Create procedure context
-            const procedureContext: ProcedureContext<TInput, TContext> = {
-                input: validatedInput,
-                ctx,
-            };
-
-            // Execute handler
-            try {
-                const result = await (config.handler as any)(procedureContext);
-
-                // Validate output if schema provided
-                if (config.output) {
-                    try {
-                        return config.output.parse(result) as TOutput;
-                    } catch (error: any) {
-                        throw SecureStackError.internal('Output validation failed', error, {
-                            errors: error.errors,
-                            output: result,
-                        });
-                    }
-                }
-
-                return result as TOutput;
-            } catch (error: any) {
-                // Re-throw SecureStackError as-is
-                if (error instanceof SecureStackError) {
-                    throw error;
-                }
-
-                // Wrap other errors
-                throw SecureStackError.internal('Procedure execution failed', error, {
-                    procedure: procedureName,
-                });
+            return result as TOutput;
+        } catch (error: any) {
+            // Re-throw SecureStackError as-is
+            if (error instanceof SecureStackError) {
+                throw error;
             }
-        },
 
-        /**
-         * Get all routes
-         */
-        getRoutes() {
-            return routes;
-        },
+            // Wrap other errors
+            throw SecureStackError.internal('Procedure execution failed', error, {
+                procedure: procedureName,
+            });
+        }
+    }
 
-        /**
-         * Get all middlewares
-         */
-        getMiddlewares() {
-            return middlewares;
-        },
-    };
+    /**
+     * Get all routes
+     */
+    getRoutes() {
+        return this.routes;
+    }
+
+    /**
+     * Get all middlewares
+     */
+    getMiddlewares() {
+        return this.middlewares;
+    }
 }
 
-export type Router = ReturnType<typeof router>;
+export const router = () => new Router();
