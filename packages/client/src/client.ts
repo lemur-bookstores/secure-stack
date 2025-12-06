@@ -202,7 +202,13 @@ export class SecureStackClient {
      * Build URL with query parameters
      */
     private buildUrl(path: string, params?: unknown): string {
-        const url = new URL(path, this.config.url);
+        // Ensure base URL ends with /
+        const baseUrl = this.config.url.endsWith('/')
+            ? this.config.url
+            : this.config.url + '/';
+
+        // Create full URL by appending path
+        const url = new URL(path, baseUrl);
 
         if (params && typeof params === 'object') {
             Object.entries(params).forEach(([key, value]) => {
