@@ -72,6 +72,35 @@ This document lays out the feature spec for building that experience directly in
 - Hooks: `useAuthorization`, `useHasRole`, `useHasPermission`.
 - Components: `<RequireRole roles={['admin']}>`, `<RequirePermission permission="orders.create">` with fallback render prop.
 
+### Session Object & State Machine
+
+- Session shape returned by hooks/helpers:
+
+```ts
+interface AuthSession {
+  status: 'loading' | 'authenticated' | 'unauthenticated' | 'error';
+  user: {
+    id: string;
+    email: string;
+    name?: string;
+    role?: string;
+    permissions?: string[];
+    orgId?: string;
+    [key: string]: unknown;
+  } | null;
+  accessToken?: string;
+  error?: Error;
+}
+```
+
+- State transitions:
+  1. `loading` → `authenticated` when `sessionFetcher` or login resolves with a valid user.
+  2. `loading` → `unauthenticated` when no cookies/session found.
+  3. Any state → `error` if refresh/login fails (expose `retry()` function from hook).
+  4. `authenticated` → `unauthenticated` on logout or refresh failure.
+
+Hooks such as `useSession` should always return `{ data, status, error, refresh }` so UI can implement skeletons consistently.
+
 ### Middleware Composition
 
 ```ts
@@ -84,11 +113,36 @@ const client = new SecureStackClient({
 - Each middleware receives `{ path, input, options, next }` similar to server-side middlewares.
 - Session middleware is exported from SessionProvider to ensure shared state.
 
+#### Middleware Contract
+
+```ts
+type ClientMiddleware = (ctx: {
+  path: string;
+  type: 'query' | 'mutation' | 'subscription';
+  input: unknown;
+  options: RequestOptions;
+  next: (nextCtx?: Partial<typeof ctx>) => Promise<unknown>;
+}) => Promise<unknown>;
+```
+
+- Middlewares execute in FIFO order and can short-circuit responses (e.g., return cached data).
+- Provide helpers like `composeMiddlewares([...])` so apps can inject their own telemetry or feature flags without touching core providers.
+
 ## Server Hooks & Helpers
 
 - `withServerSession(handler)` higher-order helper for Next.js Route Handlers to resolve the session and inject `ctx.user`.
 - `createAuthCookies(res, tokens)` and `clearAuthCookies(res)` utilities.
 - Optional integration with `@lemur-bookstores/auth` SessionManager for verifying tokens server-side.
+
+### SSR / RSC Flow
+
+1. A Next.js Route Handler or Server Component calls `getServerSession(cookies)`.
+2. Helper verifies refresh cookie (HttpOnly) by hitting `/auth/session` or decoding JWT using `@lemur-bookstores/auth`.
+3. The resolved session is serialized via `headers.set('x-securestack-session', base64(json))` or passed through `SessionProvider` hydration prop to avoid duplicate fetches.
+4. SessionProvider initializes with that payload on the client, skipping `loading` state and immediately rendering gated components.
+5. For Edge runtime, reuse the same helper but rely on `RequestCookies` from `@edge-runtime/cookies`.
+
+This flow must handle **partial hydration**, meaning if only the user object is available (no tokens) the provider still works for read-only SSR pages.
 
 ## Validation Components
 
@@ -113,6 +167,21 @@ const client = new SecureStackClient({
 3. **Cookie Utilities** – Cross-runtime helpers for reading/writing session cookies.
 4. **RBAC Layer** – Introduce providers/hooks/components for permissions.
 5. **Docs & Examples** – Update Next.js example to showcase full login/logout flow, guards, and SSR session loading.
+
+## Testing Strategy
+
+1. **Unit Tests** –
+  - Session middleware: token injection, refresh retry, failure modes.
+  - Hooks: ensure `useSession` state machine behaves across login/logout cycles.
+  - Cookie helpers: verify serialization/deserialization across Node + Edge polyfills.
+2. **Integration Tests** – Spin up a mock SecureStack server + Next.js app, run Playwright suites covering login, guard redirects, role changes.
+3. **Load/Timing Tests** – Validate background refresh cadence does not spam APIs (throttle invocation, exponential backoff on failures).
+4. **Security Audits** –
+  - Confirm cookies always set with `Secure`, `HttpOnly`, `SameSite=strict` (configurable for localhost).
+  - Ensure CSRF double-submit tokens are enforced on refresh endpoints.
+  - Verify session data is never written to localStorage when `cookieStrategy="http-only"`.
+
+Document expected test matrices so QA teams can extend coverage as providers evolve.
 
 ## Open Questions
 
