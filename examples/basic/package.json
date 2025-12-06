@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "@lemur-bookstores/core": "*",
+    "@lemur-bookstores/mesh": "*",
     "@lemur-bookstores/server": "*",
-    "@lemur-bookstores/mesh": "*"
+    "zod": "4.1.13"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",

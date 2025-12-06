@@ -24,7 +24,7 @@ const server = new SecureStackServer({
 const userRouter = router()
     .query('getUser', {
         input: z.string(),
-        handler: async ({ input }) => {
+        handler: async ({ input }: any) => {
             return {
                 id: input,
                 name: 'John Doe',
@@ -65,7 +65,7 @@ const userRouter = router()
 const postRouter = router()
     .query('getPost', {
         input: z.string(),
-        handler: async ({ input }) => {
+        handler: async ({ input }: any) => {
             return {
                 id: input,
                 title: 'Example Post',
