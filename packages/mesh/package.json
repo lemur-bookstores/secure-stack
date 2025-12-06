@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/mesh",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Secure Service Mesh for SecureStack - Hybrid encryption, JWT auth, and service discovery",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
