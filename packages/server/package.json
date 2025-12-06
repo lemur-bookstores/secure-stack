@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/server",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Server implementation for SecureStack",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

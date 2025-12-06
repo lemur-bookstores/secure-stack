@@ -5,11 +5,13 @@ Welcome to the **SecureStack Framework** documentation! SecureStack is a full-st
 ## 📚 Table of Contents
 
 ### Getting Started
+
 - [Quick Start Guide](./getting-started.md)
 - [Installation](./installation.md)
 - [Architecture Overview](./architecture.md)
 
 ### Core Concepts
+
 - [Router & Procedures](./core/router.md)
 - [Middleware System](./core/middleware.md)
 - [Context Management](./core/context.md)
@@ -18,6 +20,7 @@ Welcome to the **SecureStack Framework** documentation! SecureStack is a full-st
 ### Packages
 
 #### Server
+
 - [SecureStackServer API](./server/api.md)
 - [HTTP Adapter](./server/http.md)
 - [tRPC Integration](./server/trpc.md)
@@ -25,22 +28,28 @@ Welcome to the **SecureStack Framework** documentation! SecureStack is a full-st
 - [Lifecycle Hooks](./server/lifecycle.md)
 
 #### Client
+
 - [SecureStackClient API](./client/api.md)
+- [Auth Helper Hooks](./client/auth-helper-hooks.md)
+- [CSRF Protection](./client/csrf-protection.md)
 - [React Hooks](./client/react-hooks.md)
 - [Cache Management](./client/cache.md)
 - [SSR Support](./client/ssr.md)
 
 #### Authentication
+
 - [Authentication Setup](./auth/setup.md)
 - [RBAC System](./auth/rbac.md)
 - [JWT Configuration](./auth/jwt.md)
 
 #### Service Mesh
+
 - [Mesh Overview](./mesh/overview.md)
 - [Encryption & Security](./mesh/encryption.md)
 - [Service Discovery](./mesh/discovery.md)
 
 ### Examples & Use Cases
+
 - [Basic CRUD Application](./examples/basic-crud.md)
 - [Microservices Architecture](./examples/microservices.md)
 - [Authentication & Authorization](./examples/auth-example.md)
@@ -48,12 +57,14 @@ Welcome to the **SecureStack Framework** documentation! SecureStack is a full-st
 - [Full-Stack Application](./examples/fullstack.md)
 
 ### Advanced Topics
+
 - [Deployment Strategies](./advanced/deployment.md)
 - [Performance Optimization](./advanced/performance.md)
 - [Security Best Practices](./advanced/security.md)
 - [Testing Strategies](./advanced/testing.md)
 
 ### API Reference
+
 - [Complete API Reference](./api-reference/index.md)
 
 ## 🚀 Quick Example

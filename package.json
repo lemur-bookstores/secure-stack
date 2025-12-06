@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/secure-stack",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "description": "Full-stack TypeScript framework with hybrid communication (gRPC + tRPC), built-in security mesh, and premium developer experience",
   "scripts": {
