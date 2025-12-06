@@ -40,12 +40,15 @@ This document lays out the feature spec for building that experience directly in
 
 ## Session & Token Strategy
 
-| Concern        | Recommendation                                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| Token storage  | Access token in memory, refresh token in HttpOnly cookie (NextAuth style).                                    |
-| Rotation       | Auto-refresh on 401 via middleware using refresh cookie.                                                      |
-| CSRF           | Double-submit token (cookie + header) when using refresh endpoints.                                           |
-| Cookie helpers | `getSessionCookies(request: NextRequest)` for Route Handlers + `setSessionCookies(response, tokens)` utility. |
+| Concern        | Recommendation                                                                                                 |
+| -------------- | -------------------------------------------------------------------------------------------------------------- |
+| Token storage  | Access token in memory, refresh token in HttpOnly cookie (NextAuth style).                                     |
+| Rotation       | Auto-refresh on 401 via middleware using refresh cookie.                                                       |
+| CSRF           | Double-submit token (cookie + header) when using refresh endpoints.                                            |
+| Session cookie | `secure-stack.session` stores a user payload (unsigned JWT) so `getServerSession` can hydrate without fetches. |
+| Cookie helpers | `getSessionCookies()` / `setSessionCookies()` / `clearAuthCookies()` unify cookie handling across runtimes.    |
+
+During login, call `setSessionCookies({ accessToken, refreshToken, session })` where `session` is a signed or unsigned JWT containing the serialized user fields you want to hydrate on the server.
 
 ### Data Flow
 
@@ -53,7 +56,7 @@ This document lays out the feature spec for building that experience directly in
 2. SessionProvider stores `user` in context, access token in memory, refresh token via cookie helper.
 3. Middleware injects `Authorization: Bearer <accessToken>` into queries/mutations.
 4. On 401, middleware attempts refresh using cookie; on success, updates access token and retries original request.
-5. Server components call `getServerSession()` (reads cookies, validates via `/auth/session` endpoint) and hydrate initial session into SessionProvider to avoid waterfalls.
+5. Server components call `getServerSession()` which first inspects the session/refresh cookies, decodes the JWT payload locally, and only calls `/api/auth/session` as a fallback before hydrating SessionProvider to avoid waterfalls.
 
 ## API Surface
 
@@ -136,11 +139,20 @@ type ClientMiddleware = (ctx: {
 
 ### SSR / RSC Flow
 
-1. A Next.js Route Handler or Server Component calls `getServerSession(cookies)`.
-2. Helper verifies refresh cookie (HttpOnly) by hitting `/auth/session` or decoding JWT using `@lemur-bookstores/auth`.
-3. The resolved session is serialized via `headers.set('x-securestack-session', base64(json))` or passed through `SessionProvider` hydration prop to avoid duplicate fetches.
-4. SessionProvider initializes with that payload on the client, skipping `loading` state and immediately rendering gated components.
-5. For Edge runtime, reuse the same helper but rely on `RequestCookies` from `@edge-runtime/cookies`.
+1. A Next.js Route Handler or Server Component calls `getServerSession({ cookies })`.
+2. The helper inspects `secure-stack.session` / `secure-stack.access-token` cookies, then runs either a custom `sessionDecoder` or the built-in JWT payload decoder (unsigned) to derive the user object.
+3. If decoding fails and `disableRequest !== true`, it calls `/api/auth/session` (or custom `sessionEndpoint`) passing the cookie to let the backend verify the refresh token.
+4. The resolved session is serialized and handed to `SessionProvider` for hydration so React trees skip the `loading` state immediately.
+5. Edge runtime follows the same pattern via `RequestCookies`.
+
+### `getServerSession` Options
+
+- `tokenCookieNames`: Ordered list of cookie names to inspect (defaults to `['secure-stack.session', 'secure-stack.access-token', 'secure-stack.refresh-token', 'auth_token']`).
+- `sessionDecoder`: Optional verified decoder (e.g., `jose` + public key) that returns either an `AuthSession` or raw user payload.
+- `enableJwtDecode`: Toggles the built-in, unsigned payload decode helper for prototypes/local dev.
+- `mapJwtPayloadToUser`: Custom mapper that turns decoded payloads into the `AuthSession['user']` shape.
+- `disableRequest`: Skip the network fallback entirely when you trust the cookie payload.
+- `requestInit`: Extra fetch options for the `/api/auth/session` call (headers, credentials, etc.).
 
 This flow must handle **partial hydration**, meaning if only the user object is available (no tokens) the provider still works for read-only SSR pages.
 
@@ -171,15 +183,18 @@ This flow must handle **partial hydration**, meaning if only the user object is 
 ## Testing Strategy
 
 1. **Unit Tests** –
-  - Session middleware: token injection, refresh retry, failure modes.
-  - Hooks: ensure `useSession` state machine behaves across login/logout cycles.
-  - Cookie helpers: verify serialization/deserialization across Node + Edge polyfills.
+
+- Session middleware: token injection, refresh retry, failure modes.
+- Hooks: ensure `useSession` state machine behaves across login/logout cycles.
+- Cookie helpers: verify serialization/deserialization across Node + Edge polyfills.
+
 2. **Integration Tests** – Spin up a mock SecureStack server + Next.js app, run Playwright suites covering login, guard redirects, role changes.
 3. **Load/Timing Tests** – Validate background refresh cadence does not spam APIs (throttle invocation, exponential backoff on failures).
 4. **Security Audits** –
-  - Confirm cookies always set with `Secure`, `HttpOnly`, `SameSite=strict` (configurable for localhost).
-  - Ensure CSRF double-submit tokens are enforced on refresh endpoints.
-  - Verify session data is never written to localStorage when `cookieStrategy="http-only"`.
+
+- Confirm cookies always set with `Secure`, `HttpOnly`, `SameSite=strict` (configurable for localhost).
+- Ensure CSRF double-submit tokens are enforced on refresh endpoints.
+- Verify session data is never written to localStorage when `cookieStrategy="http-only"`.
 
 Document expected test matrices so QA teams can extend coverage as providers evolve.
 
