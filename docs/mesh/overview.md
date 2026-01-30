@@ -15,7 +15,7 @@ SecureStack includes a built-in Service Mesh for secure microservices communicat
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/mesh
+npm install @lemur-bookstores/secure-stack-mesh
 ```
 
 ## Basic Setup
@@ -23,7 +23,7 @@ npm install @lemur-bookstores/mesh
 ### Server Configuration
 
 ```typescript
-import { SecureStackServer } from '@lemur-bookstores/server';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
 
 const app = new SecureStackServer({
   name: 'user-service',
@@ -56,7 +56,7 @@ await app.start();
 ### Calling Other Services
 
 ```typescript
-import { router } from '@lemur-bookstores/core';
+import { router } from '@lemur-bookstores/secure-stack-core';
 
 const userRouter = router()
   .query('getUserWithOrders', {
@@ -236,8 +236,8 @@ console.log(metrics);
 ### Service A (User Service)
 
 ```typescript
-import { SecureStackServer } from '@lemur-bookstores/server';
-import { router } from '@lemur-bookstores/core';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
+import { router } from '@lemur-bookstores/secure-stack-core';
 
 const app = new SecureStackServer({
   name: 'user-service',
@@ -281,8 +281,8 @@ await app.start();
 ### Service B (Order Service)
 
 ```typescript
-import { SecureStackServer } from '@lemur-bookstores/server';
-import { router } from '@lemur-bookstores/core';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
+import { router } from '@lemur-bookstores/secure-stack-core';
 
 const app = new SecureStackServer({
   name: 'order-service',

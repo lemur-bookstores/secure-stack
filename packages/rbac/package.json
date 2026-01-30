@@ -1,5 +1,5 @@
 {
-  "name": "@lemur-bookstores/rbac",
+  "name": "@lemur-bookstores/secure-stack-rbac",
   "version": "0.1.1",
   "description": "Role-Based Access Control (RBAC) module for SecureStack",
   "main": "./dist/index.js",
@@ -40,12 +40,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@lemur-bookstores/core": "*"
+    "@lemur-bookstores/secure-stack-core": "*"
   },
   "devDependencies": {
-    "@types/node": "^20.11.5",
+    "@types/node": "20.19.0",
     "tsup": "8.5.1",
     "typescript": "5.9.3",
-    "vitest": "4.0.15"
+    "vitest": "4.0.18"
   }
 }

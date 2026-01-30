@@ -13,7 +13,7 @@ Track security-critical events and service interactions for compliance, debuggin
 ### Configuration
 
 ```typescript
-import { SecureMesh } from '@lemur-bookstores/mesh';
+import { SecureMesh } from '@lemur-bookstores/secure-stack-mesh';
 import { ConsoleAdapter } from './adapters/ConsoleAdapter';
 
 const mesh = new SecureMesh({
@@ -115,7 +115,7 @@ const apiGateway = new SecureMesh({
 Create custom adapters for your monitoring infrastructure:
 
 ```typescript
-import { MonitoringAdapter, MeshAuditEvent } from '@lemur-bookstores/mesh';
+import { MonitoringAdapter, MeshAuditEvent } from '@lemur-bookstores/secure-stack-mesh';
 
 class DatadogAdapter implements MonitoringAdapter {
   async logEvent(event: MeshAuditEvent): Promise<void> {
@@ -252,7 +252,7 @@ await mesh.initialize();
 ### Custom Health Checks
 
 ```typescript
-import { HealthMonitor } from '@lemur-bookstores/mesh';
+import { HealthMonitor } from '@lemur-bookstores/secure-stack-mesh';
 
 const healthMonitor = new HealthMonitor();
 
@@ -390,7 +390,7 @@ const complianceService = new SecureMesh({
 
 ```typescript
 // Manual key rotation after security incident
-import { KeyRotation } from '@lemur-bookstores/mesh';
+import { KeyRotation } from '@lemur-bookstores/secure-stack-mesh';
 
 const keyRotation = new KeyRotation(
   'my-service',

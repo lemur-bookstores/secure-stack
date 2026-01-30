@@ -5,11 +5,11 @@
 
 ## 🚀 Resumen de Progreso
 
-El desarrollo del **MVP (Fase 1)** ha avanzado significativamente. Se ha completado la implementación del paquete `@lemur-bookstores/client`, cerrando una de las brechas más importantes para el lanzamiento.
+El desarrollo del **MVP (Fase 1)** ha avanzado significativamente. Se ha completado la implementación del paquete `@lemur-bookstores/secure-stack-client`, cerrando una de las brechas más importantes para el lanzamiento.
 
 ### ✅ Hitos Recientes Completados
 
-#### 1. Cliente (`@lemur-bookstores/client`)
+#### 1. Cliente (`@lemur-bookstores/secure-stack-client`)
 
 El paquete de cliente está **completo** y funcional.
 
@@ -37,11 +37,11 @@ Los ejemplos de referencia han sido actualizados y verificados:
 
 | Paquete                    |    Estado    | Descripción                                  |
 | :------------------------- | :----------: | :------------------------------------------- |
-| `@lemur-bookstores/core`   | 🟢 **Listo** | Router, Middleware, Context, Errores.        |
-| `@lemur-bookstores/server` | 🟢 **Listo** | Adaptadores HTTP/gRPC/tRPC, Auth Middleware. |
-| `@lemur-bookstores/auth`   | 🟢 **Listo** | JWT, RBAC, Session Management.               |
-| `@lemur-bookstores/mesh`   | 🟢 **Listo** | Encriptación híbrida, Service Discovery.     |
-| `@lemur-bookstores/client` | 🟢 **Listo** | React Hooks, Cache, SSR support.             |
+| `@lemur-bookstores/secure-stack-core`   | 🟢 **Listo** | Router, Middleware, Context, Errores.        |
+| `@lemur-bookstores/secure-stack-server` | 🟢 **Listo** | Adaptadores HTTP/gRPC/tRPC, Auth Middleware. |
+| `@lemur-bookstores/secure-stack-auth`   | 🟢 **Listo** | JWT, RBAC, Session Management.               |
+| `@lemur-bookstores/secure-stack-mesh`   | 🟢 **Listo** | Encriptación híbrida, Service Discovery.     |
+| `@lemur-bookstores/secure-stack-client` | 🟢 **Listo** | React Hooks, Cache, SSR support.             |
 
 ---
 

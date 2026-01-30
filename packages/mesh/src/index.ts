@@ -1,5 +1,5 @@
 /**
- * @lemur-bookstores/mesh
+ * @lemur-bookstores/secure-stack-mesh
  * Secure Service Mesh for SecureStack
  */
 

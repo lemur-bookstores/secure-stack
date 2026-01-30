@@ -1,5 +1,5 @@
 /**
- * @lemur-bookstores/core
+ * @lemur-bookstores/secure-stack-core
  * Core framework for SecureStack
  */
 

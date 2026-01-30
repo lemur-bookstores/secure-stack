@@ -1,6 +1,6 @@
-import { router } from '@lemur-bookstores/core';
-import { SecureStackServer } from '@lemur-bookstores/server';
-import { createAuthMiddleware, createRoleMiddleware } from '@lemur-bookstores/server';
+import { router } from '@lemur-bookstores/secure-stack-core';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
+import { createAuthMiddleware, createRoleMiddleware } from '@lemur-bookstores/secure-stack-server';
 import { z } from 'zod';
 
 // Initialize the server with authentication and RBAC

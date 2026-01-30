@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-#### Client Package (@lemur-bookstores/client)
+#### Client Package (@lemur-bookstores/secure-stack-client)
 
 - **Middleware System**: Client-side middleware pipeline with composable architecture
 - **Auth Middleware**: Automatic token refresh on 401 responses with retry logic
@@ -40,13 +40,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Server-side CSRF validation
   - JWT payload decoder with type-safe mapping
 
-#### Core Package (@lemur-bookstores/core)
+#### Core Package (@lemur-bookstores/secure-stack-core)
 
 - Core framework with context, middleware, and router system
 - Type-safe procedure definitions
 - Error handling with custom error codes
 
-#### Server Package (@lemur-bookstores/server)
+#### Server Package (@lemur-bookstores/secure-stack-server)
 
 - HTTP, tRPC, and gRPC adapter implementations
 - Server lifecycle management

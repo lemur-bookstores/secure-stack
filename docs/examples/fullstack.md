@@ -117,11 +117,11 @@ enum Priority {
 
 ```typescript
 // server/src/routers/auth.ts
-import { router } from '@lemur-bookstores/core';
+import { router } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { SecureStackError } from '@lemur-bookstores/core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
@@ -226,7 +226,7 @@ export const authRouter = router()
 
 ```typescript
 // server/src/routers/task.ts
-import { router, middleware } from '@lemur-bookstores/core';
+import { router, middleware } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 import { EventEmitter } from 'events';
 
@@ -434,7 +434,7 @@ export const taskRouter = router()
 
 ```typescript
 // client/src/lib/client.ts
-import { createClient } from '@lemur-bookstores/client';
+import { createClient } from '@lemur-bookstores/secure-stack-client';
 
 export const client = createClient({
   url: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
@@ -450,7 +450,7 @@ export const client = createClient({
 ```typescript
 // client/src/contexts/AuthContext.tsx
 import { createContext, useContext, useState, useEffect } from 'react';
-import { useMutation, useQuery } from '@lemur-bookstores/client/react';
+import { useMutation, useQuery } from '@lemur-bookstores/secure-stack-client/react';
 
 interface AuthContextType {
   user: User | null;
@@ -496,7 +496,7 @@ export const useAuth = () => useContext(AuthContext);
 
 ```typescript
 // client/src/components/TaskBoard.tsx
-import { useQuery, useMutation, useSubscription } from '@lemur-bookstores/client/react';
+import { useQuery, useMutation, useSubscription } from '@lemur-bookstores/secure-stack-client/react';
 import { useState } from 'react';
 
 export function TaskBoard({ teamId }: { teamId: string }) {
@@ -558,7 +558,7 @@ export function TaskBoard({ teamId }: { teamId: string }) {
 
 ```typescript
 // client/src/components/CreateTaskForm.tsx
-import { useMutation, useInvalidateQuery } from '@lemur-bookstores/client/react';
+import { useMutation, useInvalidateQuery } from '@lemur-bookstores/secure-stack-client/react';
 import { useState } from 'react';
 
 export function CreateTaskForm({ teamId }: { teamId: string }) {

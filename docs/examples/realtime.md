@@ -14,7 +14,7 @@ We'll use Node.js `EventEmitter` for simple pub/sub, but in production, you shou
 
 ```typescript
 // server.ts
-import { SecureStackServer, router } from '@lemur-bookstores/server';
+import { SecureStackServer, router } from '@lemur-bookstores/secure-stack-server';
 import { z } from 'zod';
 import { EventEmitter } from 'events';
 
@@ -80,7 +80,7 @@ await app.start();
 
 ```typescript
 // ChatRoom.tsx
-import { useSubscription, useMutation } from '@lemur-bookstores/client/react';
+import { useSubscription, useMutation } from '@lemur-bookstores/secure-stack-client/react';
 import { useState } from 'react';
 
 export function ChatRoom({ roomId, user }) {

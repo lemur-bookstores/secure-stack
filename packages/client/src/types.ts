@@ -2,7 +2,7 @@
  * Core Client Types
  */
 
-import type { DefaultContext } from '@lemur-bookstores/core';
+import type { DefaultContext } from '@lemur-bookstores/secure-stack-core';
 
 /**
  * Client configuration options

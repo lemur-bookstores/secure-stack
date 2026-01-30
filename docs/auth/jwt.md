@@ -62,7 +62,7 @@ The authentication middleware automatically verifies tokens.
 
 ```typescript
 // middleware/auth.ts
-import { middleware } from '@lemur-bookstores/core';
+import { middleware } from '@lemur-bookstores/secure-stack-core';
 import jwt from 'jsonwebtoken';
 
 export const authMiddleware = middleware().use(async ({ ctx, next }) => {

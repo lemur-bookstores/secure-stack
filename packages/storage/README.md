@@ -1,4 +1,4 @@
-# @lemur-bookstores/storage
+# @lemur-bookstores/secure-stack-storage
 
 A unified storage module for SecureStack with support for local and cloud storage providers.
 
@@ -13,7 +13,7 @@ A unified storage module for SecureStack with support for local and cloud storag
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/storage
+npm install @lemur-bookstores/secure-stack-storage
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ npm install @lemur-bookstores/storage
 ### Basic Usage (Local)
 
 ```typescript
-import { StorageManager } from '@lemur-bookstores/storage';
+import { StorageManager } from '@lemur-bookstores/secure-stack-storage';
 
 const storage = new StorageManager({
   default: 'local',
@@ -41,7 +41,7 @@ const url = await storage.getUrl('images/profile.jpg');
 ### S3 Usage
 
 ```typescript
-import { StorageManager } from '@lemur-bookstores/storage';
+import { StorageManager } from '@lemur-bookstores/secure-stack-storage';
 
 const storage = new StorageManager({
   default: 's3',
@@ -57,7 +57,7 @@ const storage = new StorageManager({
 ### Advanced Usage (Validation & Processing)
 
 ```typescript
-import { StorageManager } from '@lemur-bookstores/storage';
+import { StorageManager } from '@lemur-bookstores/secure-stack-storage';
 
 const storage = new StorageManager({ default: 'local' });
 
@@ -85,7 +85,7 @@ await storage.upload(fileBuffer, 'images/profile.jpg', {
 ### Middleware Usage (Node.js/Fastify/Express)
 
 ```typescript
-import { StorageMiddleware, StorageManager } from '@lemur-bookstores/storage';
+import { StorageMiddleware, StorageManager } from '@lemur-bookstores/secure-stack-storage';
 import http from 'http';
 
 const storage = new StorageManager();

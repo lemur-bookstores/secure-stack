@@ -15,7 +15,7 @@ SecureStack provides first-class support for [tRPC](https://trpc.io/), enabling 
 The tRPC adapter is enabled by default in `SecureStackServer`.
 
 ```typescript
-import { SecureStackServer, router } from '@lemur-bookstores/server';
+import { SecureStackServer, router } from '@lemur-bookstores/secure-stack-server';
 
 const app = new SecureStackServer({
   name: 'trpc-api',
@@ -65,12 +65,12 @@ async function main() {
 
 ## React Integration
 
-For React applications, use `@lemur-bookstores/client` which wraps tRPC's React Query adapter.
+For React applications, use `@lemur-bookstores/secure-stack-client` which wraps tRPC's React Query adapter.
 
 ```typescript
 // App.tsx
-import { SecureStackProvider, createClient } from '@lemur-bookstores/client';
-import { useQuery } from '@lemur-bookstores/client/react';
+import { SecureStackProvider, createClient } from '@lemur-bookstores/secure-stack-client';
+import { useQuery } from '@lemur-bookstores/secure-stack-client/react';
 
 const client = createClient({
   url: 'http://localhost:3000/api',
@@ -135,7 +135,7 @@ const protectedRouter = router()
 Errors thrown in SecureStack are converted to tRPC errors:
 
 ```typescript
-import { SecureStackError } from '@lemur-bookstores/core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
 // Server
 throw new SecureStackError({

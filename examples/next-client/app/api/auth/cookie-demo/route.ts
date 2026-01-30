@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { setSessionCookies, clearAuthCookies } from '@lemur-bookstores/client/server';
+import { setSessionCookies, clearAuthCookies } from '@lemur-bookstores/secure-stack-client/server';
 
 /**
  * POST /api/auth/cookie-demo
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
  * Read and display current cookies
  */
 export async function GET() {
-    const { getSessionCookies } = await import('@lemur-bookstores/client/server');
+    const { getSessionCookies } = await import('@lemur-bookstores/secure-stack-client/server');
     const cookies = await getSessionCookies();
 
     return NextResponse.json({

@@ -1,6 +1,6 @@
 'use client';
 
-import { Protect } from '@lemur-bookstores/client/react';
+import { Protect } from '@lemur-bookstores/secure-stack-client/react';
 
 export function AdminPanel() {
   return (

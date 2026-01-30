@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { SecureStackServer } from '../SecureStackServer';
-import { router } from '@lemur-bookstores/core';
+import { router } from '@lemur-bookstores/secure-stack-core';
 
 describe('SecureStackServer Provider Integration', () => {
     let server: SecureStackServer;

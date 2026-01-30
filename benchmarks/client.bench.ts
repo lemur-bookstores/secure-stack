@@ -9,8 +9,8 @@ import { renderHook } from '@testing-library/react';
 import { QueryClient, onlineManager, focusManager } from '@tanstack/react-query';
 import { createElement } from 'react';
 import type { ReactNode } from 'react';
-import { SecureStackClient } from '@lemur-bookstores/client';
-import { useQuery, useMutation, SecureStackProvider } from '@lemur-bookstores/client/react';
+import { SecureStackClient } from '@lemur-bookstores/secure-stack-client';
+import { useQuery, useMutation, SecureStackProvider } from '@lemur-bookstores/secure-stack-client/react';
 
 // Force online and focus
 onlineManager.setOnline(true);

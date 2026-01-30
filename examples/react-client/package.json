@@ -10,18 +10,18 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "1.14.2",
-    "@lemur-bookstores/client": "*",
+    "@lemur-bookstores/secure-stack-client": "*",
     "@tanstack/react-query": "^5.17.0",
-    "next": "14.2.33",
+    "next": "16.1.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tsup": "8.5.1",
-    "vitest": "4.0.15"
+    "vitest": "4.0.18"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
-    "@vitejs/plugin-react": "4.7.0",
+    "@vitejs/plugin-react": "5.1.2",
     "typescript": "5.9.3",
     "vite": "7.2.6"
   }

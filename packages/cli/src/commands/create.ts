@@ -117,8 +117,8 @@ async function generatePackageJson(projectPath: string, options: ProjectOptions)
             typecheck: 'tsc --noEmit',
         },
         dependencies: {
-            '@lemur-bookstores/core': '*',
-            '@lemur-bookstores/server': '*',
+            '@lemur-bookstores/secure-stack-core': '*',
+            '@lemur-bookstores/secure-stack-server': '*',
         } as Record<string, string>,
         devDependencies: {
             'tsx': '^4.7.0',
@@ -130,19 +130,19 @@ async function generatePackageJson(projectPath: string, options: ProjectOptions)
 
     // Add feature dependencies
     if (options.features.includes('auth')) {
-        packageJson.dependencies['@lemur-bookstores/auth'] = '*';
+        packageJson.dependencies['@lemur-bookstores/secure-stack-auth'] = '*';
     }
     if (options.features.includes('rbac')) {
-        packageJson.dependencies['@lemur-bookstores/rbac'] = '*';
+        packageJson.dependencies['@lemur-bookstores/secure-stack-rbac'] = '*';
     }
     if (options.features.includes('mesh')) {
-        packageJson.dependencies['@lemur-bookstores/mesh'] = '*';
+        packageJson.dependencies['@lemur-bookstores/secure-stack-mesh'] = '*';
     }
     if (options.features.includes('rate-limit')) {
-        packageJson.dependencies['@lemur-bookstores/rate-limit'] = '*';
+        packageJson.dependencies['@lemur-bookstores/secure-stack-rate-limit'] = '*';
     }
     if (options.features.includes('audit')) {
-        packageJson.dependencies['@lemur-bookstores/audit'] = '*';
+        packageJson.dependencies['@lemur-bookstores/secure-stack-audit'] = '*';
     }
 
     // Add database dependencies
@@ -188,7 +188,7 @@ async function generateTsConfig(projectPath: string) {
 
 async function generateSourceFiles(projectPath: string, options: ProjectOptions) {
     // Generate index.ts
-    const indexContent = `import { SecureStack } from '@lemur-bookstores/core';
+    const indexContent = `import { SecureStack } from '@lemur-bookstores/secure-stack-core';
 
 const app = new SecureStack({
   name: '${options.name}',

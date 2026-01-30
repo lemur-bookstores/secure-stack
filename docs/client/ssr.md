@@ -10,7 +10,7 @@ For Next.js 13+ App Router, we recommend using React Server Components (RSC) to 
 
 ```typescript
 // lib/server-client.ts
-import { createClient } from '@lemur-bookstores/client';
+import { createClient } from '@lemur-bookstores/secure-stack-client';
 import { headers } from 'next/headers';
 
 export const serverClient = createClient({
@@ -54,7 +54,7 @@ For the classic Pages Router, use `getServerSideProps` or `getStaticProps` with 
 
 ```typescript
 // pages/_app.tsx
-import { SecureStackProvider, createClient } from '@lemur-bookstores/client';
+import { SecureStackProvider, createClient } from '@lemur-bookstores/secure-stack-client';
 import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query';
 import { useState } from 'react';
 

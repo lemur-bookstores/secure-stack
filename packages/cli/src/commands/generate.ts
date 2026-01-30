@@ -65,7 +65,7 @@ export async function generateService(name: string) {
         );
 
         // Generate router file
-        const routerContent = `import { router } from '@lemur-bookstores/core';
+        const routerContent = `import { router } from '@lemur-bookstores/secure-stack-core';
 import { ${capitalize(name)}Service } from './${name}.service.js';
 
 const ${name}Service = new ${capitalize(name)}Service();
@@ -137,7 +137,7 @@ export async function generateModule(name: string) {
 
         await FileManager.createDir(modulePath);
 
-        const moduleContent = `import { router } from '@lemur-bookstores/core';
+        const moduleContent = `import { router } from '@lemur-bookstores/secure-stack-core';
 
 export const ${name}Module = router()
   .query('example', async () => {
@@ -180,7 +180,7 @@ export async function generateRouter(name: string) {
             process.exit(1);
         }
 
-        const routerContent = `import { router } from '@lemur-bookstores/core';
+        const routerContent = `import { router } from '@lemur-bookstores/secure-stack-core';
 
 export const ${name}Router = router()
   .query('list', async () => {
@@ -239,7 +239,7 @@ export async function generateMiddleware(name: string) {
 
         await FileManager.createDir(path.dirname(middlewarePath));
 
-        const middlewareContent = `import { middleware } from '@lemur-bookstores/core';
+        const middlewareContent = `import { middleware } from '@lemur-bookstores/secure-stack-core';
 
 export const ${name}Middleware = middleware(async ({ ctx, next }) => {
   // TODO: Implement middleware logic

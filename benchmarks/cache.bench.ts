@@ -4,7 +4,7 @@
  */
 
 import { Bench } from 'tinybench';
-import { CacheManager, TimeBasedStrategy, StaleWhileRevalidateStrategy } from '@lemur-bookstores/client';
+import { CacheManager, TimeBasedStrategy, StaleWhileRevalidateStrategy } from '@lemur-bookstores/secure-stack-client';
 
 const bench = new Bench({ time: 1000 });
 

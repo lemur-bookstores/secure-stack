@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { SecureStackProvider } from '@lemur-bookstores/client/react';
+import { SecureStackProvider } from '@lemur-bookstores/secure-stack-client/react';
 import App from './App';
 import './index.css';
 

@@ -23,14 +23,14 @@ server.use(Auth.authMiddleware());
 
 ## Included Packages
 
-- `@lemur-bookstores/audit`
-- `@lemur-bookstores/auth`
-- `@lemur-bookstores/cache`
-- `@lemur-bookstores/client`
-- `@lemur-bookstores/core`
-- `@lemur-bookstores/mesh`
-- `@lemur-bookstores/rate-limit`
-- `@lemur-bookstores/rbac`
-- `@lemur-bookstores/realtime`
-- `@lemur-bookstores/server`
-- `@lemur-bookstores/storage`
+- `@lemur-bookstores/secure-stack-audit`
+- `@lemur-bookstores/secure-stack-auth`
+- `@lemur-bookstores/secure-stack-cache`
+- `@lemur-bookstores/secure-stack-client`
+- `@lemur-bookstores/secure-stack-core`
+- `@lemur-bookstores/secure-stack-mesh`
+- `@lemur-bookstores/secure-stack-rate-limit`
+- `@lemur-bookstores/secure-stack-rbac`
+- `@lemur-bookstores/secure-stack-realtime`
+- `@lemur-bookstores/secure-stack-server`
+- `@lemur-bookstores/secure-stack-storage`

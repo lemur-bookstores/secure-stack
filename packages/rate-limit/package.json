@@ -1,5 +1,5 @@
 {
-  "name": "@lemur-bookstores/rate-limit",
+  "name": "@lemur-bookstores/secure-stack-rate-limit",
   "version": "0.1.1",
   "description": "Rate Limit module for SecureStack",
   "main": "./dist/index.js",
@@ -29,10 +29,10 @@
   "author": "Lemur Bookstores",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^20.11.5",
+    "@types/node": "20.19.0",
     "tsup": "8.5.1",
     "typescript": "5.9.3",
-    "vitest": "4.0.15"
+    "vitest": "4.0.18"
   },
   "dependencies": {
     "@types/uuid": "10.0.0",

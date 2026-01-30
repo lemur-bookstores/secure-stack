@@ -35,7 +35,7 @@ Request → Middleware 1 → Middleware 2 → Handler → Response
 ### Basic Middleware
 
 ```typescript
-import { middleware } from '@lemur-bookstores/core';
+import { middleware } from '@lemur-bookstores/secure-stack-core';
 
 const loggerMiddleware = middleware()
   .use(async ({ ctx, next }) => {
@@ -156,7 +156,7 @@ SecureStack provides several built-in middleware functions:
 ### Authentication Middleware
 
 ```typescript
-import { authMiddleware } from '@lemur-bookstores/auth';
+import { authMiddleware } from '@lemur-bookstores/secure-stack-auth';
 
 const router = router()
   .middleware(authMiddleware({
@@ -174,7 +174,7 @@ const router = router()
 ### RBAC Middleware
 
 ```typescript
-import { rbacMiddleware } from '@lemur-bookstores/auth';
+import { rbacMiddleware } from '@lemur-bookstores/secure-stack-auth';
 
 const router = router()
   .middleware(authMiddleware())
@@ -191,7 +191,7 @@ const router = router()
 ### Rate Limiting Middleware
 
 ```typescript
-import { rateLimitMiddleware } from '@lemur-bookstores/server';
+import { rateLimitMiddleware } from '@lemur-bookstores/secure-stack-server';
 
 const router = router()
   .middleware(rateLimitMiddleware({
@@ -209,7 +209,7 @@ const router = router()
 ### Validation Middleware
 
 ```typescript
-import { validationMiddleware } from '@lemur-bookstores/core';
+import { validationMiddleware } from '@lemur-bookstores/secure-stack-core';
 
 const router = router()
   .middleware(validationMiddleware({
@@ -231,7 +231,7 @@ const router = router()
 ### Caching Middleware
 
 ```typescript
-import { cacheMiddleware } from '@lemur-bookstores/server';
+import { cacheMiddleware } from '@lemur-bookstores/secure-stack-server';
 
 const router = router()
   .query('expensiveQuery', {
@@ -308,7 +308,7 @@ const servicesMiddleware = middleware()
 ### Type-Safe Context Augmentation
 
 ```typescript
-import type { Context } from '@lemur-bookstores/core';
+import type { Context } from '@lemur-bookstores/secure-stack-core';
 
 interface AuthContext {
   user: {
@@ -351,7 +351,7 @@ const router = router()
 ### Composing Middleware
 
 ```typescript
-import { compose } from '@lemur-bookstores/core';
+import { compose } from '@lemur-bookstores/secure-stack-core';
 
 const secureMiddleware = compose(
   loggerMiddleware,

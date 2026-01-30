@@ -3,7 +3,7 @@
  * Demonstrates secure service-to-service communication
  */
 
-import { SecureMesh } from '@lemur-bookstores/mesh';
+import { SecureMesh } from '@lemur-bookstores/secure-stack-mesh';
 
 // Service 1: User Service
 const userService = new SecureMesh({

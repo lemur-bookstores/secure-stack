@@ -53,7 +53,7 @@ export const generateTokens = (user: { id: string; role: string }) => {
 
 ```typescript
 // middleware.ts
-import { middleware, SecureStackError } from '@lemur-bookstores/core';
+import { middleware, SecureStackError } from '@lemur-bookstores/secure-stack-core';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from './config';
 
@@ -82,7 +82,7 @@ export const hasRole = (role: string) => middleware().use(async ({ ctx, next }) 
 
 ```typescript
 // server.ts
-import { SecureStackServer, router } from '@lemur-bookstores/server';
+import { SecureStackServer, router } from '@lemur-bookstores/secure-stack-server';
 import { z } from 'zod';
 import { hashPassword, verifyPassword, generateTokens } from './auth';
 import { isAuthenticated, hasRole } from './middleware';
@@ -135,7 +135,7 @@ await app.start();
 
 ```typescript
 // client.ts
-import { createClient } from '@lemur-bookstores/client';
+import { createClient } from '@lemur-bookstores/secure-stack-client';
 
 const client = createClient({
   url: 'http://localhost:3000',

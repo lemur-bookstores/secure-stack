@@ -5,7 +5,7 @@ This guide covers setting up authentication in your SecureStack application usin
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/auth bcryptjs jsonwebtoken
+npm install @lemur-bookstores/secure-stack-auth bcryptjs jsonwebtoken
 npm install -D @types/bcryptjs @types/jsonwebtoken
 ```
 
@@ -43,11 +43,11 @@ enum Role {
 
 ```typescript
 // src/routers/auth.ts
-import { router } from '@lemur-bookstores/core';
+import { router } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { SecureStackError } from '@lemur-bookstores/core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
@@ -190,8 +190,8 @@ export const authRouter = router()
 
 ```typescript
 // src/middleware/auth.ts
-import { middleware } from '@lemur-bookstores/core';
-import { SecureStackError } from '@lemur-bookstores/core';
+import { middleware } from '@lemur-bookstores/secure-stack-core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
@@ -309,7 +309,7 @@ export const optionalAuth = middleware()
 ### Protected Routes
 
 ```typescript
-import { router } from '@lemur-bookstores/core';
+import { router } from '@lemur-bookstores/secure-stack-core';
 import { requireAuth } from './middleware/auth';
 
 const userRouter = router()
@@ -393,7 +393,7 @@ export const useAuthStore = create<AuthState>()(
 
 ```typescript
 // src/lib/client.ts
-import { createClient } from '@lemur-bookstores/client';
+import { createClient } from '@lemur-bookstores/secure-stack-client';
 import { useAuthStore } from './auth';
 
 export const client = createClient({
@@ -408,7 +408,7 @@ export const client = createClient({
 ### Login Component
 
 ```typescript
-import { useMutation } from '@lemur-bookstores/client/react';
+import { useMutation } from '@lemur-bookstores/secure-stack-client/react';
 import { useAuthStore } from '../lib/auth';
 
 function LoginForm() {

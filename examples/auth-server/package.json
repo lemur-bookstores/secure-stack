@@ -1,5 +1,5 @@
 {
-  "name": "@lemur-bookstores/auth-server-example",
+  "name": "@lemur-bookstores/secure-stack-auth-server-example",
   "version": "0.1.1",
   "description": "Example showing how to use SecureStack Server with Authentication and RBAC",
   "private": true,
@@ -10,17 +10,17 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "1.14.2",
-    "@lemur-bookstores/auth": "*",
-    "@lemur-bookstores/core": "*",
-    "@lemur-bookstores/server": "*",
-    "next": "14.2.33",
+    "@lemur-bookstores/secure-stack-auth": "*",
+    "@lemur-bookstores/secure-stack-core": "*",
+    "@lemur-bookstores/secure-stack-server": "*",
+    "next": "16.1.6",
     "tsup": "8.5.1",
     "vite": "7.2.6",
-    "vitest": "4.0.15",
+    "vitest": "4.0.18",
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20.11.5",
+    "@types/node": "20.19.0",
     "tsx": "4.21.0",
     "typescript": "5.9.3"
   }

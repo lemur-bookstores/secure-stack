@@ -41,7 +41,7 @@ This service manages the product catalog.
 
 ```typescript
 // services/product/index.ts
-import { SecureStackServer, router } from '@lemur-bookstores/server';
+import { SecureStackServer, router } from '@lemur-bookstores/secure-stack-server';
 import { z } from 'zod';
 import { meshConfig } from '../../shared/config';
 
@@ -78,7 +78,7 @@ This service manages orders and communicates with the Product Service to verify 
 
 ```typescript
 // services/order/index.ts
-import { SecureStackServer, router } from '@lemur-bookstores/server';
+import { SecureStackServer, router } from '@lemur-bookstores/secure-stack-server';
 import { z } from 'zod';
 import { meshConfig } from '../../shared/config';
 
@@ -136,7 +136,7 @@ This service acts as the entry point for the client.
 
 ```typescript
 // services/user/index.ts
-import { SecureStackServer, router } from '@lemur-bookstores/server';
+import { SecureStackServer, router } from '@lemur-bookstores/secure-stack-server';
 import { z } from 'zod';
 import { meshConfig } from '../../shared/config';
 

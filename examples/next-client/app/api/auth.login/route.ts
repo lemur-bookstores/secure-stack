@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { setSessionCookies, setCSRFCookie } from '@lemur-bookstores/client/server';
+import { setSessionCookies, setCSRFCookie } from '@lemur-bookstores/secure-stack-client/server';
 
 export async function POST(request: NextRequest) {
     const body = await request.json();

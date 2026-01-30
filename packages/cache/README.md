@@ -1,4 +1,4 @@
-# @lemur-bookstores/cache
+# @lemur-bookstores/secure-stack-cache
 
 A robust caching module for SecureStack with support for multiple providers (Memory, Redis, Memcached).
 
@@ -16,7 +16,7 @@ A robust caching module for SecureStack with support for multiple providers (Mem
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/cache
+npm install @lemur-bookstores/secure-stack-cache
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ npm install @lemur-bookstores/cache
 ### Basic Usage (Memory)
 
 ```typescript
-import { CacheManager } from '@lemur-bookstores/cache';
+import { CacheManager } from '@lemur-bookstores/secure-stack-cache';
 
 const cache = new CacheManager({
   store: 'memory',
@@ -41,7 +41,7 @@ const value = await cache.get('key');
 ### Redis Usage
 
 ```typescript
-import { CacheManager } from '@lemur-bookstores/cache';
+import { CacheManager } from '@lemur-bookstores/secure-stack-cache';
 
 const cache = new CacheManager({
   store: 'redis',
@@ -56,7 +56,7 @@ const cache = new CacheManager({
 ### Memcached Usage
 
 ```typescript
-import { CacheManager } from '@lemur-bookstores/cache';
+import { CacheManager } from '@lemur-bookstores/secure-stack-cache';
 
 const cache = new CacheManager({
   store: 'memcached',
@@ -72,7 +72,7 @@ const cache = new CacheManager({
 ### SQLite Usage
 
 ```typescript
-import { CacheManager } from '@lemur-bookstores/cache';
+import { CacheManager } from '@lemur-bookstores/secure-stack-cache';
 
 const cache = new CacheManager({
   store: 'sqlite',
@@ -87,7 +87,7 @@ const cache = new CacheManager({
 ### MongoDB Usage
 
 ```typescript
-import { CacheManager } from '@lemur-bookstores/cache';
+import { CacheManager } from '@lemur-bookstores/secure-stack-cache';
 
 const cache = new CacheManager({
   store: 'mongo',

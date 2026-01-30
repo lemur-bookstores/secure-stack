@@ -1,6 +1,6 @@
 'use client';
 
-import { useIsAuthenticated, useSignIn, useSignOut } from '@lemur-bookstores/client/react';
+import { useIsAuthenticated, useSignIn, useSignOut } from '@lemur-bookstores/secure-stack-client/react';
 import { useState } from 'react';
 
 /**

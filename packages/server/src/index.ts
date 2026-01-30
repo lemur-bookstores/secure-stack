@@ -1,5 +1,5 @@
 /**
- * @lemur-bookstores/server
+ * @lemur-bookstores/secure-stack-server
  * Server implementation for SecureStack
  */
 

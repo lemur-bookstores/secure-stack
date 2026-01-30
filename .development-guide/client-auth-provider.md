@@ -2,7 +2,7 @@
 
 ## Why This Matters
 
-The current `@lemur-bookstores/client` package exposes data-fetching hooks but leaves authentication/session state up to each app. Modern Next.js apps expect features similar to NextAuth:
+The current `@lemur-bookstores/secure-stack-client` package exposes data-fetching hooks but leaves authentication/session state up to each app. Modern Next.js apps expect features similar to NextAuth:
 
 - Automatic cookie-based session continuity on both client and server components.
 - Hooks that expose the authenticated user with role/permission metadata.
@@ -135,7 +135,7 @@ type ClientMiddleware = (ctx: {
 
 - `withServerSession(handler)` higher-order helper for Next.js Route Handlers to resolve the session and inject `ctx.user`.
 - `createAuthCookies(res, tokens)` and `clearAuthCookies(res)` utilities.
-- Optional integration with `@lemur-bookstores/auth` SessionManager for verifying tokens server-side.
+- Optional integration with `@lemur-bookstores/secure-stack-auth` SessionManager for verifying tokens server-side.
 
 ### SSR / RSC Flow
 

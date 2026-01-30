@@ -26,7 +26,7 @@ There are three types of procedures:
 ### Simple Router
 
 ```typescript
-import { router } from '@lemur-bookstores/core';
+import { router } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 
 const userRouter = router()
@@ -325,7 +325,7 @@ SecureStack provides full type inference without code generation:
 ### Infer Router Types
 
 ```typescript
-import type { inferRouterInputs, inferRouterOutputs } from '@lemur-bookstores/core';
+import type { inferRouterInputs, inferRouterOutputs } from '@lemur-bookstores/secure-stack-core';
 
 const userRouter = router()
   .query('getUser', {

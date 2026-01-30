@@ -45,7 +45,7 @@ const app = new SecureStackServer({
 You can implement a custom discovery provider by extending the `DiscoveryProvider` interface.
 
 ```typescript
-import { DiscoveryProvider, ServiceNode } from '@lemur-bookstores/mesh';
+import { DiscoveryProvider, ServiceNode } from '@lemur-bookstores/secure-stack-mesh';
 
 class MyCustomRegistry implements DiscoveryProvider {
   async register(service: ServiceNode): Promise<void> {

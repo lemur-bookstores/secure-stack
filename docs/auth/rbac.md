@@ -15,7 +15,7 @@ SecureStack provides a flexible and powerful RBAC system to manage permissions a
 
 ```typescript
 // config/rbac.ts
-import { createRBAC } from '@lemur-bookstores/auth';
+import { createRBAC } from '@lemur-bookstores/secure-stack-auth';
 
 export const rbac = createRBAC({
   roles: {
@@ -29,7 +29,7 @@ export const rbac = createRBAC({
 ### 2. Protect Routes
 
 ```typescript
-import { router } from '@lemur-bookstores/core';
+import { router } from '@lemur-bookstores/secure-stack-core';
 import { rbac } from './config/rbac';
 
 const postRouter = router()

@@ -1,5 +1,5 @@
-import { AuthModule } from '@lemur-bookstores/auth';
-import { MiddlewareFunction, SecureStackError, ErrorCode } from '@lemur-bookstores/core';
+import { AuthModule } from '@lemur-bookstores/secure-stack-auth';
+import { MiddlewareFunction, SecureStackError, ErrorCode } from '@lemur-bookstores/secure-stack-core';
 
 export interface AuthenticatedContext {
     user?: {

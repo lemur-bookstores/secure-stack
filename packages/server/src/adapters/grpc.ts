@@ -1,6 +1,6 @@
 import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
-import type { SecureStack } from '@lemur-bookstores/core';
+import type { SecureStack } from '@lemur-bookstores/secure-stack-core';
 
 export interface GRPCAdapterConfig {
     protoPath: string;

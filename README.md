@@ -13,7 +13,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/lemur-bookstores/secure-stack.svg)](https://github.com/lemur-bookstores/secure-stack/issues)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Contributors](https://img.shields.io/github/contributors/lemur-bookstores/secure-stack.svg)](https://github.com/lemur-bookstores/secure-stack/graphs/contributors)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/tu-perfil)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/elkincp5)
 [![Changelog](https://img.shields.io/badge/Changelog-View-orange)](CHANGELOG.md)
 
 ## 🚀 Features
@@ -26,21 +26,21 @@
 
 ## 🧩 Modules & Use Cases
 
-### 🔐 Authentication & Security (`@lemur-bookstores/auth`)
+### 🔐 Authentication & Security (`@lemur-bookstores/secure-stack-auth`)
 
 Complete security suite with JWT, RBAC, and Session management.
 
 - **Use Case**: Protect your API with role-based access control and secure session handling.
 - **Docs**: [Auth Setup](docs/auth/setup.md) | [RBAC Guide](docs/auth/rbac.md)
 
-### 🕸️ Service Mesh (`@lemur-bookstores/mesh`)
+### 🕸️ Service Mesh (`@lemur-bookstores/secure-stack-mesh`)
 
 Internal communication layer with mTLS-like encryption and service discovery.
 
 - **Use Case**: Securely connect microservices without managing complex certificates.
 - **Docs**: [Mesh Overview](docs/mesh/overview.md) | [Configuration](docs/mesh/configuration.md)
 
-### 📱 Client SDK (`@lemur-bookstores/client`)
+### 📱 Client SDK (`@lemur-bookstores/secure-stack-client`)
 
 Type-safe client SDK with React integration, auth helpers, and CSRF protection.
 
@@ -48,14 +48,14 @@ Type-safe client SDK with React integration, auth helpers, and CSRF protection.
 - **Features**: Middleware pipeline, token management, SessionProvider with SSR hydration, auth hooks (useSignIn, useSignOut, useIsAuthenticated), RBAC guards (SessionGuard, RoleGate, PermissionGate), CSRF protection, server-side utilities for Next.js
 - **Docs**: [Client API](docs/client/api.md) | [Auth Helper Hooks](docs/client/auth-helper-hooks.md) | [CSRF Protection](docs/client/csrf-protection.md) | [React Hooks](docs/client/react-hooks.md) | [SSR Support](docs/client/ssr.md)
 
-### ⚡ Realtime (`@lemur-bookstores/realtime`)
+### ⚡ Realtime (`@lemur-bookstores/secure-stack-realtime`)
 
 Scalable WebSocket support using Socket.io and Redis.
 
 - **Use Case**: Build chat apps, live notifications, or collaborative tools.
 - **Docs**: [Realtime Overview](docs/realtime/overview.md)
 
-### 🛠️ CLI Tool (`@lemur-bookstores/cli`)
+### 🛠️ CLI Tool (`@lemur-bookstores/secure-stack-cli`)
 
 Powerful CLI for scaffolding, code generation, and management.
 
@@ -116,7 +116,7 @@ This is a monorepo managed with **Turborepo** and **npm workspaces**:
 ```
 secure-stack/
 ├── packages/
-│   └── core/                    # @lemur-bookstores/core
+│   └── core/                    # @lemur-bookstores/secure-stack-core
 │       ├── src/
 │       │   ├── SecureStack.ts   # Main framework class
 │       │   ├── router.ts        # Router builder
@@ -143,11 +143,11 @@ secure-stack/
 
 ### Packages
 
-- **@lemur-bookstores/core** - Core framework with context, middleware, and router
-- **@lemur-bookstores/server** - Server implementation with HTTP, tRPC, and gRPC adapters
-- **@lemur-bookstores/client** - Client SDK with React integration, auth, CSRF protection, and SSR support
-- **@lemur-bookstores/mesh** - Service Mesh (coming soon)
-- **@lemur-bookstores/cli** - CLI tool (coming soon)
+- **@lemur-bookstores/secure-stack-core** - Core framework with context, middleware, and router
+- **@lemur-bookstores/secure-stack-server** - Server implementation with HTTP, tRPC, and gRPC adapters
+- **@lemur-bookstores/secure-stack-client** - Client SDK with React integration, auth, CSRF protection, and SSR support
+- **@lemur-bookstores/secure-stack-mesh** - Service Mesh (coming soon)
+- **@lemur-bookstores/secure-stack-cli** - CLI tool (coming soon)
 
 ## 🚀 Getting Started
 

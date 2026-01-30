@@ -4,8 +4,8 @@
  */
 
 import { Bench } from 'tinybench';
-import { compose } from '@lemur-bookstores/core';
-import type { MiddlewareFunction } from '@lemur-bookstores/core';
+import { compose } from '@lemur-bookstores/secure-stack-core';
+import type { MiddlewareFunction } from '@lemur-bookstores/secure-stack-core';
 
 const bench = new Bench({ time: 1000 });
 

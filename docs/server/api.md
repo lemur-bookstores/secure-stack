@@ -5,13 +5,13 @@ The `SecureStackServer` class extends the core `SecureStack` class with HTTP ser
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/server
+npm install @lemur-bookstores/secure-stack-server
 ```
 
 ## Basic Usage
 
 ```typescript
-import { SecureStackServer } from '@lemur-bookstores/server';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
 
 const app = new SecureStackServer({
   name: 'my-api',
@@ -191,7 +191,7 @@ Response:
 ## Registering Routers
 
 ```typescript
-import { router } from '@lemur-bookstores/core';
+import { router } from '@lemur-bookstores/secure-stack-core';
 
 const userRouter = router()
   .query('getUser', { ... })
@@ -296,7 +296,7 @@ app.server.setErrorHandler((error, request, reply) => {
 ## Production Configuration
 
 ```typescript
-import { SecureStackServer } from '@lemur-bookstores/server';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 

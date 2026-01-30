@@ -4,7 +4,7 @@
  */
 
 import { Bench } from 'tinybench';
-import { router as secureStackRouter } from '@lemur-bookstores/core';
+import { router as secureStackRouter } from '@lemur-bookstores/secure-stack-core';
 import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
 

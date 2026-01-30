@@ -3,8 +3,8 @@
  */
 
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import type { Router } from '@lemur-bookstores/core';
-import { SecureStackError } from '@lemur-bookstores/core';
+import type { Router } from '@lemur-bookstores/secure-stack-core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
 export interface HTTPRouterOptions {
     prefix?: string;

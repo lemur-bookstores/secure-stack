@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession, useClient } from '@lemur-bookstores/client/react';
+import { useSession, useClient } from '@lemur-bookstores/secure-stack-client/react';
 
 export function SessionInfo() {
   const { user, isAuthenticated, isLoading, refresh, setAccessToken, tokenManager } = useSession();

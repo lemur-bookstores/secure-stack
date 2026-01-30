@@ -1,4 +1,4 @@
-# @lemur-bookstores/rbac
+# @lemur-bookstores/secure-stack-rbac
 
 Role-Based Access Control (RBAC) module for SecureStack.
 
@@ -13,7 +13,7 @@ Role-Based Access Control (RBAC) module for SecureStack.
 ## Usage
 
 ```typescript
-import { RBAC, Role, Permission } from '@lemur-bookstores/rbac';
+import { RBAC, Role, Permission } from '@lemur-bookstores/secure-stack-rbac';
 
 // Define roles and permissions
 const rbac = new RBAC({
