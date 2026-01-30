@@ -1,6 +1,6 @@
 {
   "name": "@lemur-bookstores/secure-stack-auth",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Authentication module for SecureStack - JWT, OAuth, and Session Management",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
