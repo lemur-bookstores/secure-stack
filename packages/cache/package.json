@@ -1,5 +1,5 @@
 {
-  "name": "@lemur-bookstores/cache",
+  "name": "@lemur-bookstores/secure-stack-cache",
   "version": "0.1.1",
   "description": "Cache module for SecureStack with support for Redis, Memory, and Memcached",
   "main": "./dist/index.js",
@@ -42,9 +42,9 @@
   "devDependencies": {
     "@types/better-sqlite3": "7.6.13",
     "@types/memjs": "1.3.3",
-    "@types/node": "^20.11.5",
-    "tsup": "8.0.1",
+    "@types/node": "20.19.0",
+    "tsup": "8.5.1",
     "typescript": "5.9.3",
-    "vitest": "1.2.1"
+    "vitest": "4.0.18"
   }
 }
