@@ -17,7 +17,7 @@ RUN npm install -g turbo
 # Prune stage
 FROM base AS pruner
 COPY . .
-RUN turbo prune --scope=@lemur-bookstores/server --docker
+RUN turbo prune --scope=@lemur-bookstores/secure-stack-server --docker
 
 # Builder stage
 FROM base AS builder
@@ -26,7 +26,7 @@ COPY --from=pruner /app/out/pnpm-lock.yaml .
 RUN npm install -g pnpm && pnpm install
 
 COPY --from=pruner /app/out/full .
-RUN turbo run build --filter=@lemur-bookstores/server...
+RUN turbo run build --filter=@lemur-bookstores/secure-stack-server...
 
 # Runner stage
 FROM node:18-alpine AS runner

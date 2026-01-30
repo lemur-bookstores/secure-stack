@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Providers } from './providers';
 import { cookies } from 'next/headers';
-import { getServerSession } from '@lemur-bookstores/client/server';
+import { getServerSession } from '@lemur-bookstores/secure-stack-client/server';
 import './globals.css';
 
 const geistSans = Geist({

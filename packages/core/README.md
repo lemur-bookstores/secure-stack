@@ -1,13 +1,13 @@
-# @lemur-bookstores/core
+# @lemur-bookstores/secure-stack-core
 
 > Core framework - Foundation of SecureStack
 
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/core
+npm install @lemur-bookstores/secure-stack-core
 # or
-pnpm add @lemur-bookstores/core
+pnpm add @lemur-bookstores/secure-stack-core
 ```
 
 ## Features
@@ -22,7 +22,7 @@ pnpm add @lemur-bookstores/core
 ## Quick Start
 
 ```typescript
-import { SecureStack, router, ServiceType } from '@lemur-bookstores/core';
+import { SecureStack, router, ServiceType } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 
 const app = new SecureStack({
@@ -48,7 +48,7 @@ await app.start();
 SecureStack includes built-in middlewares:
 
 ```typescript
-import { logger, errorHandler, cors } from '@lemur-bookstores/core';
+import { logger, errorHandler, cors } from '@lemur-bookstores/secure-stack-core';
 
 app.use(errorHandler());
 app.use(logger());
@@ -70,7 +70,7 @@ app.use(async (ctx, next) => {
 Create and extend contexts:
 
 ```typescript
-import { createContext } from '@lemur-bookstores/core';
+import { createContext } from '@lemur-bookstores/secure-stack-core';
 
 const contextBuilder = createContext<{ user?: User }>();
 
@@ -84,7 +84,7 @@ app.setContextFactory((initial) => {
 Use built-in error types:
 
 ```typescript
-import { SecureStackError } from '@lemur-bookstores/core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
 // Throw errors
 throw SecureStackError.notFound('User not found');
@@ -118,7 +118,7 @@ const router = router()
 Enable the service mesh:
 
 ```typescript
-import { ServiceType, EncryptionMode, DiscoveryMode } from '@lemur-bookstores/core';
+import { ServiceType, EncryptionMode, DiscoveryMode } from '@lemur-bookstores/secure-stack-core';
 
 const app = new SecureStack({
   name: 'user-service',

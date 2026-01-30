@@ -15,7 +15,7 @@ SecureStack includes a powerful gRPC adapter for high-performance microservices 
 The gRPC adapter is optional. Enable it in your server configuration.
 
 ```typescript
-import { SecureStackServer, router } from '@lemur-bookstores/server';
+import { SecureStackServer, router } from '@lemur-bookstores/secure-stack-server';
 import { z } from 'zod';
 
 const app = new SecureStackServer({
@@ -112,7 +112,7 @@ client.getUser({ id: '123' }, (err, response) => {
 The easiest way to connect is using the built-in Mesh client:
 
 ```typescript
-import { SecureStackServer } from '@lemur-bookstores/server';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
 
 const app = new SecureStackServer({
   // ...

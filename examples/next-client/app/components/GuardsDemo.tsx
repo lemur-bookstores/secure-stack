@@ -1,6 +1,6 @@
 'use client';
 
-import { SessionGuard, RoleGate, PermissionGate } from '@lemur-bookstores/client/react';
+import { SessionGuard, RoleGate, PermissionGate } from '@lemur-bookstores/secure-stack-client/react';
 
 /**
  * Demo component showcasing validation guards

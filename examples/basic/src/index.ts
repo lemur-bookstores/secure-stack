@@ -2,7 +2,7 @@
  * Basic example of SecureStack framework
  */
 
-import { SecureStack, router, ServiceType } from '@lemur-bookstores/core';
+import { SecureStack, router, ServiceType } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 
 // Create the main application

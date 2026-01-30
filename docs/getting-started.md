@@ -15,27 +15,27 @@ Install SecureStack packages based on your needs:
 ### For Server Development
 
 ```bash
-npm install @lemur-bookstores/core @lemur-bookstores/server
+npm install @lemur-bookstores/secure-stack-core @lemur-bookstores/secure-stack-server
 # or
-pnpm add @lemur-bookstores/core @lemur-bookstores/server
+pnpm add @lemur-bookstores/secure-stack-core @lemur-bookstores/secure-stack-server
 ```
 
 ### For Client Development
 
 ```bash
-npm install @lemur-bookstores/client
+npm install @lemur-bookstores/secure-stack-client
 # For React applications
-npm install @lemur-bookstores/client @tanstack/react-query
+npm install @lemur-bookstores/secure-stack-client @tanstack/react-query
 ```
 
 ### Additional Packages
 
 ```bash
 # Authentication & RBAC
-npm install @lemur-bookstores/auth
+npm install @lemur-bookstores/secure-stack-auth
 
 # Service Mesh
-npm install @lemur-bookstores/mesh
+npm install @lemur-bookstores/secure-stack-mesh
 ```
 
 ## Your First Server
@@ -115,8 +115,8 @@ Now let's create a React client to consume your API:
 
 ```typescript
 // App.tsx
-import { SecureStackProvider, createClient } from '@lemur-bookstores/client';
-import { useQuery, useMutation } from '@lemur-bookstores/client/react';
+import { SecureStackProvider, createClient } from '@lemur-bookstores/secure-stack-client';
+import { useQuery, useMutation } from '@lemur-bookstores/secure-stack-client/react';
 
 // Create client instance
 const client = createClient({
@@ -198,7 +198,7 @@ Now that you have a basic setup, explore more features:
 ### Adding Middleware
 
 ```typescript
-import { middleware } from '@lemur-bookstores/core';
+import { middleware } from '@lemur-bookstores/secure-stack-core';
 
 // Create custom middleware
 const loggerMiddleware = middleware()
@@ -218,7 +218,7 @@ const router = router()
 ### Error Handling
 
 ```typescript
-import { SecureStackError } from '@lemur-bookstores/core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
 const userRouter = router()
   .query('getUser', {
@@ -241,7 +241,7 @@ const userRouter = router()
 ### Context & Dependency Injection
 
 ```typescript
-import { createContext } from '@lemur-bookstores/core';
+import { createContext } from '@lemur-bookstores/secure-stack-core';
 
 // Define context
 const createAppContext = () => {
@@ -302,7 +302,7 @@ const app = new SecureStackServer({
 Make sure you're using TypeScript 5.0+ and have proper type imports:
 
 ```typescript
-import type { inferRouterInputs, inferRouterOutputs } from '@lemur-bookstores/core';
+import type { inferRouterInputs, inferRouterOutputs } from '@lemur-bookstores/secure-stack-core';
 
 type RouterInputs = inferRouterInputs<typeof myRouter>;
 type RouterOutputs = inferRouterOutputs<typeof myRouter>;

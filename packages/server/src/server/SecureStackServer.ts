@@ -1,5 +1,5 @@
-import { SecureStack, SecureStackConfig, Router } from '@lemur-bookstores/core';
-import { AuthModule, AuthModuleConfig } from '@lemur-bookstores/auth';
+import { SecureStack, SecureStackConfig, Router } from '@lemur-bookstores/secure-stack-core';
+import { AuthModule, AuthModuleConfig } from '@lemur-bookstores/secure-stack-auth';
 import Fastify, { FastifyInstance } from 'fastify';
 import { registerHTTPRouter } from '../protocols/http';
 

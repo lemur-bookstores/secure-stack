@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery, useMutation } from '@lemur-bookstores/client/react';
+import { useQuery, useMutation } from '@lemur-bookstores/secure-stack-client/react';
 import { useState } from 'react';
 
 interface User {

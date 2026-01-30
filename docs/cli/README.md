@@ -1,11 +1,11 @@
-# @lemur-bookstores/cli
+# @lemur-bookstores/secure-stack-cli
 
 The official CLI tool for SecureStack, designed to streamline the development of secure, type-safe applications.
 
 ## Installation
 
 ```bash
-npm install -g @lemur-bookstores/cli
+npm install -g @lemur-bookstores/secure-stack-cli
 ```
 
 ## Usage

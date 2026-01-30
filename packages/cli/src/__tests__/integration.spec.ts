@@ -100,7 +100,7 @@ describe('CLI Integration Tests', () => {
 
             expect(FileManager.writeFile).toHaveBeenCalledWith(
                 expect.stringContaining('posts.router.ts'),
-                expect.stringContaining('@lemur-bookstores/core')
+                expect.stringContaining('@lemur-bookstores/secure-stack-core')
             );
         });
     });

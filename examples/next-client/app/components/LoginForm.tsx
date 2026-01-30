@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useClient, useSession } from '@lemur-bookstores/client/react';
+import { useClient, useSession } from '@lemur-bookstores/secure-stack-client/react';
 
 export function LoginForm() {
   const client = useClient();

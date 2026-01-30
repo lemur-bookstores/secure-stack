@@ -15,7 +15,7 @@ A simple blog API with:
 ### 1. Install Dependencies
 
 ```bash
-npm install @lemur-bookstores/core @lemur-bookstores/server @lemur-bookstores/auth
+npm install @lemur-bookstores/secure-stack-core @lemur-bookstores/secure-stack-server @lemur-bookstores/secure-stack-auth
 npm install @prisma/client zod
 npm install -D prisma typescript tsx
 ```
@@ -101,10 +101,10 @@ export type Context = ReturnType<typeof createContext>;
 
 ```typescript
 // src/routers/user.ts
-import { router } from '@lemur-bookstores/core';
+import { router } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
-import { SecureStackError } from '@lemur-bookstores/core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
 export const userRouter = router()
   .mutation('register', {
@@ -184,11 +184,11 @@ export const userRouter = router()
 
 ```typescript
 // src/routers/post.ts
-import { router, middleware } from '@lemur-bookstores/core';
+import { router, middleware } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
-import { SecureStackError } from '@lemur-bookstores/core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
-// Auth middleware (simplified - use @lemur-bookstores/auth in production)
+// Auth middleware (simplified - use @lemur-bookstores/secure-stack-auth in production)
 const requireAuth = middleware()
   .use(async ({ ctx, next }) => {
     // In real app, verify JWT token
@@ -435,9 +435,9 @@ export const postRouter = router()
 
 ```typescript
 // src/routers/comment.ts
-import { router } from '@lemur-bookstores/core';
+import { router } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
-import { SecureStackError } from '@lemur-bookstores/core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
 export const commentRouter = router()
   .mutation('create', {
@@ -513,7 +513,7 @@ export const commentRouter = router()
 
 ```typescript
 // src/index.ts
-import { SecureStackServer } from '@lemur-bookstores/server';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
 import { createContext } from './context';
 import { userRouter } from './routers/user';
 import { postRouter } from './routers/post';

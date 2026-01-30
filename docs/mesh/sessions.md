@@ -23,7 +23,7 @@ await client.call('greet', { name: 'World' });
 ### 2. Session Management
 
 ```typescript
-import { SessionManager } from '@lemur-bookstores/mesh';
+import { SessionManager } from '@lemur-bookstores/secure-stack-mesh';
 
 const sessionManager = new SessionManager(3600000);  // 1 hour TTL
 

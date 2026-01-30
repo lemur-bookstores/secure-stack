@@ -13,7 +13,7 @@ export default function Home() {
       <main className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-8">SecureStack Next.js Example</h1>
         <p className="text-gray-400 mb-8">
-          Example of @lemur-bookstores/client with Next.js App Router
+          Example of @lemur-bookstores/secure-stack-client with Next.js App Router
         </p>
 
         <div className="mb-8">

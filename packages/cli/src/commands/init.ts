@@ -26,17 +26,17 @@ export async function init() {
 
         // Core dependencies
         const dependencies = [
-            '@lemur-bookstores/core',
-            '@lemur-bookstores/server',
+            '@lemur-bookstores/secure-stack-core',
+            '@lemur-bookstores/secure-stack-server',
             'tsx', // Dev dep usually, but needed for running
         ];
 
         // Feature dependencies
-        if (features.includes('auth')) dependencies.push('@lemur-bookstores/auth');
-        if (features.includes('rbac')) dependencies.push('@lemur-bookstores/rbac');
-        if (features.includes('mesh')) dependencies.push('@lemur-bookstores/mesh');
-        if (features.includes('rate-limit')) dependencies.push('@lemur-bookstores/rate-limit');
-        if (features.includes('audit')) dependencies.push('@lemur-bookstores/audit');
+        if (features.includes('auth')) dependencies.push('@lemur-bookstores/secure-stack-auth');
+        if (features.includes('rbac')) dependencies.push('@lemur-bookstores/secure-stack-rbac');
+        if (features.includes('mesh')) dependencies.push('@lemur-bookstores/secure-stack-mesh');
+        if (features.includes('rate-limit')) dependencies.push('@lemur-bookstores/secure-stack-rate-limit');
+        if (features.includes('audit')) dependencies.push('@lemur-bookstores/secure-stack-audit');
 
         // Database dependencies
         if (database === 'prisma') {
@@ -90,7 +90,7 @@ export async function init() {
             // Create a basic index.ts if it doesn't exist
             const indexTsPath = path.join(srcDir, 'index.ts');
             if (!FileManager.exists(indexTsPath)) {
-                const indexContent = `import { SecureStack } from '@lemur-bookstores/core';
+                const indexContent = `import { SecureStack } from '@lemur-bookstores/secure-stack-core';
 
 const app = new SecureStack({
   name: 'my-app',

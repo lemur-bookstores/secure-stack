@@ -10,7 +10,7 @@ import {
     errorHandler,
     // createContext,
     SecureStackError
-} from '@lemur-bookstores/core';
+} from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 
 // Create a custom context

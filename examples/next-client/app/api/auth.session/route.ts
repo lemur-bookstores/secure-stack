@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSessionCookies } from '@lemur-bookstores/client/server';
+import { getSessionCookies } from '@lemur-bookstores/secure-stack-client/server';
 
 export async function GET(request: NextRequest) {
     const { refreshToken, accessToken: cookieAccessToken } = await getSessionCookies();

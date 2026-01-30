@@ -1,19 +1,19 @@
 # Realtime Module
 
-The `@lemur-bookstores/realtime` module provides a robust, scalable WebSocket solution built on top of [Socket.io](https://socket.io/) and [Redis](https://redis.io/).
+The `@lemur-bookstores/secure-stack-realtime` module provides a robust, scalable WebSocket solution built on top of [Socket.io](https://socket.io/) and [Redis](https://redis.io/).
 
 ## Features
 
 - **Socket.io Integration**: Full compatibility with the Socket.io ecosystem.
 - **Horizontal Scaling**: Built-in Redis Adapter for multi-instance deployments.
-- **Automatic Authentication**: Seamless integration with `@lemur-bookstores/auth`.
+- **Automatic Authentication**: Seamless integration with `@lemur-bookstores/secure-stack-auth`.
 - **Type-Safe Events**: (Coming soon) Typed events for client-server communication.
 - **Provider Injection**: Access the `RealtimeManager` from any route via `ctx.realtime`.
 
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/realtime
+npm install @lemur-bookstores/secure-stack-realtime
 ```
 
 ## Usage
@@ -21,8 +21,8 @@ npm install @lemur-bookstores/realtime
 ### Server Setup
 
 ```typescript
-import { SecureStackServer } from '@lemur-bookstores/server';
-import { useRealtime } from '@lemur-bookstores/realtime';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
+import { useRealtime } from '@lemur-bookstores/secure-stack-realtime';
 
 const app = new SecureStackServer({
   /* config */

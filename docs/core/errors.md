@@ -32,7 +32,7 @@ type ErrorCode =
 ### Basic Error
 
 ```typescript
-import { SecureStackError } from '@lemur-bookstores/core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
 const handler = async ({ input, ctx }) => {
   const user = await ctx.db.user.findUnique({
@@ -304,7 +304,7 @@ const errorReportingMiddleware = middleware()
 ### React Query Error Handling
 
 ```typescript
-import { useQuery } from '@lemur-bookstores/client/react';
+import { useQuery } from '@lemur-bookstores/secure-stack-client/react';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data, error, isError } = useQuery('user.getUser', {
@@ -362,7 +362,7 @@ function CreateUserForm() {
 ### Global Error Boundary
 
 ```typescript
-import { SecureStackProvider } from '@lemur-bookstores/client';
+import { SecureStackProvider } from '@lemur-bookstores/secure-stack-client';
 
 function App() {
   return (

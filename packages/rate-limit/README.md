@@ -1,4 +1,4 @@
-# @lemur-bookstores/rate-limit
+# @lemur-bookstores/secure-stack-rate-limit
 
 Rate Limiting module for SecureStack.
 
@@ -15,7 +15,7 @@ Rate Limiting module for SecureStack.
 ## Usage
 
 ```typescript
-import { rateLimitMiddleware, MemoryStore } from '@lemur-bookstores/rate-limit';
+import { rateLimitMiddleware, MemoryStore } from '@lemur-bookstores/secure-stack-rate-limit';
 
 const limiter = rateLimitMiddleware({
   windowMs: 15 * 60 * 1000, // 15 minutes

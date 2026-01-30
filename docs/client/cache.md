@@ -54,7 +54,7 @@ When you mutate data, you often want to refresh related queries.
 ### Basic Invalidation
 
 ```typescript
-import { useInvalidateQuery } from '@lemur-bookstores/client/react';
+import { useInvalidateQuery } from '@lemur-bookstores/secure-stack-client/react';
 
 function EditUser() {
   const invalidate = useInvalidateQuery();
@@ -133,7 +133,7 @@ Load data before it's needed to improve perceived performance.
 ### On Hover
 
 ```typescript
-import { usePrefetch } from '@lemur-bookstores/client/react';
+import { usePrefetch } from '@lemur-bookstores/secure-stack-client/react';
 
 function UserLink({ id }) {
   const prefetch = usePrefetch();

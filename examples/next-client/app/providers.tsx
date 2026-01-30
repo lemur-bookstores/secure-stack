@@ -1,6 +1,6 @@
 'use client';
 
-import { SecureStackProvider, SessionProvider } from '@lemur-bookstores/client/react';
+import { SecureStackProvider, SessionProvider } from '@lemur-bookstores/secure-stack-client/react';
 import {
   SecureStackClient,
   createAuthMiddleware,
@@ -9,7 +9,7 @@ import {
   ensureCSRFToken,
   CSRF_HEADER_NAME,
   type AuthSession,
-} from '@lemur-bookstores/client';
+} from '@lemur-bookstores/secure-stack-client';
 
 // Create client with auth and CSRF middleware
 const client = new SecureStackClient({

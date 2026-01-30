@@ -35,13 +35,13 @@ Secure service mesh implementation for SecureStack with hybrid encryption and mu
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/mesh
+npm install @lemur-bookstores/secure-stack-mesh
 ```
 
 ## Quick Start
 
 ```typescript
-import { SecureMesh } from '@lemur-bookstores/mesh';
+import { SecureMesh } from '@lemur-bookstores/secure-stack-mesh';
 
 // Create a mesh instance
 const mesh = new SecureMesh({

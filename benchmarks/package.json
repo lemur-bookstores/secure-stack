@@ -19,9 +19,9 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.14.2",
     "@grpc/proto-loader": "^0.7.13",
-    "@lemur-bookstores/client": "*",
-    "@lemur-bookstores/core": "*",
-    "@lemur-bookstores/server": "*",
+    "@lemur-bookstores/secure-stack-client": "*",
+    "@lemur-bookstores/secure-stack-core": "*",
+    "@lemur-bookstores/secure-stack-server": "*",
     "@tanstack/react-query": "^5.17.0",
     "@testing-library/react": "^14.1.2",
     "@trpc/server": "^10.45.0",

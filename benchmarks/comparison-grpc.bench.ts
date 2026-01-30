@@ -4,7 +4,7 @@
  */
 
 import { Bench } from 'tinybench';
-import { router as secureStackRouter } from '@lemur-bookstores/core';
+import { router as secureStackRouter } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';

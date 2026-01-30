@@ -1,4 +1,4 @@
-# @lemur-bookstores/core API Reference
+# @lemur-bookstores/secure-stack-core API Reference
 
 ## Table of Contents
 

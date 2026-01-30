@@ -61,7 +61,7 @@ SecureStack is organized as a monorepo with the following packages:
 
 ### Core Packages
 
-#### `@lemur-bookstores/core`
+#### `@lemur-bookstores/secure-stack-core`
 The foundation of the framework, providing:
 - **Router System**: Type-safe procedure definitions
 - **Middleware Pipeline**: Composable middleware chain
@@ -78,7 +78,7 @@ export { createContext } from './context';
 export { SecureStackError } from './error';
 ```
 
-#### `@lemur-bookstores/server`
+#### `@lemur-bookstores/secure-stack-server`
 Server implementation with multiple protocol adapters:
 - **Fastify Integration**: High-performance HTTP server
 - **tRPC Adapter**: Type-safe client-server communication
@@ -86,21 +86,21 @@ Server implementation with multiple protocol adapters:
 - **Lifecycle Hooks**: Server lifecycle management
 - **Health Checks**: Built-in health and metrics endpoints
 
-#### `@lemur-bookstores/client`
+#### `@lemur-bookstores/secure-stack-client`
 Client SDK for consuming SecureStack APIs:
 - **Core Client**: Base client implementation
 - **React Hooks**: `useQuery`, `useMutation`, `useSubscription`
 - **Cache Manager**: Intelligent caching strategies
 - **SSR Support**: Server-side rendering utilities
 
-#### `@lemur-bookstores/auth`
+#### `@lemur-bookstores/secure-stack-auth`
 Authentication and authorization:
 - **JWT Manager**: Token generation and validation
 - **RBAC System**: Role-based access control
 - **Session Management**: Secure session handling
 - **OAuth Providers**: Google, GitHub integration
 
-#### `@lemur-bookstores/mesh`
+#### `@lemur-bookstores/secure-stack-mesh`
 Service mesh for secure microservices:
 - **Hybrid Encryption**: RSA-4096 + AES-256-GCM
 - **Mutual Authentication**: JWT-based service auth
@@ -266,7 +266,7 @@ const authMiddleware = middleware()
 Standardized error handling across the framework:
 
 ```typescript
-import { SecureStackError } from '@lemur-bookstores/core';
+import { SecureStackError } from '@lemur-bookstores/secure-stack-core';
 
 // Throw errors
 throw new SecureStackError({

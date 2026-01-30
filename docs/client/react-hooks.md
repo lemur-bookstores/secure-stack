@@ -15,7 +15,7 @@ SecureStack provides powerful React hooks for building type-safe, reactive appli
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/client @tanstack/react-query
+npm install @lemur-bookstores/secure-stack-client @tanstack/react-query
 ```
 
 ## Setup
@@ -24,7 +24,7 @@ npm install @lemur-bookstores/client @tanstack/react-query
 
 ```typescript
 // src/lib/client.ts
-import { createClient } from '@lemur-bookstores/client';
+import { createClient } from '@lemur-bookstores/secure-stack-client';
 
 export const client = createClient({
   url: 'http://localhost:3000/api',
@@ -38,7 +38,7 @@ export const client = createClient({
 
 ```typescript
 // src/App.tsx
-import { SecureStackProvider } from '@lemur-bookstores/client/react';
+import { SecureStackProvider } from '@lemur-bookstores/secure-stack-client/react';
 import { client } from './lib/client';
 
 function App() {
@@ -57,7 +57,7 @@ Fetch data with automatic caching and refetching.
 ### Basic Usage
 
 ```typescript
-import { useQuery } from '@lemur-bookstores/client/react';
+import { useQuery } from '@lemur-bookstores/secure-stack-client/react';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data, isLoading, error } = useQuery('user.getUser', {
@@ -178,7 +178,7 @@ function PaginatedPosts() {
 ### Infinite Scroll
 
 ```typescript
-import { useInfiniteQuery } from '@lemur-bookstores/client/react';
+import { useInfiniteQuery } from '@lemur-bookstores/secure-stack-client/react';
 
 function InfinitePostList() {
   const {
@@ -227,7 +227,7 @@ Modify data with automatic cache invalidation.
 ### Basic Usage
 
 ```typescript
-import { useMutation } from '@lemur-bookstores/client/react';
+import { useMutation } from '@lemur-bookstores/secure-stack-client/react';
 
 function CreatePostForm() {
   const createPost = useMutation('post.create');
@@ -290,7 +290,7 @@ function CreatePostForm() {
 ### Cache Invalidation
 
 ```typescript
-import { useInvalidateQuery } from '@lemur-bookstores/client/react';
+import { useInvalidateQuery } from '@lemur-bookstores/secure-stack-client/react';
 
 function CreatePostForm() {
   const invalidate = useInvalidateQuery();
@@ -359,7 +359,7 @@ Real-time data with WebSocket subscriptions.
 ### Basic Usage
 
 ```typescript
-import { useSubscription } from '@lemur-bookstores/client/react';
+import { useSubscription } from '@lemur-bookstores/secure-stack-client/react';
 
 function ChatRoom({ roomId }: { roomId: string }) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -411,7 +411,7 @@ function UserStatus({ userId }: { userId: string }) {
 ### Invalidate Queries
 
 ```typescript
-import { useInvalidateQuery } from '@lemur-bookstores/client/react';
+import { useInvalidateQuery } from '@lemur-bookstores/secure-stack-client/react';
 
 function RefreshButton() {
   const invalidate = useInvalidateQuery();
@@ -431,7 +431,7 @@ function RefreshButton() {
 ### Prefetch Data
 
 ```typescript
-import { usePrefetch } from '@lemur-bookstores/client/react';
+import { usePrefetch } from '@lemur-bookstores/secure-stack-client/react';
 
 function PostLink({ postId }: { postId: string }) {
   const prefetch = usePrefetch();

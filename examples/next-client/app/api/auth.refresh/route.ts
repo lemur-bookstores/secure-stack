@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSessionCookies, validateCSRFFromRequest } from '@lemur-bookstores/client/server';
+import { getSessionCookies, validateCSRFFromRequest } from '@lemur-bookstores/secure-stack-client/server';
 
 export async function POST(request: NextRequest) {
     // CSRF Protection - validate token for refresh endpoint

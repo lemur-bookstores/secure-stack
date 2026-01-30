@@ -15,7 +15,7 @@ The HTTP adapter in SecureStack is built on top of [Fastify](https://www.fastify
 The HTTP adapter is automatically configured when you use `SecureStackServer`.
 
 ```typescript
-import { SecureStackServer, router } from '@lemur-bookstores/server';
+import { SecureStackServer, router } from '@lemur-bookstores/secure-stack-server';
 import { z } from 'zod';
 
 const app = new SecureStackServer({

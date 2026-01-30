@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/mesh
+npm install @lemur-bookstores/secure-stack-mesh
 ```
 
 ## Quick Start
@@ -11,7 +11,7 @@ npm install @lemur-bookstores/mesh
 ### 1. Create a Basic Service
 
 ```typescript
-import { SecureMesh } from '@lemur-bookstores/mesh';
+import { SecureMesh } from '@lemur-bookstores/secure-stack-mesh';
 
 const mesh = new SecureMesh({
   serviceId: 'my-service',
@@ -47,7 +47,7 @@ console.log(response);
 ### 3. Create a Server
 
 ```typescript
-import { SecureMeshServer } from '@lemur-bookstores/mesh';
+import { SecureMeshServer } from '@lemur-bookstores/secure-stack-mesh';
 
 const server = new SecureMeshServer('my-service');
 
@@ -62,7 +62,7 @@ Create the following directory structure for your mesh service:
 ```
 my-service/
 ├── proto/
-│   └── secure-messaging.proto  # Copy from node_modules/@lemur-bookstores/mesh/proto
+│   └── secure-messaging.proto  # Copy from node_modules/@lemur-bookstores/secure-stack-mesh/proto
 ├── keys/                       # Auto-generated RSA keys
 ├── logs/                       # Service logs (if monitoring enabled)
 ├── metrics/                    # Metrics data (if monitoring enabled)
@@ -99,7 +99,7 @@ const mesh = new SecureMesh({
 
 If you get a "proto file not found" error:
 
-1. Copy the proto file from `node_modules/@lemur-bookstores/mesh/proto/secure-messaging.proto`
+1. Copy the proto file from `node_modules/@lemur-bookstores/secure-stack-mesh/proto/secure-messaging.proto`
 2. Place it in your project's `./proto` directory
 3. Or configure a custom path using `paths.protoFile`
 

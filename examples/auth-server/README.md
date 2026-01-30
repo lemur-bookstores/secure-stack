@@ -1,6 +1,6 @@
 # Auth Server Example
 
-This example demonstrates how to use `@lemur-bookstores/server` with authentication and RBAC.
+This example demonstrates how to use `@lemur-bookstores/secure-stack-server` with authentication and RBAC.
 
 ## Features
 

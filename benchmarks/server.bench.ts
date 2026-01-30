@@ -4,8 +4,8 @@
  */
 
 import { Bench } from 'tinybench';
-import { SecureStackServer } from '@lemur-bookstores/server';
-import { router } from '@lemur-bookstores/core';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
+import { router } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 
 const bench = new Bench({ time: 1000 });

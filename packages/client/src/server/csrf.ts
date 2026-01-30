@@ -74,7 +74,7 @@ export function withCSRFProtection(
  * @example
  * ```ts
  * // middleware.ts
- * import { csrfMiddleware } from '@lemur-bookstores/client/server';
+ * import { csrfMiddleware } from '@lemur-bookstores/secure-stack-client/server';
  * 
  * export function middleware(request: NextRequest) {
  *   return csrfMiddleware(request, {

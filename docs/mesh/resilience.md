@@ -80,7 +80,7 @@ const notificationService = new SecureMesh({
 The `SecureMeshServer` automatically enforces rate limits on incoming requests:
 
 ```typescript
-import { SecureMeshServer } from '@lemur-bookstores/mesh';
+import { SecureMeshServer } from '@lemur-bookstores/secure-stack-mesh';
 
 const server = new SecureMeshServer(
   'my-service',

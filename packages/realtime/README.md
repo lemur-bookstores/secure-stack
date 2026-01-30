@@ -1,4 +1,4 @@
-# @lemur-bookstores/realtime
+# @lemur-bookstores/secure-stack-realtime
 
 Realtime module for SecureStack using Socket.io.
 
@@ -12,7 +12,7 @@ Realtime module for SecureStack using Socket.io.
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/realtime
+npm install @lemur-bookstores/secure-stack-realtime
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ npm install @lemur-bookstores/realtime
 ### Basic Setup
 
 ```typescript
-import { RealtimeManager } from '@lemur-bookstores/realtime';
+import { RealtimeManager } from '@lemur-bookstores/secure-stack-realtime';
 import { createServer } from 'http';
 
 const httpServer = createServer();
@@ -34,7 +34,7 @@ httpServer.listen(3000);
 ### Authentication
 
 ```typescript
-import { socketAuthMiddleware } from '@lemur-bookstores/realtime';
+import { socketAuthMiddleware } from '@lemur-bookstores/secure-stack-realtime';
 
 const realtime = new RealtimeManager();
 const io = realtime.getServer();

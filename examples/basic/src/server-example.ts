@@ -3,8 +3,8 @@
  * Demonstrates HTTP endpoints with SecureStackServer
  */
 
-import { SecureStackServer } from '@lemur-bookstores/server';
-import { router } from '@lemur-bookstores/core';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
+import { router } from '@lemur-bookstores/secure-stack-core';
 import { z } from 'zod';
 
 // Create server instance

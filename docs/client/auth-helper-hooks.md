@@ -17,7 +17,7 @@ The client package provides three convenient hooks that wrap common authenticati
 Returns a boolean indicating if the user is currently authenticated.
 
 ```tsx
-import { useIsAuthenticated } from '@lemur-bookstores/client/react';
+import { useIsAuthenticated } from '@lemur-bookstores/secure-stack-client/react';
 
 function ProtectedContent() {
   const isAuthenticated = useIsAuthenticated();
@@ -35,7 +35,7 @@ function ProtectedContent() {
 Returns a function to sign in users. Automatically stores tokens and refreshes the session.
 
 ```tsx
-import { useSignIn } from '@lemur-bookstores/client/react';
+import { useSignIn } from '@lemur-bookstores/secure-stack-client/react';
 
 function LoginForm() {
   const signIn = useSignIn();
@@ -85,7 +85,7 @@ function LoginForm() {
 Returns a function to sign out users. Automatically clears tokens and refreshes the session.
 
 ```tsx
-import { useSignOut } from '@lemur-bookstores/client/react';
+import { useSignOut } from '@lemur-bookstores/secure-stack-client/react';
 
 function LogoutButton() {
   const signOut = useSignOut();
@@ -121,7 +121,7 @@ await signOut('custom.logout.endpoint');
 ```tsx
 'use client';
 
-import { useIsAuthenticated, useSignIn, useSignOut } from '@lemur-bookstores/client/react';
+import { useIsAuthenticated, useSignIn, useSignOut } from '@lemur-bookstores/secure-stack-client/react';
 
 export function AuthFlow() {
   const isAuthenticated = useIsAuthenticated();
@@ -184,7 +184,7 @@ try {
 These hooks work seamlessly with the `SessionProvider`:
 
 ```tsx
-import { SessionProvider, useIsAuthenticated } from '@lemur-bookstores/client/react';
+import { SessionProvider, useIsAuthenticated } from '@lemur-bookstores/secure-stack-client/react';
 
 function App() {
   return (

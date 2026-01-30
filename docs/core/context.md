@@ -38,7 +38,7 @@ interface DefaultContext {
 ### Basic Context
 
 ```typescript
-import { SecureStackServer } from '@lemur-bookstores/server';
+import { SecureStackServer } from '@lemur-bookstores/secure-stack-server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();

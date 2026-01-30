@@ -5,13 +5,13 @@ The `SecureStackClient` is the core entry point for consuming your SecureStack A
 ## Installation
 
 ```bash
-npm install @lemur-bookstores/client
+npm install @lemur-bookstores/secure-stack-client
 ```
 
 ## Creating a Client
 
 ```typescript
-import { createClient } from '@lemur-bookstores/client';
+import { createClient } from '@lemur-bookstores/secure-stack-client';
 
 const client = createClient({
   url: 'http://localhost:3000/api',
@@ -105,7 +105,7 @@ unsubscribe();
 For React applications, wrap your app in `SecureStackProvider`.
 
 ```typescript
-import { SecureStackProvider } from '@lemur-bookstores/client/react';
+import { SecureStackProvider } from '@lemur-bookstores/secure-stack-client/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();

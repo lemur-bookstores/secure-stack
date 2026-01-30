@@ -17,10 +17,10 @@ Type-safe client for SecureStack applications with React integration.
 
 ```bash
 # React / Next.js
-npm install @lemur-bookstores/client @tanstack/react-query react react-dom
+npm install @lemur-bookstores/secure-stack-client @tanstack/react-query react react-dom
 
 # Vue 3
-npm install @lemur-bookstores/client @tanstack/vue-query vue
+npm install @lemur-bookstores/secure-stack-client @tanstack/vue-query vue
 ```
 
 ## Quick Start
@@ -30,7 +30,7 @@ npm install @lemur-bookstores/client @tanstack/vue-query vue
 Wrap your application with `SecureStackProvider`:
 
 ```tsx
-import { SecureStackProvider } from '@lemur-bookstores/client/react';
+import { SecureStackProvider } from '@lemur-bookstores/secure-stack-client/react';
 
 const config = {
   url: 'http://localhost:3000/api',
@@ -53,7 +53,7 @@ function App() {
 Make queries and mutations in your components:
 
 ```tsx
-import { useQuery, useMutation } from '@lemur-bookstores/client/react';
+import { useQuery, useMutation } from '@lemur-bookstores/secure-stack-client/react';
 
 function UserProfile({ userId }) {
   // Query with caching enabled
@@ -89,7 +89,7 @@ function UserProfile({ userId }) {
 ### 3. Real-time Subscriptions
 
 ```tsx
-import { useSubscription } from '@lemur-bookstores/client/react';
+import { useSubscription } from '@lemur-bookstores/secure-stack-client/react';
 
 function Notifications() {
   useSubscription('notifications.subscribe', undefined, {
@@ -109,7 +109,7 @@ See the [Next.js Example](../../examples/next-client) for a full implementation.
 
 ```tsx
 // app/page.tsx
-import { SecureStackClient } from '@lemur-bookstores/client';
+import { SecureStackClient } from '@lemur-bookstores/secure-stack-client';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export default async function Page() {
@@ -185,7 +185,7 @@ Register the plugin once in your app entrypoint:
 // main.ts
 import { createApp } from 'vue';
 import App from './App.vue';
-import { SecureStackPlugin } from '@lemur-bookstores/client/vue';
+import { SecureStackPlugin } from '@lemur-bookstores/secure-stack-client/vue';
 
 const app = createApp(App);
 
@@ -201,7 +201,7 @@ app.mount('#app');
 Use the composables anywhere:
 
 ```ts
-import { useQuery, useMutation, useQueryClient } from '@lemur-bookstores/client/vue';
+import { useQuery, useMutation, useQueryClient } from '@lemur-bookstores/secure-stack-client/vue';
 
 const queryClient = useQueryClient();
 const { data: users, isLoading } = useQuery('user.listUsers');

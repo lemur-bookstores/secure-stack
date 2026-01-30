@@ -1,4 +1,4 @@
-import { MiddlewareFunction } from '@lemur-bookstores/core';
+import { MiddlewareFunction } from '@lemur-bookstores/secure-stack-core';
 import { RBACManager } from './RBACManager';
 import { Permission, Role } from './types';
 

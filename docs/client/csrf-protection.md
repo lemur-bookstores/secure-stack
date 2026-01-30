@@ -25,7 +25,7 @@ import {
   globalTokenManager,
   ensureCSRFToken,
   CSRF_HEADER_NAME,
-} from '@lemur-bookstores/client';
+} from '@lemur-bookstores/secure-stack-client';
 
 const client = new SecureStackClient({
   url: 'https://app.example.com/api',
@@ -70,7 +70,7 @@ const client = new SecureStackClient({
 
 ```ts
 import { NextRequest, NextResponse } from 'next/server';
-import { validateCSRFFromRequest } from '@lemur-bookstores/client/server';
+import { validateCSRFFromRequest } from '@lemur-bookstores/secure-stack-client/server';
 
 export async function POST(request: NextRequest) {
   if (!validateCSRFFromRequest(request)) {
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
 ### Higher-Order Wrapper
 
 ```ts
-import { withCSRFProtection } from '@lemur-bookstores/client/server';
+import { withCSRFProtection } from '@lemur-bookstores/secure-stack-client/server';
 
 export const POST = withCSRFProtection(async (request) => {
   // Only executes if CSRF validation succeeded
@@ -96,7 +96,7 @@ export const POST = withCSRFProtection(async (request) => {
 ### Middleware Guard (optional)
 
 ```ts
-import { csrfMiddleware } from '@lemur-bookstores/client/server';
+import { csrfMiddleware } from '@lemur-bookstores/secure-stack-client/server';
 
 export function middleware(request: NextRequest) {
   return csrfMiddleware(request, {
@@ -112,7 +112,7 @@ export const config = { matcher: '/api/:path*' };
 Generate / refresh the CSRF cookie after login or when rendering the app shell:
 
 ```ts
-import { setCSRFCookie } from '@lemur-bookstores/client/server';
+import { setCSRFCookie } from '@lemur-bookstores/secure-stack-client/server';
 
 export async function POST(request: NextRequest) {
   const response = NextResponse.json({ success: true });
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
 
 ```ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getSessionCookies, validateCSRFFromRequest } from '@lemur-bookstores/client/server';
+import { getSessionCookies, validateCSRFFromRequest } from '@lemur-bookstores/secure-stack-client/server';
 
 export async function POST(request: NextRequest) {
   if (!validateCSRFFromRequest(request)) {

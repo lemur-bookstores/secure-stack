@@ -9,7 +9,7 @@ The Mesh package provides flexible configuration options for paths, security, re
 Configure custom paths for proto files, keys, logs, and metrics:
 
 ```typescript
-import { SecureMesh } from '@lemur-bookstores/mesh';
+import { SecureMesh } from '@lemur-bookstores/secure-stack-mesh';
 
 const mesh = new SecureMesh({
   serviceId: 'my-service',
@@ -178,7 +178,7 @@ discovery: {
 ## Complete Configuration Example
 
 ```typescript
-import { SecureMesh } from '@lemur-bookstores/mesh';
+import { SecureMesh } from '@lemur-bookstores/secure-stack-mesh';
 
 const mesh = new SecureMesh({
   serviceId: 'my-service',

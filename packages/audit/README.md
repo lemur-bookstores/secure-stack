@@ -1,4 +1,4 @@
-# @lemur-bookstores/audit
+# @lemur-bookstores/secure-stack-audit
 
 Audit logging module for SecureStack.
 
@@ -16,7 +16,7 @@ Audit logging module for SecureStack.
 ### Basic Setup
 
 ```typescript
-import { AuditLogger, ConsoleAdapter, FileAdapter } from '@lemur-bookstores/audit';
+import { AuditLogger, ConsoleAdapter, FileAdapter } from '@lemur-bookstores/secure-stack-audit';
 
 const logger = new AuditLogger({
   adapters: [new ConsoleAdapter(), new FileAdapter('./logs/audit.log')],
@@ -30,7 +30,7 @@ await logger.log('user.login', { id: 'user-123', ip: '192.168.1.1' }, 'success')
 ### With Middleware
 
 ```typescript
-import { auditMiddleware } from '@lemur-bookstores/audit';
+import { auditMiddleware } from '@lemur-bookstores/secure-stack-audit';
 
 const audit = auditMiddleware({
   logger,
@@ -54,7 +54,7 @@ app.use(audit);
 ### Querying Logs
 
 ```typescript
-import { FileAdapter } from '@lemur-bookstores/audit';
+import { FileAdapter } from '@lemur-bookstores/secure-stack-audit';
 
 const fileAdapter = new FileAdapter('./logs/audit.log');
 
@@ -95,7 +95,7 @@ const adapter = new FileAdapter('./audit.log');
 Database-agnostic adapter for storing audit logs. Works with any database by providing a client interface.
 
 ```typescript
-import { DatabaseAdapter } from '@lemur-bookstores/audit';
+import { DatabaseAdapter } from '@lemur-bookstores/secure-stack-audit';
 
 // Example with Prisma
 const prismaClient = {
@@ -142,7 +142,7 @@ const sqlClient = {
 Send audit logs to external services via HTTP/REST APIs. Perfect for cloud logging services (Datadog, Sentry, custom APIs).
 
 ```typescript
-import { HttpAdapter } from '@lemur-bookstores/audit';
+import { HttpAdapter } from '@lemur-bookstores/secure-stack-audit';
 
 // Example with Bearer token authentication
 const httpAdapter = new HttpAdapter({
@@ -222,7 +222,7 @@ const axiosAdapter = new HttpAdapter({
 Implement the `AuditAdapter` interface:
 
 ```typescript
-import { AuditAdapter, AuditEvent } from '@lemur-bookstores/audit';
+import { AuditAdapter, AuditEvent } from '@lemur-bookstores/secure-stack-audit';
 
 class DatabaseAdapter implements AuditAdapter {
   async log(event: AuditEvent): Promise<void> {

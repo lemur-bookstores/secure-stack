@@ -1,5 +1,5 @@
 import { initTRPC } from '@trpc/server';
-import type { SecureStack } from '@lemur-bookstores/core';
+import type { SecureStack } from '@lemur-bookstores/secure-stack-core';
 
 const t = initTRPC.create();
 

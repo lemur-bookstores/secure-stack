@@ -12,7 +12,7 @@ Getting started with SecureStack is easy. You can install the packages you need 
 Install the core packages to build a server.
 
 ```bash
-npm install @lemur-bookstores/core @lemur-bookstores/server zod
+npm install @lemur-bookstores/secure-stack-core @lemur-bookstores/secure-stack-server zod
 ```
 
 ## Client Packages
@@ -20,7 +20,7 @@ npm install @lemur-bookstores/core @lemur-bookstores/server zod
 Install the client packages for your frontend application.
 
 ```bash
-npm install @lemur-bookstores/client @tanstack/react-query
+npm install @lemur-bookstores/secure-stack-client @tanstack/react-query
 ```
 
 ## Optional Packages
@@ -30,7 +30,7 @@ npm install @lemur-bookstores/client @tanstack/react-query
 For JWT and RBAC support:
 
 ```bash
-npm install @lemur-bookstores/auth
+npm install @lemur-bookstores/secure-stack-auth
 ```
 
 ### Service Mesh
@@ -38,7 +38,7 @@ npm install @lemur-bookstores/auth
 For microservices communication:
 
 ```bash
-npm install @lemur-bookstores/mesh
+npm install @lemur-bookstores/secure-stack-mesh
 ```
 
 ## TypeScript Configuration
